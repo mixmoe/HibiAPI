@@ -75,6 +75,10 @@ class RankingDate(date):
     def toString(self) -> str:
         return self.strftime(r"%Y-%m-%d")
 
+    @classmethod
+    def new(cls, date: date) -> "RankingDate":
+        return cls(date.year, date.month, date.day)
+
 
 class PixivAPI:
     def __init__(self):
@@ -175,7 +179,7 @@ class PixivEndpoints(BaseEndpoint):
             "v1/illust/ranking",
             params={
                 "mode": mode,
-                "date": (date or RankingDate.yesterday()).toString(),
+                "date": RankingDate.new(date or RankingDate.yesterday()).toString(),
                 "offset": (page - 1) * size,
             },
         )

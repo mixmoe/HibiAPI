@@ -6,7 +6,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from pydantic.error_wrappers import ValidationError
 from utils.config import Config
-from utils.exceptions import ExceptionStorage, ServerSideException
+from utils.exceptions import RESPONSE_CONDITIONS, ExceptionStorage, ServerSideException
 from utils.log import logger
 
 from app.pixiv import router as PixivRouter
@@ -18,6 +18,7 @@ app = FastAPI(
     description="An alternative implement of Imjad API",
     docs_url="/docs/test",
     redoc_url="/docs",
+    responses=RESPONSE_CONDITIONS,  # type:ignore
 )
 app.include_router(PixivRouter, prefix="/pixiv")
 

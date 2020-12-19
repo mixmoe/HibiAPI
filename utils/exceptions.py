@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from secrets import token_hex
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterable, Optional, Type
 
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
@@ -79,3 +79,20 @@ class UpstreamAPIException(ServerSideException):
 class ClientSideException(BaseServerException):
     code = 400
     detail = "Bad Request"
+
+
+def _getSubclass(cls: Type[BaseServerException]):
+    return set(cls.__subclasses__()).union(
+        [s for c in cls.__subclasses__() for s in _getSubclass(c)]
+    )
+
+
+def _getCondintions(l: Iterable[Type[BaseServerException]]):  # noqa:E741
+    d: Dict[int, Dict[str, Type[BaseServerException]]] = {}
+    for i in l:
+        d[i.code] = {**d.get(i.code, {}), i.detail: i}
+    return d
+
+
+ALL_EXCEPTIONS = _getSubclass(BaseServerException)
+RESPONSE_CONDITIONS = _getCondintions(ALL_EXCEPTIONS)
