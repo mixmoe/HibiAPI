@@ -1,6 +1,51 @@
+import json
+from datetime import datetime
+from pathlib import Path
+from secrets import token_hex
 from typing import Any, Dict, Optional
 
 from fastapi.exceptions import HTTPException
+from pydantic import BaseModel
+
+
+class ExceptionStorage:
+    EXCEPTION_PATH = Path(".") / "data" / "errors"
+    PATH_DEPTH = 3
+    ID_LENGTH = 8
+
+    class ExceptionInfo(BaseModel):
+        time: datetime
+        stamp: float
+        id: str
+        traceback: str
+
+    @classmethod
+    def _resolvePath(cls, id_: str) -> Path:
+        assert len(id_) >= cls.PATH_DEPTH
+        filename = id_ + ".json"
+        path = cls.EXCEPTION_PATH / ("/".join(filename[: cls.PATH_DEPTH])) / filename
+        path.parent.mkdir(exist_ok=True, parents=True)
+        return path
+
+    @classmethod
+    def save(cls, traceback: str, *, time: Optional[datetime] = None) -> str:
+        traceID = token_hex(cls.ID_LENGTH).upper()
+        time = time or datetime.now()
+        traceData = cls.ExceptionInfo(
+            time=time, stamp=time.timestamp(), id=traceID, traceback=traceback
+        )
+        path = cls._resolvePath(traceID)
+        path.write_text(
+            traceData.json(ensure_ascii=False, indent=4, sort_keys=True),
+            encoding="utf-8",
+        )
+        return traceID
+
+    @classmethod
+    def read(cls, id_: str):
+        path = cls._resolvePath(id_.upper())
+        assert path.exists()
+        return cls.ExceptionInfo.parse_obj(json.loads(path.read_text(encoding="utf-8")))
 
 
 class BaseServerException(HTTPException):
