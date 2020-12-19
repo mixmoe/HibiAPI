@@ -12,7 +12,22 @@
             "source.fixAll": true
         }
     },
-    "cSpell.words": [],
+    "cSpell.words": [
+        "Hibi",
+        "Imjad",
+        "Pixiv",
+        "aenter",
+        "aexit",
+        "asyncio",
+        "httpx",
+        "illusts",
+        "iscoroutinefunction",
+        "noqa",
+        "pydantic",
+        "redoc",
+        "ugoira",
+        "uvicorn"
+    ],
     "editor.formatOnSave": true,
     "files.watcherExclude": {
         "**/.git/objects/**": true,
