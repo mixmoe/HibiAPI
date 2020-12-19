@@ -5,13 +5,28 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.parse import ParseResult, urlparse
 
-from pydantic import Extra, validate_arguments
+from httpx import HTTPError, HTTPStatusError
 from utils.exceptions import UpstreamAPIException
+from utils.utils import BaseEndpoint
 
 from .constants import PixivConstants
-from .net import AsyncPixivClient, NetRequest, UserInfo
+from .net import NetRequest, UserInfo
 
 USER_TEMP_DATA = Path(".") / "data" / "pixiv_account.json"
+
+
+class EndpointsType(str, Enum):
+    illust = "illust"
+    member = "member"
+    member_illust = "member_illust"
+    favorite = "favorite"
+    following = "following"
+    follower = "follower"
+    rank = "rank"
+    search = "search"
+    tags = "tags"
+    related = "related"
+    ugoira_metadata = "ugoira_metadata"
 
 
 class IllustType(str, Enum):
@@ -85,21 +100,16 @@ class PixivAPI:
         )
 
 
-class PixivEndpoints:
-    def __init__(self, client: AsyncPixivClient):
-        self.client = client
-
-    def __getattribute__(self, name: str) -> Any:
-        obj = super().__getattribute__(name)
-        if not callable(obj):
-            return obj
-        return validate_arguments(obj, config={"extra": Extra.forbid})
-
+class PixivEndpoints(BaseEndpoint):
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         host = urlparse(url=PixivConstants.APP_HOST)
-        params = {k: v for k, v in (params or {}).items() if v is not None}
+        params = {
+            k: (v.value if isinstance(v, Enum) else v)
+            for k, v in (params or {}).items()
+            if v is not None
+        }
         try:
             response = await self.client.get(
                 ParseResult(
@@ -114,7 +124,9 @@ class PixivEndpoints:
             )
             response.raise_for_status()
             return response.json()
-        except Exception:
+        except HTTPStatusError as e:
+            raise UpstreamAPIException(detail=e.response.text)
+        except HTTPError:
             raise UpstreamAPIException
 
     async def illust(self, *, id: int):
@@ -154,15 +166,15 @@ class PixivEndpoints:
     async def rank(
         self,
         *,
-        type: RankingType = RankingType.week,
+        mode: RankingType = RankingType.week,
         date: Optional[RankingDate] = None,
         page: int = 1,
         size: int = 50,
     ):
         return await self.request(
-            "v1/ranking/{type}.json",
+            "v1/illust/ranking",
             params={
-                "type": type,
+                "mode": mode,
                 "date": (date or RankingDate.yesterday()).toString(),
                 "offset": (page - 1) * size,
             },

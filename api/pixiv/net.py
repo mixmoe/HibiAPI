@@ -4,21 +4,11 @@ from http.cookiejar import CookieJar
 from threading import current_thread
 from typing import Any, Dict, Optional, Tuple, overload
 
-from httpx import URL, AsyncClient, HTTPError
+from httpx import URL
 from pydantic import BaseModel, Extra, Field
-from utils.decorators import Retry
-from utils.exceptions import UpstreamAPIException
+from utils.utils import AsyncHTTPClient, BaseNetClient
 
 from .constants import PixivConstants
-
-
-class AsyncPixivClient(AsyncClient):
-    @Retry
-    async def request(self, *args, **kwargs):
-        try:
-            return await super().request(*args, **kwargs)
-        except HTTPError:
-            raise UpstreamAPIException
 
 
 class UserInfo(BaseModel):
@@ -69,7 +59,7 @@ class UserInfo(BaseModel):
             data.update(
                 {"grant_type": "password", "username": username, "password": password}
             )
-        async with AsyncPixivClient(
+        async with AsyncHTTPClient(
             proxies=PixivConstants.CONFIG["proxy"].as_dict()
         ) as client:
             response = await client.post(url, data=data, headers=headers)
@@ -80,19 +70,23 @@ class UserInfo(BaseModel):
         return await self.login(refresh_token=self.refresh_token)
 
 
-class NetRequest:
+class NetRequest(BaseNetClient):
     def __init__(self, user: UserInfo):
-        self.clients: Dict[int, AsyncClient] = {}
+        super().__init__(
+            headers=PixivConstants.DEFAULT_HEADERS.copy(),
+            proxies=PixivConstants.CONFIG["proxy"].as_dict(),
+        )
+
         self.user = user
         self.headers = PixivConstants.DEFAULT_HEADERS.copy()
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
         self.headers["authorization"] = f"Bearer {self.user.access_token}"
         self.cookies = CookieJar()
 
-    async def __aenter__(self) -> AsyncPixivClient:
+    async def __aenter__(self) -> AsyncHTTPClient:
         tid = current_thread().ident or 1
         if tid not in self.clients:
-            self.clients[tid] = AsyncPixivClient(
+            self.clients[tid] = AsyncHTTPClient(
                 headers=self.headers,
                 cookies=self.cookies,
                 proxies=PixivConstants.CONFIG["proxy"].as_dict(),
