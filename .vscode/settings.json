@@ -22,6 +22,7 @@
         "httpx",
         "illusts",
         "iscoroutinefunction",
+        "levelno",
         "noqa",
         "pydantic",
         "redoc",
