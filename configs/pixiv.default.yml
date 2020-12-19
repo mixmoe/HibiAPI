@@ -1,0 +1,8 @@
+proxy: {}
+
+account:
+  username: ""
+  password: ""
+  refresh_interval: 1800
+
+language: zh-cn

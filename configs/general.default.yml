@@ -1,0 +1,14 @@
+debug: false
+version: 0.1.0
+
+server:
+  host: 127.0.0.1
+  port: 8080
+
+log:
+  level: INFO
+  format: >
+    <level>
+    <v>{level:<8}</v>
+    [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}</d>]</level>
+    {message}
