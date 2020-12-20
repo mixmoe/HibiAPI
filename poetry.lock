@@ -311,7 +311,7 @@ python-versions = "*"
 
 [[package]]
 name = "uvicorn"
-version = "0.13.1"
+version = "0.13.2"
 description = "The lightning-fast ASGI server."
 category = "main"
 optional = false
@@ -565,8 +565,8 @@ typing-extensions = [
     {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
 ]
 uvicorn = [
-    {file = "uvicorn-0.13.1-py3-none-any.whl", hash = "sha256:6fcce74c00b77d4f4b3ed7ba1b2a370d27133bfdb46f835b7a76dfe0a8c110ae"},
-    {file = "uvicorn-0.13.1.tar.gz", hash = "sha256:2a7b17f4d9848d6557ccc2274a5f7c97f1daf037d130a0c6918f67cd9bc8cdf5"},
+    {file = "uvicorn-0.13.2-py3-none-any.whl", hash = "sha256:6707fa7f4dbd86fd6982a2d4ecdaad2704e4514d23a1e4278104311288b04691"},
+    {file = "uvicorn-0.13.2.tar.gz", hash = "sha256:d19ca083bebd212843e01f689900e5c637a292c63bb336c7f0735a99300a5f38"},
 ]
 win32-setctime = [
     {file = "win32_setctime-1.0.3-py3-none-any.whl", hash = "sha256:dc925662de0a6eb987f0b01f599c01a8236cb8c62831c22d9cada09ad958243e"},
