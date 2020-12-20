@@ -1,13 +1,22 @@
-debug: false
-version: 0.1.0
+#   _    _   _   _       _              _____    _____
+#  | |  | | (_) | |     (_)     /\     |  __ \  |_   _|
+#  | |__| |  _  | |__    _     /  \    | |__) |   | |
+#  |  __  | | | | '_ \  | |   / /\ \   |  ___/    | |
+#  | |  | | | | | |_) | | |  / ____ \  | |       _| |_
+#  |_|  |_| |_| |_.__/  |_| /_/    \_\ |_|      |_____|
+
+# An alternative implement of Imjad API
+
+debug: false # 是否开启Debug模式
+version: 0.1.0 # 程序版本, 勿动
 
 server:
-  host: 127.0.0.1
-  port: 8080
+  host: 127.0.0.1 # 监听主机
+  port: 8080 # 端口
 
 log:
-  level: INFO
-  format: >
+  level: INFO # 日志等级, 可选 [TRACE,DEBUG,INFO,WARNING,ERROR]
+  format: > # 输出日志格式, 如果没有必要请不要修改
     <level>
     <v>{level:<8}</v>
     [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}</d>]</level>

@@ -1,8 +1,13 @@
+# HTTP代理地址
+# 示例格式
+# proxy:
+#   http_proxy: http://127.0.0.1:1081
+#   https_proxy: http://127.0.0.1:1081
 proxy: {}
 
 account:
-  username: ""
-  password: ""
-  refresh_interval: 1800
+  username: "" # Pixiv帐号
+  password: "" # Pixiv密码
+  refresh_interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
 
-language: zh-cn
+language: zh-cn # 返回语言, 会影响tag翻译
