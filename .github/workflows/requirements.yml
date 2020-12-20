@@ -1,0 +1,32 @@
+name: Generate Requirements.txt
+
+on: 
+  push:
+    paths: 
+      - poetry.lock
+      - pyproject.toml
+
+jobs:
+  generate:
+    name: Generate Requirements
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Configure gut
+        run: |
+          git config --global user.name github-action
+          git config --global user.email noreply@github.com
+      
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+     
+      - name: Generate
+        run: |
+          pip install poetry
+          poetry install
+          poetry export -f requirements.txt -o requirements.txt --without-hashes
+          git commit -am ":pushpin: 更新requirements.txt"
