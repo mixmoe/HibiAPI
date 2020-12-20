@@ -1,5 +1,7 @@
 # HibiAPI
 
+![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
+
 ![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
 [![GitHub license](https://img.shields.io/github/license/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/stargazers)
@@ -11,7 +13,7 @@
 
 **Imjad API 的开源替代.**
 
-![Online Demo](https://img.shields.io/badge/Demo-Click_Here-red?style=for-the-badge&link=https://api.obfs.dev/docs)
+[![Online Demo](https://img.shields.io/badge/Demo-Click_Here-red?style=for-the-badge)](https://api.obfs.dev/docs)
 
 ---
 
