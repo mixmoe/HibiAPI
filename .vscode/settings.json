@@ -23,6 +23,7 @@
         "illusts",
         "iscoroutinefunction",
         "levelno",
+        "mypy",
         "noqa",
         "pydantic",
         "redoc",
@@ -38,4 +39,6 @@
         "**/.venv/**": true,
         "**/.mypy_cache/**": true,
     },
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
 }

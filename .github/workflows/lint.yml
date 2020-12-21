@@ -5,7 +5,10 @@ name: Code Linting
 
 on:
   push:
-
+    paths:
+      - "**.py"
+      - "**.pyi"
+  workflow_dispatch:
   pull_request:
     branches:
       - master
@@ -31,9 +34,14 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Linters
-        uses: samuelmeuli/lint-action@v1
+        uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.github_token }}
-          auto_fix: false
+          auto_fix: true
           flake8: true
           flake8_args: "--config .flake8"
+          mypy: true
+          mypy_args: "--config .mypy.ini"
+          black: true
+          commit_message: ":rotating_light: 自动进行代码格式化"
+          git_email: noreply@github.com
