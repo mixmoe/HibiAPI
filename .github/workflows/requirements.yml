@@ -7,6 +7,7 @@ on:
     paths:
       - poetry.lock
       - pyproject.toml
+      - requirements.txt
 
 jobs:
   generate:
@@ -24,8 +25,7 @@ jobs:
       - name: Generate
         run: |
           pip install poetry
-          poetry install
-          poetry export -f requirements.txt -o requirements.txt --without-hashes
+          poetry export -f requirements.txt -o requirements.txt
 
       - name: Push to repository
         run: |
