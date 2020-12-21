@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Generic, Optional, Type, TypeVar
 
-import confuse
+import confuse  # type:ignore
 from pydantic import BaseModel
 
 CONFIG_DIR = Path(".") / "configs"

@@ -1,4 +1,4 @@
-import uvicorn
+import uvicorn  # type:ignore
 
 from app import app as AppRoot
 from utils.config import Config
