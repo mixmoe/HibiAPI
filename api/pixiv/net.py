@@ -1,7 +1,5 @@
 import hashlib
 from datetime import datetime
-from http.cookiejar import CookieJar
-from threading import current_thread
 from typing import Any, Dict, Optional, Tuple, overload
 
 from httpx import URL
@@ -76,25 +74,6 @@ class NetRequest(BaseNetClient):
             headers=PixivConstants.DEFAULT_HEADERS.copy(),
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
         )
-
         self.user = user
-        self.headers = PixivConstants.DEFAULT_HEADERS.copy()
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
         self.headers["authorization"] = f"Bearer {self.user.access_token}"
-        self.cookies = CookieJar()
-
-    async def __aenter__(self) -> AsyncHTTPClient:
-        tid = current_thread().ident or 1
-        if tid not in self.clients:
-            self.clients[tid] = AsyncHTTPClient(
-                headers=self.headers,
-                cookies=self.cookies,
-                proxies=PixivConstants.CONFIG["proxy"].as_dict(),
-            )
-        return await self.clients[tid].__aenter__()  # type:ignore
-
-    async def __aexit__(self, *args):
-        tid = current_thread().ident or 1
-        if tid not in self.clients:
-            return
-        return await self.clients[tid].__aexit__(*args)

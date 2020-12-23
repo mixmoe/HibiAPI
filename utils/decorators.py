@@ -3,11 +3,26 @@ from datetime import datetime
 from functools import partial, wraps
 from inspect import iscoroutinefunction
 from time import sleep as syncSleep
-from typing import Callable, Iterable, Optional, Tuple, Type, TypeVar, Union, overload
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Iterable,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+    overload,
+)
+
+from starlette.concurrency import run_in_threadpool
 
 from .log import logger
 
 _AnyCallable = TypeVar("_AnyCallable", bound=Callable)
+_T = TypeVar("_T")
 
 
 def TimeIt(function: _AnyCallable) -> _AnyCallable:
@@ -94,4 +109,15 @@ def Retry(  # type:ignore
                 continue
         raise exception  # type:ignore
 
-    return asyncWrapper if iscoroutinefunction(function) else syncWrapper  # type:ignore
+    return TimeIt(
+        asyncWrapper if iscoroutinefunction(function) else syncWrapper
+    )  # type:ignore
+
+
+def ToAsync(function: Callable[..., _T]) -> Callable[..., Coroutine[Any, Any, _T]]:
+    @TimeIt
+    @wraps(function)
+    async def wrapper(*args, **kwargs):
+        return await run_in_threadpool(function, *args, **kwargs)
+
+    return wrapper

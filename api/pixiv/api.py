@@ -108,23 +108,11 @@ class PixivEndpoints(BaseEndpoint):
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        host = urlparse(url=PixivConstants.APP_HOST)
-        params = {
-            k: (v.value if isinstance(v, Enum) else v)
-            for k, v in (params or {}).items()
-            if v is not None
-        }
         try:
             response = await self.client.get(
-                ParseResult(
-                    scheme=host.scheme,
-                    netloc=host.netloc,
-                    path=endpoint.format(**params),
-                    params="",
-                    query="",
-                    fragment="",
-                ).geturl(),
-                params=params,
+                self._join(
+                    base=PixivConstants.APP_HOST, endpoint=endpoint, params=params or {}
+                )
             )
             response.raise_for_status()
             return response.json()
