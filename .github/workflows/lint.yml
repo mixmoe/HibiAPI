@@ -8,6 +8,7 @@ on:
     paths:
       - "**.py"
       - "**.pyi"
+      - ".github/workflows/lint.yml"
   pull_request:
     branches:
       - master
@@ -41,7 +42,7 @@ jobs:
           flake8: true
           flake8_args: "--config .flake8"
           mypy: true
-          mypy_args: "--config .mypy.ini"
+          mypy_args: ". --config .mypy.ini"
           black: true
           commit_message: ":rotating_light: 自动进行代码格式化"
           git_email: noreply@github.com
