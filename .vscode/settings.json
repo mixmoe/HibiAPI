@@ -13,6 +13,7 @@
         }
     },
     "cSpell.words": [
+        "Bilibili",
         "Hibi",
         "Imjad",
         "Pixiv",
@@ -27,6 +28,7 @@
         "noqa",
         "pydantic",
         "redoc",
+        "starlette",
         "ugoira",
         "uvicorn"
     ],
