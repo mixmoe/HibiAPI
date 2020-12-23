@@ -8,7 +8,6 @@ from typing import (
     Callable,
     Coroutine,
     Iterable,
-    List,
     Optional,
     Tuple,
     Type,

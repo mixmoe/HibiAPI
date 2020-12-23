@@ -3,7 +3,6 @@ from datetime import date, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, Optional
-from urllib.parse import ParseResult, urlparse
 
 from httpx import HTTPError, HTTPStatusError
 from utils.exceptions import UpstreamAPIException
