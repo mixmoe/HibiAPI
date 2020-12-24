@@ -7,6 +7,16 @@ _CONFIG = APIConfig("bilibili")
 
 
 class BilibiliConstants:
+    SERVER_HOST: Dict[str, str] = {
+        "app": "https://app.bilibili.com",
+        "api": "https://api.bilibili.com",
+        "interface": "https://interface.bilibili.com",
+        "main": "https://www.bilibili.com",
+        "bgm": "https://bangumi.bilibili.com",
+        "comment": "https://comment.bilibili.com",
+        "search": "https://s.search.bilibili.com",
+        "mobile": "https://m.bilibili.com",
+    }
     APP_HOST: str = "http://app.bilibili.com"
     DEFAULT_PARAMS: Dict[str, Any] = {
         "build": 507000,

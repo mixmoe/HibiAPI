@@ -90,6 +90,8 @@ class BaseEndpoint:
 
     def __getattribute__(self, name: str) -> Any:
         obj = super().__getattribute__(name)
+        if name.startswith("_"):
+            return obj
         if not callable(obj):
             return obj
         return validate_arguments(
