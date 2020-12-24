@@ -20,6 +20,7 @@
         "aenter",
         "aexit",
         "asyncio",
+        "bangumi",
         "httpx",
         "illusts",
         "iscoroutinefunction",
