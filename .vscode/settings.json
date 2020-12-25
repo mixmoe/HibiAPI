@@ -13,12 +13,14 @@
         }
     },
     "cSpell.words": [
+        "Bilibili",
         "Hibi",
         "Imjad",
         "Pixiv",
         "aenter",
         "aexit",
         "asyncio",
+        "bangumi",
         "httpx",
         "illusts",
         "iscoroutinefunction",
@@ -27,8 +29,10 @@
         "noqa",
         "pydantic",
         "redoc",
+        "starlette",
         "ugoira",
-        "uvicorn"
+        "uvicorn",
+        "vmid"
     ],
     "editor.formatOnSave": true,
     "files.watcherExclude": {

@@ -1,10 +1,11 @@
-from http.cookiejar import CookieJar
+from enum import Enum
 from threading import current_thread
 from types import TracebackType
 from typing import Any, Dict, Optional, Type
+from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
-from httpx import AsyncClient, HTTPError
+from httpx import URL, AsyncClient, Cookies, HTTPError
 from pydantic import Extra, validate_arguments
 
 from .decorators import Retry
@@ -31,11 +32,11 @@ class BaseNetClient:
     def __init__(
         self,
         headers: Optional[Dict[str, Any]] = None,
-        cookies: Optional[CookieJar] = None,
+        cookies: Optional[Cookies] = None,
         proxies: Optional[Dict[str, str]] = None,
     ):
         self.headers: Dict[str, Any] = headers or {}
-        self.cookies: CookieJar = cookies or CookieJar()
+        self.cookies: Cookies = cookies or Cookies()
         self.proxies: Dict[str, str] = proxies or {}
         self.clients: Dict[int, AsyncHTTPClient] = {}
 
@@ -64,12 +65,38 @@ class BaseNetClient:
 
 
 class BaseEndpoint:
+    type_checking: bool = True
+
     def __init__(self, client: AsyncHTTPClient):
         self.client = client
 
+    @staticmethod
+    def _join(base: str, endpoint: str, params: Dict[str, Any]) -> URL:
+        host: ParseResult = urlparse(base)
+        params = {
+            k: (v.value if isinstance(v, Enum) else v)
+            for k, v in params.items()
+            if v is not None
+        }
+        return URL(
+            url=ParseResult(
+                scheme=host.scheme,
+                netloc=host.netloc,
+                path=endpoint.format(**params),
+                params="",
+                query="",
+                fragment="",
+            ).geturl(),
+            params=params,
+        )
+
     def __getattribute__(self, name: str) -> Any:
         obj = super().__getattribute__(name)
-        if not callable(obj):
+        if not self.type_checking:
+            return obj
+        elif name.startswith("_"):
+            return obj
+        elif not callable(obj):
             return obj
         return validate_arguments(
             obj,
