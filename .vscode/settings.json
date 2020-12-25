@@ -31,7 +31,8 @@
         "redoc",
         "starlette",
         "ugoira",
-        "uvicorn"
+        "uvicorn",
+        "vmid"
     ],
     "editor.formatOnSave": true,
     "files.watcherExclude": {
