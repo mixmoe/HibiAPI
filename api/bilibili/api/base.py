@@ -1,6 +1,6 @@
 import hashlib
 import json
-from json.decoder import JSONDecodeError
+from enum import Enum
 from time import time
 from typing import Any, Dict, Optional, overload
 
@@ -8,10 +8,15 @@ from httpx import URL, HTTPError, HTTPStatusError
 from utils.exceptions import UpstreamAPIException
 from utils.utils import BaseEndpoint
 
-from .constants import BilibiliConstants
+from ..constants import BilibiliConstants
 
 
-class BilibiliEndpointImplention(BaseEndpoint):
+class TimelineType(str, Enum):
+    CN = "cn"
+    GLOBAL = "global"
+
+
+class BaseBilibiliEndpoint(BaseEndpoint):
     def _sign(self, base: str, endpoint: str, params: Dict[str, Any]) -> URL:
         params.update(
             {
@@ -33,7 +38,7 @@ class BilibiliEndpointImplention(BaseEndpoint):
         content = content.replace("http:", "https:")
         try:
             return json.loads(content)
-        except JSONDecodeError:
+        except json.JSONDecodeError:
             right, left = content.find("("), content.rfind(")")
             return json.loads(content[right + 1 : left].strip())
 
@@ -105,8 +110,10 @@ class BilibiliEndpointImplention(BaseEndpoint):
             "x/v2/search/suggest", params={"keyword": keyword, "type": type}
         )
 
-    async def space(self, *, vmid: int, pagesize: int = 10):
-        return await self.request("x/v2/space", params={"vmid": vmid, "ps": pagesize})
+    async def space(self, *, vmid: int, page: int = 1, pagesize: int = 10):
+        return await self.request(
+            "x/v2/space", params={"vmid": vmid, "ps": pagesize, "pn": page}
+        )
 
     async def space_archive(self, *, vmid: int, page: int = 1, pagesize: int = 10):
         return await self.request(
@@ -189,5 +196,60 @@ class BilibiliEndpointImplention(BaseEndpoint):
             params={"type": 1, "oid": aid, "pn": 1, "nohot": 1, "sort": sort},
         )
 
-    async def rank_list(self, *, type: str = "all"):
-        pass
+    async def rank_list_bangumi(
+        self,
+        *,
+        site: str,
+        duration: int = 3,
+    ):
+        return await self.request(
+            "jsonp/season_rank/{site}/{duration}.ver",
+            "bgm",
+            sign=False,
+            params={"duration": duration, "site": site},
+        )
+
+    async def rank_list(
+        self, type: str = "all", content: int = 0, duration: int = 3, new: bool = True
+    ):
+        return await self.request(
+            "index/rank/{type}-{new_post}{duration}-{content}.ver",
+            "main",
+            sign=False,
+            params={
+                "type": type,
+                "new_post": "" if new else "0",
+                "duration": duration,
+                "content": content,
+            },
+        )
+
+    async def type_dynamic(self):
+        return await self.request(
+            "typedynamic/index", "api", sign=False, params={"type": "json"}
+        )
+
+    async def timeline(self, type: TimelineType = TimelineType.GLOBAL):
+        return await self.request(
+            "web_api/timeline_{type}", "bgm", sign=False, params={"type": type}
+        )
+
+    async def recommend(self):
+        return self.request("index/recommend.json", "main", sign=False)
+
+    async def suggest(self, *, keyword: str):
+        return self.request(
+            "main/suggest",
+            "search",
+            sign=False,
+            params={
+                "func": "suggest",
+                "suggest_type": "accurate",
+                "sug_type": "tag",
+                "main_ver": "v1",
+                "keyword": keyword,
+            },
+        )
+
+    # async def search(self,keyword:str,type:str='all'):
+    #     return self.request

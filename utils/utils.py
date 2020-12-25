@@ -65,6 +65,8 @@ class BaseNetClient:
 
 
 class BaseEndpoint:
+    type_checking: bool = True
+
     def __init__(self, client: AsyncHTTPClient):
         self.client = client
 
@@ -90,9 +92,11 @@ class BaseEndpoint:
 
     def __getattribute__(self, name: str) -> Any:
         obj = super().__getattribute__(name)
-        if name.startswith("_"):
+        if not self.type_checking:
             return obj
-        if not callable(obj):
+        elif name.startswith("_"):
+            return obj
+        elif not callable(obj):
             return obj
         return validate_arguments(
             obj,
