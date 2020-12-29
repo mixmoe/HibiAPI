@@ -124,7 +124,7 @@ class PixivEndpoints(BaseEndpoint):
         return await self.request("v1/illust/detail", params={"illust_id": id})
 
     async def member(self, *, id: int):
-        return await self.request("v1/member/detail", params={"user_id": id})
+        return await self.request("v1/user/detail", params={"user_id": id})
 
     async def member_illust(
         self,
