@@ -2,6 +2,7 @@ import logging
 import re
 import sys
 from asyncio.log import logger as _asyncioLogger
+from datetime import timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -29,7 +30,14 @@ logger.add(
     filter=lambda record: record["level"].no < 30,
 )
 logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
-logger.add(LOG_PATH / "{time}.log", level=LOG_LEVEL, encoding="utf-8", enqueue=True)
+logger.add(
+    LOG_PATH / "{time}.log",
+    level=LOG_LEVEL,
+    encoding="utf-8",
+    enqueue=True,
+    compression="zip",
+    rotation=timedelta(days=1),
+)
 logger.level(Config["log"]["level"].as_str().upper())
 
 
