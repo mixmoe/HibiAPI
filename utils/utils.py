@@ -92,11 +92,11 @@ class BaseEndpoint:
 
     def __getattribute__(self, name: str) -> Any:
         obj = super().__getattribute__(name)
-        if not self.type_checking:
-            return obj
-        elif name.startswith("_"):
+        if name.startswith("_"):
             return obj
         elif not callable(obj):
+            return obj
+        elif not self.type_checking:
             return obj
         return validate_arguments(
             obj,
