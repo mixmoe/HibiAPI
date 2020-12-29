@@ -113,7 +113,6 @@ class PixivEndpoints(BaseEndpoint):
                     base=PixivConstants.APP_HOST, endpoint=endpoint, params=params or {}
                 )
             )
-            response.raise_for_status()
             return response.json()
         except HTTPStatusError as e:
             raise UpstreamAPIException(detail=e.response.text)

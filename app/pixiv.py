@@ -1,4 +1,5 @@
 import asyncio
+import inspect
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from api.pixiv import (
@@ -51,10 +52,8 @@ async def matchAll(
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
     func: Callable[..., Coroutine] = getattr(endpoint, type)
-    params = {**request.query_params}
-    if "type" in params:
-        params.pop("type")
-    return await func(**params)
+    params = inspect.signature(func).parameters
+    return await func(**{k: v for k, v in request.query_params.items() if k in params})
 
 
 @router.get(EndpointsType.illust)
