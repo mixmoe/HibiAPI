@@ -58,7 +58,7 @@ class UserInfo(BaseModel):
                 {"grant_type": "password", "username": username, "password": password}
             )
         async with AsyncHTTPClient(
-            proxies=PixivConstants.CONFIG["proxy"].as_dict()
+            proxies=PixivConstants.CONFIG["proxy"].get(Dict[str, str])  # type:ignore
         ) as client:
             response = await client.post(url, data=data, headers=headers)
             response.raise_for_status()
