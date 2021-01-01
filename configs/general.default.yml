@@ -8,7 +8,7 @@
 # An alternative implement of Imjad API
 
 debug: false # 是否开启Debug模式
-version: 0.1.0 # 程序版本, 勿动
+version: 0.2.0 # 程序版本, 勿动
 
 server:
   host: 127.0.0.1 # 监听主机
