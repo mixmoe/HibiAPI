@@ -39,6 +39,11 @@ app.add_middleware(
 )
 
 
+@app.get("/", include_in_schema=False)
+async def redirect():
+    return Response(status_code=302, headers={"Location": "/docs"})
+
+
 @app.exception_handler(HTTPException)
 async def exceptionHandler(request: Request, exc: HTTPException):
     content = {"url": str(request.url), "detail": exc.detail, "code": exc.status_code}

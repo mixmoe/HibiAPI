@@ -34,6 +34,7 @@
         "noqa",
         "pydantic",
         "redoc",
+        "rfind",
         "starlette",
         "ugoira",
         "uvicorn",
@@ -50,4 +51,5 @@
     },
     "git.autofetch": true,
     "git.enableSmartCommit": true,
+    "python.analysis.diagnosticMode": "workspace"
 }
