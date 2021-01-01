@@ -12,7 +12,6 @@ from .base import (
     RankBangumiType,
     RankContentType,
     RankDurationType,
-    RankType,
     TimelineType,
     VideoFormatType,
     VideoQualityType,
@@ -30,6 +29,22 @@ def process_keyerror(function: _AnyCallable) -> _AnyCallable:
             raise ClientSideException(detail=str(e))
 
     return wrapper  # type:ignore
+
+
+class V2EndpointsType(str, Enum):
+    playurl = "playurl"
+    seasoninfo = "seasoninfo"
+    source = "source"
+    seasonrecommend = "seasonrecommend"
+    comments = "comments"
+    search = "search"
+    rank = "rank"
+    typedynamic = "typedynamic"
+    recommend = "recommend"
+    timeline = "timeline"
+    space = "space"
+    archive = "archive"
+    favlist = "favlist"
 
 
 class SearchType(str, Enum):
@@ -109,14 +124,13 @@ class BilibiliEndpointV2(BaseEndpoint):
     async def rank(
         self,
         *,
-        type: RankType = RankType.all,
         content: Union[RankContentType, RankBangumiType] = RankContentType.FULL_SITE,
         duration: RankDurationType = RankDurationType.THREE_DAY,
         new: bool = True
     ):
         if isinstance(content, int):
             return await self.base.rank_list(
-                type=type, content=content, duration=duration, new=new
+                content=content, duration=duration, new=new
             )
         else:
             return await self.base.rank_list_bangumi(site=content, duration=duration)

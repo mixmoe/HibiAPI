@@ -54,13 +54,6 @@ class RankBangumiType(str, Enum):
     GLOBAL = "global"
 
 
-class RankType(str, Enum):
-    all = "all"
-    origin = "origin"
-    rookie = "rookie"
-    bangumi = "bangumi"
-
-
 class RankContentType(IntEnum):
     FULL_SITE = 0  # 0 	全站
     DOUGA = 1  # 1 	动画
@@ -212,7 +205,6 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         self,
         fid: int,
         vmid: int,
-        order: str = "ftime",
         page: int = 1,
         pagesize: int = 20,
     ):
@@ -224,7 +216,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
                 "pn": page,
                 "ps": pagesize,
                 "vmid": vmid,
-                "order": order,
+                "order": "ftime",
             },
         )
 
@@ -233,10 +225,9 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         *,
         fid: int,
         vmid: int,
-        order: str = "ftime",
         page: int = 1,
         pagesize: int = 20,
-    ):
+    ):  # NOTE: this endpoint is not used
         return await self.request(
             "event/getlist",
             "api",
@@ -245,7 +236,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
                 "pn": page,
                 "ps": pagesize,
                 "vmid": vmid,
-                "order": order,
+                "order": "ftime",
             },
         )
 
@@ -304,17 +295,15 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def rank_list(
         self,
-        type: RankType = RankType.all,
         content: RankContentType = RankContentType.FULL_SITE,
         duration: RankDurationType = RankDurationType.THREE_DAY,
         new: bool = True,
     ):
         return await self.request(
-            "index/rank/{type}-{new_post}{duration}-{content}.json",
+            "index/rank/all-{new_post}{duration}-{content}.json",
             "main",
             sign=False,
             params={
-                "type": type,
                 "new_post": "" if new else "0",
                 "duration": duration,
                 "content": content,
@@ -334,7 +323,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     async def recommend(self):
         return await self.request("index/recommend.json", "main", sign=False)
 
-    async def suggest(self, *, keyword: str):
+    async def suggest(self, *, keyword: str):  # NOTE: this endpoint is not used
         return await self.request(
             "main/suggest",
             "search",
