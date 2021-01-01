@@ -14,6 +14,16 @@ server:
   host: 127.0.0.1 # 监听主机
   port: 8080 # 端口
 
+  cors:
+    origins:
+      - "http://localhost.tiangolo.com"
+      - "https://localhost.tiangolo.com"
+      - "http://localhost"
+      - "http://localhost:8080"
+    credentials: true
+    methods: ["*"]
+    headers: ["*"]
+
 log:
   level: INFO # 日志等级, 可选 [TRACE,DEBUG,INFO,WARNING,ERROR]
   format: > # 输出日志格式, 如果没有必要请不要修改

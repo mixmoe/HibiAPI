@@ -1,3 +1,3 @@
 net:
   cookie: "DedeUserID=; DedeUserID__ckMd5=; SESSDATA=;"
-  user-agent: "Mozilla/5.0 (X11; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
+  user-agent: "HibiAPI/latest mixmoe@GitHub"
