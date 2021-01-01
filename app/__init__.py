@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Callable, Coroutine
+from typing import Any, Callable, Coroutine, List
 
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import HTTPException
@@ -32,10 +32,10 @@ app.include_router(PixivRouter, prefix="/pixiv")
 app.include_router(BilibiliRouter, prefix="/bilibili")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=Config["server"]["cors"]["origins"].as_iterable(list),
+    allow_origins=Config["server"]["cors"]["origins"].get(List[str]),
     allow_credentials=Config["server"]["cors"]["credentials"].as_bool(),
-    allow_methods=Config["server"]["cors"]["methods"].as_iterable(list),
-    allow_headers=Config["server"]["cors"]["headers"].as_iterable(list),
+    allow_methods=Config["server"]["cors"]["methods"].get(List[str]),
+    allow_headers=Config["server"]["cors"]["headers"].get(List[str]),
 )
 
 

@@ -36,6 +36,8 @@ class V3EndpointsType(str, Enum):
     search_recommend = "search_recommend"
     search_suggestion = "search_suggestion"
 
+    comments = "comments"
+
 
 class BilibiliEndpointV3(BaseEndpoint):
     def __init__(self, client: AsyncHTTPClient):
