@@ -1,4 +1,4 @@
-# Generated at $(date -R)
+# Fri, 01 Jan 2021 16:26:03 +0000
 certifi==2020.12.5; python_version >= "3.6" \
     --hash=sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830 \
     --hash=sha256:1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c
