@@ -1,19 +1,23 @@
-# HibiAPI
+<div align="center">
 
-![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
+# HibiAPI
+[![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
+![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
+![Version](https://img.shields.io/badge/dynamic/yaml?color=green&label=version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fmixmoe%2FHibiAPI%2Fmain%2Fconfigs%2Fgeneral.default.yml)
+
 [![GitHub license](https://img.shields.io/github/license/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/network)
 [![GitHub issues](https://img.shields.io/github/issues/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/issues)
-![Python version](https://img.shields.io/badge/Python-3.8%2B-yellowgreen)
+![Python version](https://img.shields.io/badge/python-3.8%2B-yellowgreen)
 
 **An alternative implement of Imjad API.**
 
 **Imjad API 的开源替代.**
 
-[![Online Demo](https://img.shields.io/badge/Demo-Click_Here-red?style=for-the-badge)](https://api.obfs.dev/docs)
+</div>
 
 ---
 
