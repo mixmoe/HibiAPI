@@ -1,5 +1,4 @@
 import asyncio
-import inspect
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from api.pixiv import (
@@ -16,7 +15,7 @@ from api.pixiv import (
 )
 from fastapi import Depends, Request
 from utils.log import logger
-from utils.utils import SlashRouter
+from utils.utils import SlashRouter, exclude_params
 
 router = SlashRouter(tags=["Pixiv"])
 
@@ -52,8 +51,7 @@ async def matchAll(
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
     func: Callable[..., Coroutine] = getattr(endpoint, type)
-    params = inspect.signature(func).parameters
-    return await func(**{k: v for k, v in request.query_params.items() if k in params})
+    return await func(**exclude_params(func, request.query_params))
 
 
 @router.get(EndpointsType.illust)

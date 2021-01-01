@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Generic, Optional, Type, TypeVar
 
@@ -8,6 +9,16 @@ CONFIG_DIR = Path(".") / "configs"
 
 
 _T = TypeVar("_T")
+
+
+for file in os.listdir(CONFIG_DIR):
+    path = CONFIG_DIR / file
+    if not file.endswith(".default.yml"):
+        continue
+    new_path = CONFIG_DIR / file.replace(".default", "")
+    if new_path.is_file():
+        continue
+    new_path.write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
 
 
 class _TypeChecker(BaseModel, Generic[_T]):
