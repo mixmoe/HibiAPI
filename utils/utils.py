@@ -1,15 +1,22 @@
+import asyncio
+import inspect
 from enum import Enum
 from threading import current_thread
 from types import TracebackType
-from typing import Any, Dict, Optional, Type
+from typing import Any, Callable, Dict, Mapping, Optional, Type
 from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
-from httpx import URL, AsyncClient, Cookies, HTTPError
+from httpx import URL, AsyncClient, Cookies, Request, Response, TransportError
 from pydantic import Extra, validate_arguments
 
 from .decorators import Retry
-from .exceptions import UpstreamAPIException
+from .log import logger
+
+
+def exclude_params(func: Callable, params: Mapping[str, Any]) -> Dict[str, Any]:
+    func_params = inspect.signature(func).parameters
+    return {k: v for k, v in params.items() if k in func_params}
 
 
 class SlashRouter(APIRouter):
@@ -20,12 +27,9 @@ class SlashRouter(APIRouter):
 
 
 class AsyncHTTPClient(AsyncClient):
-    @Retry
+    @Retry(exceptions=[TransportError])
     async def request(self, *args, **kwargs):
-        try:
-            return await super().request(*args, **kwargs)
-        except HTTPError:
-            raise UpstreamAPIException
+        return await super().request(*args, **kwargs)
 
 
 class BaseNetClient:
@@ -40,6 +44,22 @@ class BaseNetClient:
         self.proxies: Dict[str, str] = proxies or {}
         self.clients: Dict[int, AsyncHTTPClient] = {}
 
+    @staticmethod
+    async def _log_request(request: Request):
+        method, url = request.method, request.url
+        logger.debug(
+            f"Network request <y>sent</y>: <b><e>{method}</e> <u>{url}</u></b>"
+        )
+
+    @staticmethod
+    async def _log_response(response: Response):
+        method, url = response.request.method, response.url
+        length, code = len(response.content), response.status_code
+        logger.debug(
+            f"Network request <g>finished</g>: <b><e>{method}</e> "
+            f"<u>{url}</u> <m>{code}</m></b> <m>{length}</m>"
+        )
+
     async def __aenter__(self) -> AsyncHTTPClient:
         tid = current_thread().ident or 1
         if tid not in self.clients:
@@ -47,14 +67,18 @@ class BaseNetClient:
                 headers=self.headers,
                 proxies=self.proxies,  # type:ignore
                 cookies=self.cookies,
+                event_hooks={
+                    "request": [self._log_request],
+                    "response": [self._log_response],
+                },
             )
         return await self.clients[tid].__aenter__()
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ):
         if exc_type is None:
             return
@@ -62,6 +86,11 @@ class BaseNetClient:
         if tid not in self.clients:
             return
         await self.clients.pop(tid).__aexit__(exc_type, exc_value, traceback)
+
+    def __del__(self):
+        asyncio.ensure_future(
+            asyncio.gather(*map(lambda f: f.aclose(), self.clients.values()))
+        )
 
 
 class BaseEndpoint:
@@ -102,7 +131,6 @@ class BaseEndpoint:
             obj,
             config={
                 "extra": Extra.forbid,
-                "use_enum_values": True,
                 "allow_mutation": False,
             },
         )

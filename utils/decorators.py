@@ -60,8 +60,8 @@ def Retry(function: _AnyCallable) -> _AnyCallable:
 @overload
 def Retry(
     *,
-    retires: int = 3,
-    delay: int = 3,
+    retries: int = 3,
+    delay: float = 0.1,
     exceptions: Optional[Iterable[Type[Exception]]] = None,
 ) -> Callable[[_AnyCallable], _AnyCallable]:
     ...
@@ -70,26 +70,32 @@ def Retry(
 def Retry(  # type:ignore
     function: Optional[_AnyCallable] = None,
     *,
-    retires: int = 3,
+    retries: int = 3,
     delay: float = 0.1,
     exceptions: Optional[Tuple[Type[Exception], ...]] = None,
 ) -> Union[_AnyCallable, Callable[[_AnyCallable], _AnyCallable]]:
     if function is None:
-        return partial(Retry, retires=retires, delay=delay, exceptions=exceptions)
+        return partial(
+            Retry, retries=retries, delay=delay, exceptions=exceptions
+        )  # type:ignore
 
     allowedExceptions: Tuple[Type[Exception], ...] = tuple(exceptions or [Exception])
-    assert (retires >= 1) and (delay >= 0)
+    assert (retries >= 1) and (delay >= 0)
 
     @wraps(function)
     def syncWrapper(*args, **kwargs):
         exception: Optional[Exception] = None
-        for retried in range(retires):
+        for retried in range(retries):
             try:
                 return function(*args, **kwargs)
             except Exception as e:
                 if not isinstance(e, allowedExceptions):
                     raise
-                exception = e
+                exception, remain = e, retries - retried
+                logger.debug(
+                    f"Retry of {function=} trigged due to "
+                    f"{exception=} raised ({remain=})"
+                )
                 syncSleep(delay)
                 continue
         raise exception  # type:ignore
@@ -97,7 +103,7 @@ def Retry(  # type:ignore
     @wraps(function)
     async def asyncWrapper(*args, **kwargs):
         exception: Optional[Exception] = None
-        for retried in range(retires):
+        for retried in range(retries):
             try:
                 return await function(*args, **kwargs)
             except Exception as e:

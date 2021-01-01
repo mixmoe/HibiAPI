@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
-from typing import Generic, Optional, Type, TypeVar
+from typing import Any, Dict, Generic, Optional, Type, TypeVar
 
 import confuse  # type:ignore
-from pydantic import BaseModel
+from pydantic.generics import GenericModel
 
 CONFIG_DIR = Path(".") / "configs"
 
@@ -10,37 +11,48 @@ CONFIG_DIR = Path(".") / "configs"
 _T = TypeVar("_T")
 
 
-class _TypeChecker(BaseModel, Generic[_T]):
+def _generate_default() -> int:
+    generated = 0
+    for file in os.listdir(CONFIG_DIR):
+        path = CONFIG_DIR / file
+        if not file.endswith(".default.yml"):
+            continue
+        new_path = CONFIG_DIR / file.replace(".default", "")
+        if new_path.is_file():
+            continue
+        generated += new_path.write_text(
+            path.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+    return generated
+
+
+assert _generate_default() <= 0, "Please complete config file!"
+
+
+class _TypeChecker(GenericModel, Generic[_T]):
     value: _T
 
 
 class ConfigSubView(confuse.Subview):
     def get(self, template: Optional[Type[_T]] = None) -> _T:
-        try:
-            return super().get(template=template or confuse.REQUIRED)  # type:ignore
-        except Exception:
-            return _TypeChecker[template](value=super().get()).value  # type:ignore
+        return _TypeChecker[template or Any](value=super().get()).value  # type:ignore
 
     def as_str(self) -> str:
-        return super().as_str()  # type:ignore
+        return self.get(str)
 
     def as_number(self) -> int:
-        return super().as_number()  # type:ignore
+        return self.get(int)
 
     def as_bool(self) -> bool:
-        return self.get(bool)  # type:ignore
+        return self.get(bool)
 
     def as_path(self) -> Path:
-        return super().as_path()  # type:ignore
+        return self.get(Path)
 
-    def as_dict(self) -> dict:
-        return self.get(dict)  # type:ignore
+    def as_dict(self) -> Dict[str, Any]:
+        return self.get(Dict[str, Any])
 
-    def as_iterable(self, serializer: Optional[Type[_T]] = None) -> _T:
-        value = self.get(list)
-        return value if serializer is None else serializer(value)  # type:ignore
-
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> "ConfigSubView":
         return self.__class__(self, key)
 
 
@@ -56,7 +68,7 @@ class AppConfig(confuse.Configuration):
         return str(self._config_path)
 
     @staticmethod
-    def _generate_default_name(path: Path):
+    def _generate_default_name(path: Path) -> Path:
         filename, ext = path.name.rsplit(".", 1)
         return path.with_name(filename + ".default." + ext)
 
@@ -64,17 +76,24 @@ class AppConfig(confuse.Configuration):
         return str(self._config)
 
     def _add_default_source(self):
-        if self._default is None:
-            return
-        assert self._default.is_file()
         data = confuse.load_yaml(self._default, loader=self.loader)
-        self.add(confuse.ConfigSource(data, filename=str(self._default), default=True))
+        self.add(
+            confuse.ConfigSource(
+                data,
+                filename=str(self._default),
+                default=True,
+            )
+        )
 
     def _add_user_source(self):
-        if not Path(self._config).is_file():
-            Path(self._config).write_bytes(self._default.read_bytes())
         data = confuse.load_yaml(self._config, loader=self.loader)
-        self.add(confuse.ConfigSource(data, filename=str(self._config), default=True))
+        self.add(
+            confuse.ConfigSource(
+                data,
+                filename=str(self._config),
+                default=True,
+            )
+        )
 
     def __getitem__(self, key: str) -> ConfigSubView:
         return ConfigSubView(self, key)

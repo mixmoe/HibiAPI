@@ -1,6 +1,6 @@
 import hashlib
 import json
-from enum import Enum
+from enum import Enum, IntEnum
 from time import time
 from typing import Any, Dict, Optional, overload
 
@@ -14,6 +14,68 @@ from ..constants import BilibiliConstants
 class TimelineType(str, Enum):
     CN = "cn"
     GLOBAL = "global"
+
+
+class CommentSortType(IntEnum):
+    LIKES = 2
+    HOT = 1
+    TIME = 0
+
+
+class CommentType(IntEnum):
+    VIDEO = 1
+    ARTICLE = 12
+    DYNAMIC_PICTURE = 11
+    DYNAMIC_TEXT = 17
+    AUDIO = 14
+    AUDIO_LIST = 19
+
+
+class VideoQualityType(IntEnum):
+    VIDEO_240P = 6
+    VIDEO_360P = 16
+    VIDEO_480P = 32
+    VIDEO_720P = 64
+    VIDEO_720P_60FPS = 74
+    VIDEO_1080P = 80
+    VIDEO_1080P_PLUS = 112
+    VIDEO_1080P_60FPS = 116
+    VIDEO_4K = 120
+
+
+class VideoFormatType(IntEnum):
+    FLV = 0
+    MP4 = 2
+    DASH = 16
+
+
+class RankBangumiType(str, Enum):
+    CN = "cn"
+    GLOBAL = "global"
+
+
+class RankContentType(IntEnum):
+    FULL_SITE = 0  # 0 	全站
+    DOUGA = 1  # 1 	动画
+    GUOCHUANG = 168  # 168 	国创相关
+    MUSIC = 3  # 3 	音乐
+    DANCE = 129  # 129 	舞蹈
+    GAME = 4  # 4 	游戏
+    TECHNOLOGY = 36  # 36 	科技
+    LIFE = 160  # 160 	生活
+    KICHIKU = 119  # 119 	鬼畜
+    FASHION = 155  # 155 	时尚
+    INFORMATION = 165  # 165 	广告
+    ENT = 5  # 5 	娱乐
+    MOVIE = 23  # 23 	电影
+    TV = 11  # 11 	电视剧
+
+
+class RankDurationType(IntEnum):
+    DAILY = 1
+    THREE_DAY = 3
+    WEEKLY = 7
+    MONTHLY = 30
 
 
 class BaseBilibiliEndpoint(BaseEndpoint):
@@ -56,7 +118,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     async def request(
         self,
         endpoint: str,
-        path: str,
+        source: str,
         *,
         sign: bool = True,
         params: Optional[Dict[str, Any]] = None,
@@ -66,19 +128,19 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     async def request(
         self,
         endpoint: str,
-        path: Optional[str] = None,
+        source: Optional[str] = None,
         *,
         sign: bool = True,
         params: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        host, endpoint = (
-            (BilibiliConstants.APP_HOST, endpoint)
-            if path is None
-            else (BilibiliConstants.SERVER_HOST[endpoint], path)
+        host = (
+            BilibiliConstants.APP_HOST
+            if source is None
+            else BilibiliConstants.SERVER_HOST[source]
         )
         url = (
             self._join(base=host, endpoint=endpoint, params=params or {})
-            if sign
+            if not sign
             else self._sign(base=host, endpoint=endpoint, params=params or {})
         )
         try:
@@ -90,8 +152,27 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         except HTTPError:
             raise UpstreamAPIException
 
-    async def cid2url(self, *, cid: int, quality: int = 2, type: str = "hdmp4"):
-        pass
+    async def playurl(
+        self,
+        *,
+        aid: int,
+        cid: int,
+        quality: VideoQualityType = VideoQualityType.VIDEO_480P,
+        type: VideoFormatType = VideoFormatType.FLV,
+    ):
+        return await self.request(
+            "x/player/playurl",
+            "api",
+            sign=False,
+            params={
+                "avid": aid,
+                "cid": cid,
+                "qn": quality,
+                "fnval": type,
+                "fnver": 0,
+                "fourk": 0 if quality >= VideoQualityType.VIDEO_4K else 1,
+            },
+        )
 
     async def view(self, *, aid: int):
         return await self.request("x/v2/view", params={"aid": aid})
@@ -124,18 +205,18 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         self,
         fid: int,
         vmid: int,
-        order: str = "ftime",
         page: int = 1,
         pagesize: int = 20,
     ):
         return await self.request(
             "x/v2/fav/video",
+            "api",
             params={
                 "fid": fid,
                 "pn": page,
                 "ps": pagesize,
                 "vmid": vmid,
-                "order": order,
+                "order": "ftime",
             },
         )
 
@@ -144,10 +225,9 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         *,
         fid: int,
         vmid: int,
-        order: str = "ftime",
         page: int = 1,
         pagesize: int = 20,
-    ):
+    ):  # NOTE: this endpoint is not used
         return await self.request(
             "event/getlist",
             "api",
@@ -156,26 +236,13 @@ class BaseBilibiliEndpoint(BaseEndpoint):
                 "pn": page,
                 "ps": pagesize,
                 "vmid": vmid,
-                "order": order,
+                "order": "ftime",
             },
         )
 
     async def season_info(self, *, season_id: int):
         return await self.request(
             "api/season_v5", "bgm", params={"season_id": season_id}
-        )
-
-    async def season_info_web(self, *, season_id: int):
-        return await self.request(
-            "jsonp/seasoninfo/{season_id}.ver",
-            "bgm",
-            sign=False,
-            params={
-                "callback": "seasonListCallback",
-                "jsonp": "jsonp",
-                "season_id": season_id,
-                "_": int(time()),
-            },
         )
 
     async def bangumi_source(self, *, episode_id: int):
@@ -185,39 +252,58 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def season_recommend(self, *, season_id: int):
         return await self.request(
-            "api/season/recommend/rnd/{season_id}.json", params={"season_id": season_id}
-        )
-
-    async def comments(self, *, aid: int, sort: int = 0):
-        return await self.request(
-            "x/reply",
+            "pgc/season/web/related/recommend",
             "api",
             sign=False,
-            params={"type": 1, "oid": aid, "pn": 1, "nohot": 1, "sort": sort},
+            params={"season_id": season_id},
+        )
+
+    async def comments(
+        self,
+        *,
+        type: CommentType,
+        oid: int,
+        sort: CommentSortType = CommentSortType.TIME,
+        page: int = 1,
+        pagesize: int = 20,
+    ):
+        return await self.request(
+            "x/v2/reply",
+            "api",
+            sign=False,
+            params={
+                "type": type,
+                "oid": oid,
+                "sort": sort,
+                "pn": page,
+                "ps": pagesize,
+            },
         )
 
     async def rank_list_bangumi(
         self,
         *,
-        site: str,
-        duration: int = 3,
+        site: RankBangumiType = RankBangumiType.GLOBAL,
+        duration: RankDurationType = RankDurationType.THREE_DAY,
     ):
         return await self.request(
-            "jsonp/season_rank/{site}/{duration}.ver",
+            "jsonp/season_rank_list/{site}/{duration}.ver",
             "bgm",
             sign=False,
             params={"duration": duration, "site": site},
         )
 
     async def rank_list(
-        self, type: str = "all", content: int = 0, duration: int = 3, new: bool = True
+        self,
+        content: RankContentType = RankContentType.FULL_SITE,
+        duration: RankDurationType = RankDurationType.THREE_DAY,
+        new: bool = True,
     ):
         return await self.request(
-            "index/rank/{type}-{new_post}{duration}-{content}.ver",
+            "index/rank/all-{new_post}{duration}-{content}.json",
             "main",
             sign=False,
             params={
-                "type": type,
                 "new_post": "" if new else "0",
                 "duration": duration,
                 "content": content,
@@ -235,10 +321,10 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         )
 
     async def recommend(self):
-        return self.request("index/recommend.json", "main", sign=False)
+        return await self.request("index/recommend.json", "main", sign=False)
 
-    async def suggest(self, *, keyword: str):
-        return self.request(
+    async def suggest(self, *, keyword: str):  # NOTE: this endpoint is not used
+        return await self.request(
             "main/suggest",
             "search",
             sign=False,
@@ -250,6 +336,3 @@ class BaseBilibiliEndpoint(BaseEndpoint):
                 "keyword": keyword,
             },
         )
-
-    # async def search(self,keyword:str,type:str='all'):
-    #     return self.request

@@ -58,11 +58,13 @@ class BaseServerException(HTTPException):
         detail: Optional[str] = None,
         *,
         code: Optional[int] = None,
-        headers: Optional[Dict[str, Any]] = None
+        headers: Optional[Dict[str, Any]] = None,
+        **params
     ) -> None:
         detail = detail or self.detail
         headers = headers or self.headers
         code = code or self.code
+        self.extra = params
         super().__init__(status_code=code, detail=detail, headers=headers)
 
 

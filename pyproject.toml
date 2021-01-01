@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "HibiAPI"
-version = "0.1.0"
+version = "0.2.0"
 description = "An alternative implement of Imjad API"
 authors = ["mixmoe"]
 license = "Apache-2.0"
