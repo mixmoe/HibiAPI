@@ -24,13 +24,6 @@ LOG_LEVEL = Config["log"]["level"].as_str().upper()
 logger: "Logger" = _logger.opt(colors=True)
 logger.remove()
 logger.add(
-    sys.stdout,
-    level=LOG_LEVEL,
-    format=LOG_FORMAT,
-    filter=lambda record: record["level"].no < 30,
-)
-logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
-logger.add(
     LOG_PATH / "{time}.log",
     level=LOG_LEVEL,
     encoding="utf-8",
@@ -38,6 +31,13 @@ logger.add(
     compression="zip",
     rotation=timedelta(days=1),
 )
+logger.add(
+    sys.stdout,
+    level=LOG_LEVEL,
+    format=LOG_FORMAT,
+    filter=lambda record: record["level"].no < 30,
+)
+logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
 logger.level(Config["log"]["level"].as_str().upper())
 
 

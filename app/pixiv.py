@@ -41,6 +41,7 @@ async def login():
                 PixivConstants.CONFIG["account"]["refresh-interval"].as_number()
             )
 
+    await PixivAPIRoot.login()
     asyncio.ensure_future(_refreshIdentity())
 
 
