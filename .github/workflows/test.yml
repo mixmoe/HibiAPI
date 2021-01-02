@@ -1,3 +1,5 @@
+name: Testing
+
 on:
   workflow_dispatch:
 
@@ -10,7 +12,7 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: Lint Code
+    name: Code Testing
 
     if: ${{! contains( github.event.head_commit.message , 'forward:' ) }}
 
@@ -40,7 +42,8 @@ jobs:
 
       - name: Start Testing
         env:
-          DOTENV_FILE: ${{ secrets.DOTENV_FILE }}
+          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
         run: |
-          echo $DOTENV_FILE > configs/.env
+          export $ENVIRONMENTS
+          echo $ENVIRONMENTS > configs/.env
           pytest
