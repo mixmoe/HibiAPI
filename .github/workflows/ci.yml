@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+  push:
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Testing
+
+    if: "!contains(github.event.head_commit.message,'forward:')"
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set up python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          poetry export -f requirements.txt -o /tmp/requirements.txt --dev
+          pip install -r /tmp/requirements.txt
+
+      - name: Testing with pytest
+        env:
+          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
+        run: |
+          export $ENVIRONMENTS
+          echo $ENVIRONMENTS > configs/.env
+          pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    name: Build Docker Image
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Add environment files
+        env:
+          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
+        run: |
+          echo $ENVIRONMENTS > configs/.env
+
+      - name: Test building Docker image
+        run: |
+          docker build .
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deployment
+    needs: [test, docker]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Add environment files
+        env:
+          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
+        run: |
+          echo $ENVIRONMENTS > configs/.env
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.8.9
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_app_name: hibiapi
+          usedocker: true
+          dontuseforce: true
