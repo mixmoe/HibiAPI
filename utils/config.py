@@ -10,7 +10,6 @@ from pydantic.generics import GenericModel
 CONFIG_DIR = Path(".") / "configs"
 ENV_DIR = CONFIG_DIR / ".env"
 
-assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True)
 _T = TypeVar("_T")
 
 
@@ -29,7 +28,10 @@ def _generate_default() -> int:
     return generated
 
 
-assert _generate_default() <= 0, "Please complete config file!"
+if ENV_DIR.is_file():
+    assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True)
+else:
+    assert _generate_default() <= 0, "Please complete config file!"
 
 
 class _TypeChecker(GenericModel, Generic[_T]):
