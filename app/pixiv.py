@@ -38,7 +38,7 @@ async def login():
             except Exception:
                 logger.exception("Exception occurred during trying to login account:")
             await asyncio.sleep(
-                PixivConstants.CONFIG["account"]["refresh_interval"].as_number()
+                PixivConstants.CONFIG["account"]["refresh-interval"].as_number()
             )
 
     asyncio.ensure_future(_refreshIdentity())

@@ -8,6 +8,6 @@ proxy: {}
 account:
   username: "" # Pixiv帐号
   password: "" # Pixiv密码
-  refresh_interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
+  refresh-interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
 
 language: zh-cn # 返回语言, 会影响tag翻译
