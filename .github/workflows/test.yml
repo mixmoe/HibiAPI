@@ -1,0 +1,46 @@
+on:
+  workflow_dispatch:
+
+  push:
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint Code
+
+    if: ${{! contains( github.event.head_commit.message , 'forward:' ) }}
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: |
+          pip install poetry
+          poetry export -f requirements.txt -o /tmp/requirements.txt --dev
+          pip install -r /tmp/requirements.txt
+
+      - name: Start Testing
+        env:
+          DOTENV_FILE: ${{ secrets.DOTENV_FILE }}
+        run: |
+          echo $DOTENV_FILE > configs/.env
+          pytest
