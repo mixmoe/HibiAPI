@@ -1,12 +1,14 @@
+import json
 import os
 from pathlib import Path
 from typing import Any, Dict, Generic, Optional, Type, TypeVar
 
 import confuse  # type:ignore
+import dotenv
 from pydantic.generics import GenericModel
 
 CONFIG_DIR = Path(".") / "configs"
-
+ENV_DIR = CONFIG_DIR / ".env"
 
 _T = TypeVar("_T")
 
@@ -26,7 +28,10 @@ def _generate_default() -> int:
     return generated
 
 
-assert _generate_default() <= 0, "Please complete config file!"
+if ENV_DIR.is_file():
+    assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True)
+else:
+    assert _generate_default() <= 0, "Please complete config file!"
 
 
 class _TypeChecker(GenericModel, Generic[_T]):
@@ -58,10 +63,11 @@ class ConfigSubView(confuse.Subview):
 
 class AppConfig(confuse.Configuration):
     def __init__(self, name: str, path: Path):
-        self._config_path = path
+        self._config_path, self._config_name = path, name
         self._config = self._config_path / (name + ".yml")
         self._default = self._generate_default_name(self._config)
         super().__init__(name)
+        self._add_env_source()
 
     def config_dir(self) -> str:
         Path(self._config_path).mkdir(exist_ok=True, parents=True)
@@ -75,25 +81,30 @@ class AppConfig(confuse.Configuration):
     def user_config_path(self) -> str:
         return str(self._config)
 
+    def _add_env_source(self):
+        config_name = self._config_name.lower() + "_"
+        env_configs = {
+            k[len(config_name) :].lower(): str(v)
+            for k, v in os.environ.items()
+            if k.lower().startswith(config_name)
+        }
+        source_tree: Dict[str, Any] = {}
+        for key, value in env_configs.items():
+            _tmp = source_tree
+            *nodes, name = key.split("_")
+            for node in nodes:
+                _tmp = _tmp.setdefault(node, {})
+            try:
+                _tmp[name] = json.loads(value)
+            except json.JSONDecodeError:
+                _tmp[name] = value
+        self.sources.insert(0, confuse.ConfigSource.of(source_tree))
+
     def _add_default_source(self):
-        data = confuse.load_yaml(self._default, loader=self.loader)
-        self.add(
-            confuse.ConfigSource(
-                data,
-                filename=str(self._default),
-                default=True,
-            )
-        )
+        self.add(confuse.YamlSource(self._default, default=True))
 
     def _add_user_source(self):
-        data = confuse.load_yaml(self._config, loader=self.loader)
-        self.add(
-            confuse.ConfigSource(
-                data,
-                filename=str(self._config),
-                default=True,
-            )
-        )
+        self.add(confuse.YamlSource(self._config, optional=True))
 
     def __getitem__(self, key: str) -> ConfigSubView:
         return ConfigSubView(self, key)

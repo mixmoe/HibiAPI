@@ -109,7 +109,7 @@ async def season_info(
     return await endpoint.season_info(season_id=season_id)
 
 
-@router.get(V3EndpointsType.search_recommend)
+@router.get(V3EndpointsType.season_recommend)
 async def season_recommend(
     season_id: int, endpoint: BilibiliEndpointV3 = Depends(requestClient)
 ):
