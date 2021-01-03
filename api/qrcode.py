@@ -2,6 +2,7 @@ from enum import Enum
 from io import BytesIO
 from typing import Optional
 
+from fastapi.responses import StreamingResponse
 from PIL import Image  # type:ignore
 from utils.decorators import ToAsync
 from utils.utils import BaseNetClient
@@ -35,7 +36,6 @@ def generate_qrcode(
     fgcolor: str = "#000000"
 ):
     qr = QRCode(
-        text,
         error_correction={
             QRCodeLevel.L: constants.ERROR_CORRECT_L,
             QRCodeLevel.M: constants.ERROR_CORRECT_M,
@@ -55,7 +55,6 @@ def generate_qrcode(
     if icon_stream is None:
         return image
     icon = Image.open(icon_stream)
-    icon.resize((int(size / 10), int(size / 10)))
     icon_width, icon_height = icon.size
     image.paste(
         icon,
@@ -97,4 +96,6 @@ async def qrcode(
         icon_stream=icon_stream,
     )
     stream = BytesIO()
-    qr.save(stream)
+    qr.save(stream, "PNG")
+    stream.seek(0)
+    return StreamingResponse(content=stream, media_type="image/png")
