@@ -78,6 +78,12 @@ class UpstreamAPIException(ServerSideException):
     detail = "Upstram API request failed"
 
 
+class UncaughtException(ServerSideException):
+    code = 500
+    detail = "Uncaught exception raised during processing"
+    exc: Exception
+
+
 class ClientSideException(BaseServerException):
     code = 400
     detail = "Bad Request"

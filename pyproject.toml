@@ -13,6 +13,8 @@ uvicorn = "^0.13.1"
 confuse = "^1.4.0"
 loguru = "^0.5.3"
 python-dotenv = "^0.15.0"
+qrcode = {extras = ["pil"], version = "^6.1"}
+aiofiles = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

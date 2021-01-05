@@ -1,10 +1,12 @@
+import asyncio
 from datetime import datetime
-from typing import Any, Callable, Coroutine, List
+from typing import Any, Callable, Coroutine, List, NoReturn
 
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic.error_wrappers import ValidationError
 from utils.config import Config
 from utils.exceptions import (
@@ -15,9 +17,11 @@ from utils.exceptions import (
     ServerSideException,
 )
 from utils.log import logger
+from utils.temp import TempFile
 
 from app.bilibili import router as BilibiliRouter
 from app.pixiv import router as PixivRouter
+from app.qrcode import router as QRCodeRouter
 
 app = FastAPI(
     debug=Config["debug"].as_bool(),
@@ -30,6 +34,7 @@ app = FastAPI(
 )
 app.include_router(PixivRouter, prefix="/pixiv")
 app.include_router(BilibiliRouter, prefix="/bilibili")
+app.include_router(QRCodeRouter, prefix="/qrcode")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=Config["server"]["cors"]["origins"].get(List[str]),
@@ -37,6 +42,24 @@ app.add_middleware(
     allow_methods=Config["server"]["cors"]["methods"].get(List[str]),
     allow_headers=Config["server"]["cors"]["headers"].get(List[str]),
 )
+app.mount(
+    "/temp",
+    StaticFiles(directory=str(TempFile.path), check_dir=False),
+    "Temporary file directory",
+)
+
+
+@app.on_event("startup")
+async def cleaner():
+    async def clean() -> NoReturn:
+        while True:
+            try:
+                await TempFile.clean()
+            except Exception:
+                logger.exception("Exception occurred during executing cleaning task:")
+            await asyncio.sleep(3600)
+
+    asyncio.ensure_future(clean())
 
 
 @app.get("/", include_in_schema=False)

@@ -1,0 +1,8 @@
+qrcode:
+  max-size: 1000
+  min-size: 50
+  icon-site:
+    - localhost
+    # - sm.ms
+    # - api.imjad.cn
+    # - "*"
