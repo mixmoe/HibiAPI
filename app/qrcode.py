@@ -1,9 +1,8 @@
 from typing import Optional
 from urllib.parse import ParseResult
 
-from api.qrcode import QRCodeLevel, QRInfo, ReturnEncode
+from api.qrcode import HostUrl, QRCodeLevel, QRInfo, ReturnEncode
 from fastapi import Request, Response
-from pydantic import HttpUrl
 from pydantic.color import Color
 from utils.temp import TempFile
 from utils.utils import SlashRouter
@@ -26,7 +25,7 @@ async def qrcode_api(
     *,
     text: str,
     size: int = 200,
-    logo: Optional[HttpUrl] = None,
+    logo: Optional[HostUrl] = None,
     encode: ReturnEncode = ReturnEncode.raw,
     level: QRCodeLevel = QRCodeLevel.M,
     bgcolor: Color = Color("FFFFFF"),

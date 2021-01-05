@@ -30,6 +30,7 @@
         "dotenv",
         "favlist",
         "fgcolor",
+        "fnmatch",
         "getrgb",
         "httpx",
         "illusts",
