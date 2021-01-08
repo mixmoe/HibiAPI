@@ -94,6 +94,8 @@ class AppConfig(confuse.Configuration):
             *nodes, name = key.split("_")
             for node in nodes:
                 _tmp = _tmp.setdefault(node, {})
+            if value == "":
+                continue
             try:
                 _tmp[name] = json.loads(value)
             except json.JSONDecodeError:
