@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": ".venv/bin/python3",
+    "python.pythonPath": ".venv/bin/python",
     "python.analysis.completeFunctionParens": true,
     "python.analysis.typeCheckingMode": "basic",
     "python.formatting.provider": "black",
@@ -44,12 +44,14 @@
         "pytest",
         "qrcode",
         "redoc",
+        "referer",
         "rfind",
         "rsplit",
         "starlette",
         "ugoira",
         "uvicorn",
-        "vmid"
+        "vmid",
+        "weapi"
     ],
     "editor.formatOnSave": true,
     "files.watcherExclude": {
