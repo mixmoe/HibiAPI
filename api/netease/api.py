@@ -120,7 +120,7 @@ class NeteaseEndpoint(BaseEndpoint):
 
     async def album(self, *, album_id: int):
         return await self.request(
-            "music.163.com/weapi/v1/album/{album_id}",
+            "weapi/v1/album/{album_id}",
             params={
                 "album_id": album_id,
             },
@@ -130,7 +130,7 @@ class NeteaseEndpoint(BaseEndpoint):
         return await self.request(
             "weapi/v3/song/detail",
             params={
-                "c": [{"id": song_id}],
+                "c": json.dumps([{"id": str(song_id)}]),
             },
         )
 
@@ -138,7 +138,7 @@ class NeteaseEndpoint(BaseEndpoint):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={
-                "ids": song_id,
+                "ids": [song_id],
                 "br": bitrate,
             },
         )

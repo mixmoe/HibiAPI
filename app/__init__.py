@@ -20,6 +20,7 @@ from utils.log import logger
 from utils.temp import TempFile
 
 from app.bilibili import router as BilibiliRouter
+from app.netease import router as NeteaseRouter
 from app.pixiv import router as PixivRouter
 from app.qrcode import router as QRCodeRouter
 
@@ -35,6 +36,7 @@ app = FastAPI(
 app.include_router(PixivRouter, prefix="/pixiv")
 app.include_router(BilibiliRouter, prefix="/bilibili")
 app.include_router(QRCodeRouter, prefix="/qrcode")
+app.include_router(NeteaseRouter, prefix="/netease")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=Config["server"]["cors"]["origins"].get(List[str]),
