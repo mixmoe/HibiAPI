@@ -71,7 +71,12 @@ class BilibiliEndpointV2(BaseEndpoint):
         if page is None:
             return video_view
         cid: int = video_view["data"]["pages"][page - 1]["cid"]
-        return await self.base.playurl(aid=aid, cid=cid, quality=quality, type=type)
+        return await self.base.playurl(
+            aid=aid,
+            cid=cid,
+            quality=quality,
+            type=type,
+        )
 
     async def seasoninfo(self, *, season_id: int):  # NOTE: not same with origin
         return await self.base.season_info(season_id=season_id)
@@ -102,7 +107,11 @@ class BilibiliEndpointV2(BaseEndpoint):
         else:
             raise ClientSideException
         return await self.base.comments(
-            oid=oid, sort=sort, type=CommentType.VIDEO, page=page, pagesize=pagesize
+            oid=oid,
+            sort=sort,
+            type=CommentType.VIDEO,
+            page=page,
+            pagesize=pagesize,
         )
 
     async def search(
@@ -119,7 +128,11 @@ class BilibiliEndpointV2(BaseEndpoint):
         elif type == SearchType.hot:
             return await self.base.search_hot(limit=limit)
         else:
-            return await self.base.search(keyword=keyword, page=page, pagesize=pagesize)
+            return await self.base.search(
+                keyword=keyword,
+                page=page,
+                pagesize=pagesize,
+            )
 
     async def rank(
         self,
@@ -130,10 +143,15 @@ class BilibiliEndpointV2(BaseEndpoint):
     ):
         if isinstance(content, int):
             return await self.base.rank_list(
-                content=content, duration=duration, new=new
+                content=content,
+                duration=duration,
+                new=new,
             )
         else:
-            return await self.base.rank_list_bangumi(site=content, duration=duration)
+            return await self.base.rank_list_bangumi(
+                site=content,
+                duration=duration,
+            )
 
     async def typedynamic(self):
         return await self.base.type_dynamic()
@@ -147,12 +165,23 @@ class BilibiliEndpointV2(BaseEndpoint):
         return await self.base.timeline(type=type)
 
     async def space(self, *, vmid: int, page: int = 1, pagesize: int = 10):
-        return await self.base.space(vmid=vmid, page=page, pagesize=pagesize)
+        return await self.base.space(
+            vmid=vmid,
+            page=page,
+            pagesize=pagesize,
+        )
 
     async def archive(self, vmid: int, page: int = 1, pagesize: int = 10):
-        return await self.base.space_archive(vmid=vmid, page=page, pagesize=pagesize)
+        return await self.base.space_archive(
+            vmid=vmid,
+            page=page,
+            pagesize=pagesize,
+        )
 
     async def favlist(self, fid: int, vmid: int, page: int = 1, pagesize: int = 20):
         return await self.base.favorite_video(
-            fid=fid, vmid=vmid, page=page, pagesize=pagesize
+            fid=fid,
+            vmid=vmid,
+            page=page,
+            pagesize=pagesize,
         )

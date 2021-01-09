@@ -110,7 +110,9 @@ class PixivEndpoints(BaseEndpoint):
         try:
             response = await self.client.get(
                 self._join(
-                    base=PixivConstants.APP_HOST, endpoint=endpoint, params=params or {}
+                    base=PixivConstants.APP_HOST,
+                    endpoint=endpoint,
+                    params=params or {},
                 )
             )
             return response.json()
@@ -135,22 +137,38 @@ class PixivEndpoints(BaseEndpoint):
     ):
         return await self.request(
             "v1/user/illusts",
-            params={"user_id": id, "type": illust_type, "offset": (page - 1) * size},
+            params={
+                "user_id": id,
+                "type": illust_type,
+                "offset": (page - 1) * size,
+            },
         )
 
     async def favorite(self, *, id: int, tag: Optional[str] = None):
         return await self.request(
-            "v1/user/bookmarks/illust", params={"user_id": id, "tag": tag}
+            "v1/user/bookmarks/illust",
+            params={
+                "user_id": id,
+                "tag": tag,
+            },
         )
 
     async def following(self, *, id: int, page: int = 1, size: int = 20):
         return await self.request(
-            "v1/user/following", params={"user_id": id, "offset": (page - 1) * size}
+            "v1/user/following",
+            params={
+                "user_id": id,
+                "offset": (page - 1) * size,
+            },
         )
 
     async def follower(self, *, id: int, page: int = 1, size: int = 20):
         return await self.request(
-            "v1/user/follower", params={"user_id": id, "offset": (page - 1) * size}
+            "v1/user/follower",
+            params={
+                "user_id": id,
+                "offset": (page - 1) * size,
+            },
         )
 
     async def rank(
@@ -196,8 +214,17 @@ class PixivEndpoints(BaseEndpoint):
 
     async def related(self, id: int, page: int = 1, size: int = 20):
         return await self.request(
-            "v2/illust/related", params={"illust_id": id, "offset": (page - 1) * size}
+            "v2/illust/related",
+            params={
+                "illust_id": id,
+                "offset": (page - 1) * size,
+            },
         )
 
     async def ugoira_metadata(self, *, id: int):
-        return await self.request("v1/ugoira/metadata", params={"illust_id": id})
+        return await self.request(
+            "v1/ugoira/metadata",
+            params={
+                "illust_id": id,
+            },
+        )
