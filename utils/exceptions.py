@@ -3,20 +3,9 @@ from datetime import datetime
 from pathlib import Path
 from secrets import token_hex
 from traceback import format_tb
-from typing import Any, Dict, Iterable, List, Optional, Type
+from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Extra, HttpUrl
-
-
-class ExceptionReturn(BaseModel):
-    url: Optional[HttpUrl] = None
-    code: int
-    detail: str
-    trace: Optional[str] = None
-    headers: Dict[str, str] = {}
-
-    class Config:
-        extra = Extra.allow
+from pydantic import BaseModel, Extra, HttpUrl, conint, constr
 
 
 class ExceptionStorage:
@@ -62,6 +51,21 @@ class ExceptionStorage:
         path = cls._resolvePath(id_.upper())
         assert path.exists()
         return cls.ExceptionInfo.parse_obj(json.loads(path.read_text(encoding="utf-8")))
+
+
+class ExceptionReturn(BaseModel):
+    url: Optional[HttpUrl] = None
+    code: conint(ge=400, lt=600)  # type:ignore
+    detail: constr(  # type:ignore
+        strict=True,
+        min_length=ExceptionStorage.ID_LENGTH * 2,
+        max_length=ExceptionStorage.ID_LENGTH * 2,
+    )
+    trace: Optional[str] = None
+    headers: Dict[str, str] = {}
+
+    class Config:
+        extra = Extra.allow
 
 
 class BaseServerException(Exception):
@@ -119,20 +123,3 @@ class ClientSideException(BaseServerException):
 
 class ValidationException(ClientSideException):
     code = 422
-
-
-def _getSubclass(cls: Type[BaseServerException]):
-    return set(cls.__subclasses__()).union(
-        [s for c in cls.__subclasses__() for s in _getSubclass(c)]
-    )
-
-
-def _getCondintions(l: Iterable[Type[BaseServerException]]):  # noqa:E741
-    d: Dict[int, Dict[str, Type[BaseServerException]]] = {}
-    for i in l:
-        d[i.code] = {**d.get(i.code, {}), i.detail: i}
-    return d
-
-
-ALL_EXCEPTIONS = _getSubclass(BaseServerException)
-RESPONSE_CONDITIONS = _getCondintions(ALL_EXCEPTIONS)

@@ -14,10 +14,10 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 #
 from utils.config import Config
 from utils.exceptions import (
-    RESPONSE_CONDITIONS,
     BaseHTTPException,
     BaseServerException,
     ClientSideException,
+    ExceptionReturn,
     ExceptionStorage,
     UncaughtException,
     ValidationException,
@@ -37,7 +37,12 @@ app = FastAPI(
     description="An alternative implement of Imjad API",
     docs_url="/docs/test",
     redoc_url="/docs",
-    responses=RESPONSE_CONDITIONS,  # type:ignore
+    responses={
+        code: {
+            "model": ExceptionReturn,
+        }
+        for code in (400, 422, 500, 502)
+    },
 )
 
 app.include_router(PixivRouter, prefix="/pixiv")
