@@ -2,10 +2,21 @@ import json
 from datetime import datetime
 from pathlib import Path
 from secrets import token_hex
-from typing import Any, Dict, Iterable, Optional, Type
+from traceback import format_tb
+from typing import Any, Dict, Iterable, List, Optional, Type
 
-from fastapi.exceptions import HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, HttpUrl
+
+
+class ExceptionReturn(BaseModel):
+    url: Optional[HttpUrl] = None
+    code: int
+    detail: str
+    trace: Optional[str] = None
+    headers: Dict[str, str] = {}
+
+    class Config:
+        extra = Extra.allow
 
 
 class ExceptionStorage:
@@ -17,7 +28,7 @@ class ExceptionStorage:
         time: datetime
         stamp: float
         id: str
-        traceback: str
+        traceback: List[str]
 
     @classmethod
     def _resolvePath(cls, id_: str) -> Path:
@@ -28,11 +39,16 @@ class ExceptionStorage:
         return path
 
     @classmethod
-    def save(cls, traceback: str, *, time: Optional[datetime] = None) -> str:
+    def save(
+        cls, traceback: Optional[Any] = None, *, time: Optional[datetime] = None
+    ) -> str:
         traceID = token_hex(cls.ID_LENGTH).upper()
         time = time or datetime.now()
         traceData = cls.ExceptionInfo(
-            time=time, stamp=time.timestamp(), id=traceID, traceback=traceback
+            time=time,
+            stamp=time.timestamp(),
+            id=traceID,
+            traceback=format_tb(traceback),
         )
         path = cls._resolvePath(traceID)
         path.write_text(
@@ -48,7 +64,7 @@ class ExceptionStorage:
         return cls.ExceptionInfo.parse_obj(json.loads(path.read_text(encoding="utf-8")))
 
 
-class BaseServerException(HTTPException):
+class BaseServerException(Exception):
     code: int = 500
     detail: str = "Server Fault"
     headers: Dict[str, Any] = {}
@@ -61,11 +77,17 @@ class BaseServerException(HTTPException):
         headers: Optional[Dict[str, Any]] = None,
         **params
     ) -> None:
-        detail = detail or self.detail
-        headers = headers or self.headers
-        code = code or self.code
-        self.extra = params
-        super().__init__(status_code=code, detail=detail, headers=headers)
+        self.data = ExceptionReturn(  # type:ignore
+            detail=detail or self.__class__.detail,
+            code=code or self.__class__.code,
+            headers=headers or self.__class__.headers,
+            **params
+        )
+        super().__init__(detail)
+
+
+class BaseHTTPException(BaseServerException):
+    pass
 
 
 class ServerSideException(BaseServerException):
@@ -83,10 +105,20 @@ class UncaughtException(ServerSideException):
     detail = "Uncaught exception raised during processing"
     exc: Exception
 
+    @classmethod
+    def with_exception(cls, e: Exception):
+        c = cls(e.__class__.__qualname__)
+        c.exc = e
+        return c
+
 
 class ClientSideException(BaseServerException):
     code = 400
     detail = "Bad Request"
+
+
+class ValidationException(ClientSideException):
+    code = 422
 
 
 def _getSubclass(cls: Type[BaseServerException]):
