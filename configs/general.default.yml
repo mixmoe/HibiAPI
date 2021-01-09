@@ -29,5 +29,5 @@ log:
   format: > # 输出日志格式, 如果没有必要请不要修改
     <level>
     <v>{level:<8}</v>
-    [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}</d>]</level>
+    [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}:{line}</d>]</level>
     {message}
