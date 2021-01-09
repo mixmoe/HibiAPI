@@ -1,5 +1,7 @@
 <div align="center">
 
+![HibiAPI Logo](.github/logo.svg)
+
 # HibiAPI
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
