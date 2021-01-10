@@ -56,7 +56,12 @@ class BilibiliEndpointV3(BaseEndpoint):
         quality: VideoQualityType = VideoQualityType.VIDEO_480P,
         type: VideoFormatType = VideoFormatType.FLV,
     ):
-        return await self.base.playurl(aid=aid, cid=cid, quality=quality, type=type)
+        return await self.base.playurl(
+            aid=aid,
+            cid=cid,
+            quality=quality,
+            type=type,
+        )
 
     async def video_recommend(
         self,
@@ -71,17 +76,31 @@ class BilibiliEndpointV3(BaseEndpoint):
         type: RankContentType = RankContentType.FULL_SITE,
         duration: RankDurationType = RankDurationType.THREE_DAY,
     ):
-        return await self.base.rank_list(content=type, duration=duration)
+        return await self.base.rank_list(
+            content=type,
+            duration=duration,
+        )
 
     async def user_info(self, *, uid: int, page: int = 1, size: int = 10):
-        return await self.base.space(vmid=uid, page=page, pagesize=size)
+        return await self.base.space(
+            vmid=uid,
+            page=page,
+            pagesize=size,
+        )
 
     async def user_uploaded(self, *, uid: int, page: int = 1, size: int = 10):
-        return await self.base.space_archive(vmid=uid, page=page, pagesize=size)
+        return await self.base.space_archive(
+            vmid=uid,
+            page=page,
+            pagesize=size,
+        )
 
     async def user_favorite(self, *, uid: int, fid: int, page: int = 1, size: int = 10):
         return await self.base.favorite_video(
-            fid=fid, vmid=uid, page=page, pagesize=size
+            fid=fid,
+            vmid=uid,
+            page=page,
+            pagesize=size,
         )
 
     async def season_info(self, *, season_id: int):
@@ -102,10 +121,17 @@ class BilibiliEndpointV3(BaseEndpoint):
         type: RankBangumiType = RankBangumiType.GLOBAL,
         duration: RankDurationType = RankDurationType.THREE_DAY,
     ):
-        return await self.base.rank_list_bangumi(site=type, duration=duration)
+        return await self.base.rank_list_bangumi(
+            site=type,
+            duration=duration,
+        )
 
     async def search(self, keyword: str, page: int = 1, size: int = 20):
-        return await self.base.search(keyword=keyword, page=page, pagesize=size)
+        return await self.base.search(
+            keyword=keyword,
+            page=page,
+            pagesize=size,
+        )
 
     async def search_recommend(self, *, limit: int = 50):
         return await self.base.search_hot(limit=limit)
@@ -123,5 +149,9 @@ class BilibiliEndpointV3(BaseEndpoint):
         size: int = 20,
     ):
         return await self.base.comments(
-            oid=id, type=type, sort=sort, page=page, pagesize=size
+            oid=id,
+            type=type,
+            sort=sort,
+            page=page,
+            pagesize=size,
         )

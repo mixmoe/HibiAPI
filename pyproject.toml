@@ -15,6 +15,7 @@ loguru = "^0.5.3"
 python-dotenv = "^0.15.0"
 qrcode = {extras = ["pil"], version = "^6.1"}
 aiofiles = "^0.6.0"
+pycryptodomex = "^3.9.9"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

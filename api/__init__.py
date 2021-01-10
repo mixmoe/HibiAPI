@@ -1,2 +1,2 @@
 # flake8:noqa:F401
-from . import bilibili, pixiv, qrcode
+from . import bilibili, netease, pixiv, qrcode

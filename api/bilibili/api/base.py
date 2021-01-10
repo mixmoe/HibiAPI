@@ -175,30 +175,59 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         )
 
     async def view(self, *, aid: int):
-        return await self.request("x/v2/view", params={"aid": aid})
+        return await self.request(
+            "x/v2/view",
+            params={
+                "aid": aid,
+            },
+        )
 
     async def search(self, *, keyword: str, page: int = 1, pagesize: int = 20):
         return await self.request(
             "x/v2/search",
-            params={"duration": 0, "keyword": keyword, "pn": page, "ps": pagesize},
+            params={
+                "duration": 0,
+                "keyword": keyword,
+                "pn": page,
+                "ps": pagesize,
+            },
         )
 
     async def search_hot(self, *, limit: int = 50):
-        return await self.request("x/v2/search/hot", params={"limit": limit})
+        return await self.request(
+            "x/v2/search/hot",
+            params={
+                "limit": limit,
+            },
+        )
 
     async def search_suggest(self, *, keyword: str, type: str = "accurate"):
         return await self.request(
-            "x/v2/search/suggest", params={"keyword": keyword, "type": type}
+            "x/v2/search/suggest",
+            params={
+                "keyword": keyword,
+                "type": type,
+            },
         )
 
     async def space(self, *, vmid: int, page: int = 1, pagesize: int = 10):
         return await self.request(
-            "x/v2/space", params={"vmid": vmid, "ps": pagesize, "pn": page}
+            "x/v2/space",
+            params={
+                "vmid": vmid,
+                "ps": pagesize,
+                "pn": page,
+            },
         )
 
     async def space_archive(self, *, vmid: int, page: int = 1, pagesize: int = 10):
         return await self.request(
-            "x/v2/space/archive", params={"vmid": vmid, "ps": pagesize, "pn": page}
+            "x/v2/space/archive",
+            params={
+                "vmid": vmid,
+                "ps": pagesize,
+                "pn": page,
+            },
         )
 
     async def favorite_video(
@@ -242,12 +271,20 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def season_info(self, *, season_id: int):
         return await self.request(
-            "api/season_v5", "bgm", params={"season_id": season_id}
+            "api/season_v5",
+            "bgm",
+            params={
+                "season_id": season_id,
+            },
         )
 
     async def bangumi_source(self, *, episode_id: int):
         return await self.request(
-            "api/get_source", "bgm", params={"episode_id": episode_id}
+            "api/get_source",
+            "bgm",
+            params={
+                "episode_id": episode_id,
+            },
         )
 
     async def season_recommend(self, *, season_id: int):
@@ -255,7 +292,9 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             "pgc/season/web/related/recommend",
             "api",
             sign=False,
-            params={"season_id": season_id},
+            params={
+                "season_id": season_id,
+            },
         )
 
     async def comments(
@@ -290,7 +329,10 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             "jsonp/season_rank_list/{site}/{duration}.ver",
             "bgm",
             sign=False,
-            params={"duration": duration, "site": site},
+            params={
+                "duration": duration,
+                "site": site,
+            },
         )
 
     async def rank_list(
@@ -312,12 +354,22 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def type_dynamic(self):
         return await self.request(
-            "typedynamic/index", "api", sign=False, params={"type": "json"}
+            "typedynamic/index",
+            "api",
+            sign=False,
+            params={
+                "type": "json",
+            },
         )
 
     async def timeline(self, type: TimelineType = TimelineType.GLOBAL):
         return await self.request(
-            "web_api/timeline_{type}", "bgm", sign=False, params={"type": type}
+            "web_api/timeline_{type}",
+            "bgm",
+            sign=False,
+            params={
+                "type": type,
+            },
         )
 
     async def recommend(self):

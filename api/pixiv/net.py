@@ -51,11 +51,20 @@ class UserInfo(BaseModel):
             "client_secret": PixivConstants.CLIENT_SECRET,
         }
         if refresh_token:
-            data.update({"grant_type": "refresh_token", "refresh_token": refresh_token})
+            data.update(
+                {
+                    "grant_type": "refresh_token",
+                    "refresh_token": refresh_token,
+                }
+            )
         elif account:
             username, password = account
             data.update(
-                {"grant_type": "password", "username": username, "password": password}
+                {
+                    "grant_type": "password",
+                    "username": username,
+                    "password": password,
+                }
             )
         async with AsyncHTTPClient(
             proxies=PixivConstants.CONFIG["proxy"].get(Dict[str, str])  # type:ignore

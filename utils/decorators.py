@@ -33,8 +33,8 @@ def TimeIt(function: _AnyCallable) -> _AnyCallable:
         finally:
             delta = datetime.now() - start
             logger.trace(
-                f"Async function <y>{function.__name__}</y> "
-                f"cost <e>{delta.seconds}s{(delta.microseconds)}ms</e>"
+                f"<g>Async</g> function <y>{function.__qualname__}</y> "
+                f"cost <e>{delta.total_seconds() * 1000:.3f}ms</e>"
             )
 
     @wraps(function)
@@ -45,8 +45,8 @@ def TimeIt(function: _AnyCallable) -> _AnyCallable:
         finally:
             delta = datetime.now() - start
             logger.trace(
-                f"Sync function <y>{function.__name__}</y> "
-                f"cost <e>{delta.seconds}s{(delta.microseconds)}ms</e>"
+                f"<g>Sync</g> function <y>{function.__qualname__}</y> "
+                f"cost <e>{delta.total_seconds() * 1000:.3f}ms</e>"
             )
 
     return asyncWrapper if iscoroutinefunction(function) else syncWrapper  # type:ignore

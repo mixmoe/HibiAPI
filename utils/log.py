@@ -13,7 +13,6 @@ from .config import Config
 if TYPE_CHECKING:
     from loguru import Logger
 
-_asyncioLogger.setLevel(40)
 
 LOG_PATH = Path(".") / "data" / "logs"
 LOG_PATH.mkdir(parents=True, exist_ok=True)
@@ -48,15 +47,19 @@ class LoguruHandler(logging.Handler):
         except ValueError:
             level = record.levelno  # type:ignore
 
-        frame, depth = logging.currentframe(), 2
+        frame, depth, message = logging.currentframe(), 2, record.getMessage()
         while frame.f_code.co_filename == logging.__file__:
             frame = frame.f_back  # type:ignore
             depth += 1
 
         logger.opt(depth=depth, exception=record.exc_info, colors=True).log(
-            level, ("<e>" + self._escape_tag(record.getMessage()) + "</e>")
+            level, ("<e>" + self._escape_tag(message) + "</e>")
         )
 
     @staticmethod
     def _escape_tag(s: str) -> str:
         return re.sub(r"</?((?:[fb]g\s)?[^<>\s]*)>", r"\\\g<0>", s)
+
+
+_asyncioLogger.handlers.clear()
+_asyncioLogger.addHandler(LoguruHandler())

@@ -29,7 +29,7 @@ def _generate_default() -> int:
 
 
 if ENV_DIR.is_file():
-    assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True)
+    assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True), "Failed to load .env"
 else:
     assert _generate_default() <= 0, "Please complete config file!"
 
@@ -94,6 +94,8 @@ class AppConfig(confuse.Configuration):
             *nodes, name = key.split("_")
             for node in nodes:
                 _tmp = _tmp.setdefault(node, {})
+            if value == "":
+                continue
             try:
                 _tmp[name] = json.loads(value)
             except json.JSONDecodeError:
