@@ -32,6 +32,11 @@ class BitRateType(IntEnum):
     LOSELESS = 3200000
 
 
+class RecordType(IntEnum):
+    WEEKLY = 1
+    ALL = 0
+
+
 class _EncryptUtil:
     @staticmethod
     def _aes(data: bytes, key: bytes) -> bytes:
@@ -94,69 +99,71 @@ class NeteaseEndpoint(BaseEndpoint):
     async def search(
         self,
         *,
-        keyword: str,
-        type: SearchType = SearchType.SONG,
+        s: str,
+        search_type: SearchType = SearchType.SONG,
         limit: int = 30,
         offset: int = 0,
     ):
         return await self.request(
             "weapi/cloudsearch/get/web",
             params={
-                "s": keyword,
-                "type": type,
+                "s": s,
+                "type": search_type,
                 "limit": limit,
                 "offset": offset,
                 "total": True,
             },
         )
 
-    async def artist(self, *, artist_id: int):
+    async def artist(self, *, id: int):
         return await self.request(
             "weapi/v1/artist/{artist_id}",
             params={
-                "artist_id": artist_id,
+                "artist_id": id,
             },
         )
 
-    async def album(self, *, album_id: int):
+    async def album(self, *, id: int):
         return await self.request(
             "weapi/v1/album/{album_id}",
             params={
-                "album_id": album_id,
+                "album_id": id,
             },
         )
 
-    async def detail(self, *, song_id: int):
+    async def detail(self, *, id: int):
         return await self.request(
             "weapi/v3/song/detail",
             params={
-                "c": json.dumps([{"id": str(song_id)}]),
+                "c": json.dumps(
+                    [{"id": str(id)}],
+                ),
             },
         )
 
-    async def url(self, *, song_id: int, bitrate: BitRateType = BitRateType.STANDARD):
+    async def song(self, *, id: int, bitrate: BitRateType = BitRateType.STANDARD):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={
-                "ids": [song_id],
+                "ids": [id],
                 "br": bitrate,
             },
         )
 
-    async def playlist(self, *, playlist_id: int):
+    async def playlist(self, *, id: int):
         return await self.request(
             "weapi/v3/playlist/detail",
             params={
-                "id": playlist_id,
+                "id": id,
                 "n": 1000,
             },
         )
 
-    async def lyric(self, *, song_id: int):
+    async def lyric(self, *, id: int):
         return await self.request(
             "weapi/song/lyric",
             params={
-                "id": song_id,
+                "id": id,
                 "os": "pc",
                 "lv": -1,
                 "kv": -1,
@@ -164,10 +171,58 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def mv(self, *, mv_id: int):
+    async def mv(self, *, id: int):
         return await self.request(
             "weapi/mv/detail",
             params={
-                "id": mv_id,
+                "id": id,
+            },
+        )
+
+    async def comments(self, *, id: int, offset: int = 0, limit: int = 1):
+        return await self.request(
+            "weapi/v1/resource/comments/R_SO_4_{song_id}",
+            params={
+                "song_id": id,
+                "offset": offset,
+                "total": True,
+                "limit": limit,
+            },
+        )
+
+    async def record(self, *, id: int, period: RecordType = RecordType.ALL):
+        return await self.request(
+            "weapi/v1/play/record",
+            params={
+                "uid": id,
+                "type": period,
+            },
+        )
+
+    async def djradio(self, *, id: int):
+        return await self.request(
+            "api/djradio/v2/get",
+            params={
+                "id": id,
+            },
+        )
+
+    async def dj(self, *, id: int, offset: int = 0, limit: int = 20, asc: bool = False):
+        # NOTE: Possible not same with origin
+        return await self.request(
+            "weapi/dj/program/byradio",
+            params={
+                "radioId": id,
+                "offset": offset,
+                "limit": limit,
+                "asc": asc,
+            },
+        )
+
+    async def detail_dj(self, *, id: int):
+        return await self.request(
+            "api/dj/program/detail",
+            params={
+                "id": id,
             },
         )
