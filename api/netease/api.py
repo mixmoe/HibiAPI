@@ -190,7 +190,7 @@ class NeteaseEndpoint(BaseEndpoint):
 
     async def mv(self, *, id: int):
         return await self.request(
-            "weapi/mv/detail",
+            "api/v1/mv/detail",
             params={
                 "id": id,
             },
