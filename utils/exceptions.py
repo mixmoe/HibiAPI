@@ -56,12 +56,14 @@ class ExceptionStorage:
 class ExceptionReturn(BaseModel):
     url: Optional[HttpUrl] = None
     code: conint(ge=400, lt=600)  # type:ignore
-    detail: constr(  # type:ignore
-        strict=True,
-        min_length=ExceptionStorage.ID_LENGTH * 2,
-        max_length=ExceptionStorage.ID_LENGTH * 2,
-    )
-    trace: Optional[str] = None
+    detail: str
+    trace: Optional[  # type:ignore
+        constr(
+            strict=True,
+            min_length=ExceptionStorage.ID_LENGTH * 2,
+            max_length=ExceptionStorage.ID_LENGTH * 2,
+        )  # type:ignore
+    ] = None
     headers: Dict[str, str] = {}
 
     class Config:

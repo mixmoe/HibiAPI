@@ -1,6 +1,6 @@
 import base64
 import json
-from enum import IntEnum
+from enum import Enum, IntEnum
 from secrets import token_urlsafe
 from typing import Any, Dict, Optional
 
@@ -12,6 +12,22 @@ from utils.exceptions import UpstreamAPIException
 from utils.utils import BaseEndpoint
 
 from .constants import NeteaseConstants
+
+
+class EndpointsType(str, Enum):
+    search = "search"
+    artist = "artist"
+    album = "album"
+    detail = "detail"
+    song = "song"
+    playlist = "playlist"
+    lyric = "lyric"
+    mv = "mv"
+    comments = "comments"
+    record = "record"
+    djradio = "djradio"
+    dj = "dj"
+    detail_dj = "detail_dj"
 
 
 class SearchType(IntEnum):
@@ -27,12 +43,13 @@ class SearchType(IntEnum):
 
 
 class BitRateType(IntEnum):
-    STANDARD = 96000
+    LOW = 64000
+    MEDIUM = 128000
+    STANDARD = 198000
     HIGH = 320000
-    LOSELESS = 3200000
 
 
-class RecordType(IntEnum):
+class RecordPeriodType(IntEnum):
     WEEKLY = 1
     ALL = 0
 
@@ -101,7 +118,7 @@ class NeteaseEndpoint(BaseEndpoint):
         *,
         s: str,
         search_type: SearchType = SearchType.SONG,
-        limit: int = 30,
+        limit: int = 20,
         offset: int = 0,
     ):
         return await self.request(
@@ -141,12 +158,12 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def song(self, *, id: int, bitrate: BitRateType = BitRateType.STANDARD):
+    async def song(self, *, id: int, br: BitRateType = BitRateType.STANDARD):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={
                 "ids": [id],
-                "br": bitrate,
+                "br": br,
             },
         )
 
@@ -190,7 +207,7 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def record(self, *, id: int, period: RecordType = RecordType.ALL):
+    async def record(self, *, id: int, period: RecordPeriodType = RecordPeriodType.ALL):
         return await self.request(
             "weapi/v1/play/record",
             params={
