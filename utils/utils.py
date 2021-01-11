@@ -88,8 +88,12 @@ class BaseNetClient:
         await self.clients.pop(tid).__aexit__(exc_type, exc_value, traceback)
 
     def __del__(self):
+        try:
+            loop = asyncio.get_event_loop()
+        except ImportError:
+            return
         asyncio.ensure_future(
-            asyncio.gather(*map(lambda f: f.aclose(), self.clients.values()))
+            asyncio.gather(*map(lambda f: f.aclose(), self.clients.values()), loop=loop)
         )
 
 
