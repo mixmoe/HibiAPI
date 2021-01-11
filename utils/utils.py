@@ -89,11 +89,16 @@ class BaseNetClient:
 
     def __del__(self):
         try:
-            loop = asyncio.get_event_loop()
+            asyncio.get_event_loop()
         except ImportError:
             return
         asyncio.ensure_future(
-            asyncio.gather(*map(lambda f: f.aclose(), self.clients.values()), loop=loop)
+            asyncio.gather(
+                *map(
+                    lambda f: f.aclose(),
+                    self.clients.values(),
+                ),
+            )
         )
 
 
