@@ -13,6 +13,7 @@
             "source.fixAll": true
         }
     },
+    "autoDocstring.customTemplatePath": ".vscode/docstring.mustache",
     "cSpell.words": [
         "Bilibili",
         "DOUGA",

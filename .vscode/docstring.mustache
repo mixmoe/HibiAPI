@@ -1,0 +1,58 @@
+{{! FastAPI Automatic docstring}}
+
+Name: `{{name}}`
+
+> {{summaryPlaceholder}} {{extendedSummaryPlaceholder}}
+{{#argsExist}}
+
+---
+
+### Required:
+
+{{#args}}
+- `{{typePlaceholder}}` **`{{var}}`** 
+    - Description: {{descriptionPlaceholder}}
+{{/args}}
+{{/argsExist}}
+{{#kwargsExist}}
+
+---
+
+### Optional:
+{{#kwargs}}
+- `{{typePlaceholder}}` **`{{var}}`** = *`{{default}}`*
+    - Description: {{descriptionPlaceholder}}
+{{/kwargs}}
+{{/kwargsExist}}
+{{#exceptionsExist}}
+
+---
+
+### Exceptions:
+
+{{#exceptions}}
+- **`{{var}}`** 
+    - Description: {{descriptionPlaceholder}}
+{{/exceptions}}
+{{/exceptionsExist}}
+{{#yieldsExist}}
+
+---
+
+### Yields:
+{{#yields}}
+- `{{typePlaceholder}}`
+    - Description: {{descriptionPlaceholder}}
+{{/yields}}
+{{/yieldsExist}}
+{{#returnsExist}}
+
+---
+
+### Returns:
+
+{{#returns}}
+- `{{typePlaceholder}}`
+    - Description: {{descriptionPlaceholder}}
+{{/returns}}
+{{/returnsExist}}

@@ -3,6 +3,5 @@ qrcode:
   min-size: 50
   icon-site:
     - localhost
-    # - sm.ms
-    # - api.imjad.cn
+    - i.loli.net
     # - "*"

@@ -90,6 +90,7 @@ class AppConfig(confuse.Configuration):
         }
         source_tree: Dict[str, Any] = {}
         for key, value in env_configs.items():
+            # Convert `AAA_BBB_CCC=DDD` to `{'aaa':{'bbb':{'ccc':'ddd'}}}`
             _tmp = source_tree
             *nodes, name = key.split("_")
             for node in nodes:
