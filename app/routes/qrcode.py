@@ -1,11 +1,14 @@
 from typing import Optional
-from urllib.parse import ParseResult
 
 from api.qrcode import HostUrl, QRCodeLevel, QRInfo, ReturnEncode
 from fastapi import Request, Response
 from pydantic.color import Color
 from utils.temp import TempFile
 from utils.utils import SlashRouter
+
+QR_CALLBACK_TEMPLATE = (
+    """function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""
+)
 
 router = SlashRouter(tags=["QRCode"])
 
@@ -35,18 +38,24 @@ async def qrcode_api(
     qr = await QRInfo.new(
         text, size=size, logo=logo, level=level, bgcolor=bgcolor, fgcolor=fgcolor
     )
-    qr.url = ParseResult(  # type:ignore
-        scheme=request.url.scheme,
-        netloc=request.url.netloc,
-        path=f"temp/{qr.path.relative_to(TempFile.path)}",
-        params="",
-        query="",
-        fragment="",
-    ).geturl()
+    qr.url = TempFile.to_url(request, qr.path)  # type:ignore
     return (
         qr
         if encode == ReturnEncode.json
-        else Response(headers={"Location": qr.url}, status_code=302)
+        else Response(
+            content=qr.json(),
+            media_type="application/json",
+            headers={"Location": qr.url},
+            status_code=302,
+        )
         if encode == ReturnEncode.raw
-        else Response(content=f"{fun}({qr.json()})", media_type="text/javascript")
+        else Response(
+            content="{fun}({json})".format(json=qr.json(), fun=fun),
+            media_type="text/javascript",
+        )
+        if encode == ReturnEncode.jsc
+        else Response(
+            content=QR_CALLBACK_TEMPLATE.format(url=qr.url, fun=fun),
+            media_type="text/javascript",
+        )
     )

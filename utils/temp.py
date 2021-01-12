@@ -2,6 +2,9 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from secrets import token_hex
+from urllib.parse import ParseResult
+
+from fastapi import Request
 
 from .decorators import ToAsync
 
@@ -17,6 +20,17 @@ class TempFile:
         path: Path = cls.path / "/".join(filename[: cls.path_depth]) / filename
         path.parent.mkdir(exist_ok=True, parents=True)
         return path
+
+    @classmethod
+    def to_url(cls, request: Request, path: Path) -> str:
+        return ParseResult(
+            scheme=request.url.scheme,
+            netloc=request.url.netloc,
+            path=f"/temp/{path.relative_to(cls.path)}",
+            params="",
+            query="",
+            fragment="",
+        ).geturl()
 
     @classmethod
     @ToAsync

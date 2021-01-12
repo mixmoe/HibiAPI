@@ -6,10 +6,18 @@ from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
 from PIL import Image  # type:ignore
-from pydantic import BaseModel, Field, HttpUrl, UrlHostError, conint, validate_arguments
+from pydantic import (
+    AnyHttpUrl,
+    BaseModel,
+    Field,
+    UrlHostError,
+    conint,
+    validate_arguments,
+)
 from pydantic.color import Color
 from utils.config import APIConfig
 from utils.decorators import ToAsync
+from utils.exceptions import ClientSideException
 from utils.temp import TempFile
 from utils.utils import BaseNetClient
 
@@ -19,7 +27,7 @@ from qrcode.image.pil import PilImage  # type:ignore
 Config = APIConfig("qrcode")
 
 
-class HostUrl(HttpUrl):
+class HostUrl(AnyHttpUrl):
     @classmethod
     def validate_host(
         cls, parts: Dict[str, str]
@@ -54,7 +62,7 @@ class ReturnEncode(str, Enum):
 
 
 class QRInfo(BaseModel):
-    url: Optional[HttpUrl] = None
+    url: Optional[AnyHttpUrl] = None
     path: Path
     time: datetime = Field(default_factory=datetime.now)
     data: str
@@ -134,7 +142,10 @@ class QRInfo(BaseModel):
         ).get_image()  # type:ignore
         image = image.resize((size, size))
         if icon_stream is not None:
-            icon = Image.open(icon_stream)
+            try:
+                icon = Image.open(icon_stream)
+            except ValueError:
+                raise ClientSideException("Invalid image format.")
             icon_width, icon_height = icon.size
             image.paste(
                 icon,

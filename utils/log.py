@@ -4,7 +4,7 @@ import sys
 from asyncio.log import logger as _asyncioLogger
 from datetime import timedelta
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from loguru import logger as _logger
 
@@ -17,7 +17,11 @@ if TYPE_CHECKING:
 LOG_PATH = Path(".") / "data" / "logs"
 LOG_PATH.mkdir(parents=True, exist_ok=True)
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
-LOG_LEVEL = Config["log"]["level"].as_str().upper()
+LOG_LEVEL = (
+    Config["log"]["level"]
+    .get(Literal["TRACE", "DEBUG", "INFO", "WARNING", "ERROR"])  # type:ignore
+    .upper()
+)
 
 
 logger: "Logger" = _logger.opt(colors=True)
@@ -37,7 +41,7 @@ logger.add(
     filter=lambda record: record["level"].no < 30,
 )
 logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
-logger.level(Config["log"]["level"].as_str().upper())
+logger.level(LOG_LEVEL)
 
 
 class LoguruHandler(logging.Handler):
