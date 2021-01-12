@@ -41,6 +41,7 @@
         "mixmoe",
         "mypy",
         "noqa",
+        "proto",
         "pydantic",
         "pytest",
         "qrcode",

@@ -3,7 +3,7 @@ import inspect
 from enum import Enum
 from threading import current_thread
 from types import TracebackType
-from typing import Any, Callable, Dict, Mapping, Optional, Type
+from typing import Any, Callable, Dict, Mapping, Optional, Type, Union
 from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
@@ -21,15 +21,14 @@ def exclude_params(func: Callable, params: Mapping[str, Any]) -> Dict[str, Any]:
 
 class SlashRouter(APIRouter):
     def api_route(self, path: str, **kwargs):
-        return super().api_route(
-            path=(path if path.startswith("/") else ("/" + path)), **kwargs
-        )
+        path = path if path.startswith("/") else ("/" + path)
+        return super().api_route(path, **kwargs)
 
 
 class AsyncHTTPClient(AsyncClient):
     @Retry(exceptions=[TransportError])
-    async def request(self, *args, **kwargs):
-        return await super().request(*args, **kwargs)
+    async def request(self, method: str, url: Union[URL, str], **kwargs):
+        return await super().request(method, url, **kwargs)
 
 
 class BaseNetClient:

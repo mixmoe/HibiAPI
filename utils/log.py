@@ -41,6 +41,8 @@ logger.level(Config["log"]["level"].as_str().upper())
 
 
 class LoguruHandler(logging.Handler):
+    _tag_escape_re = re.compile(r"</?((?:[fb]g\s)?[^<>\s]*)>")
+
     def emit(self, record: logging.LogRecord):
         try:
             level = logger.level(record.levelname).name
@@ -56,9 +58,9 @@ class LoguruHandler(logging.Handler):
             level, ("<e>" + self._escape_tag(message) + "</e>")
         )
 
-    @staticmethod
-    def _escape_tag(s: str) -> str:
-        return re.sub(r"</?((?:[fb]g\s)?[^<>\s]*)>", r"\\\g<0>", s)
+    @classmethod
+    def _escape_tag(cls, string: str) -> str:
+        return cls._tag_escape_re.sub(r"\\\g<0>", string)
 
 
 _asyncioLogger.handlers.clear()

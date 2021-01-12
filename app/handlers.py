@@ -1,49 +1,44 @@
-from fastapi import Request
-
-#
+from fastapi import Request, Response
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError as FastAPIValidationError
-from fastapi.responses import JSONResponse
 from pydantic.error_wrappers import ValidationError as PydanticValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from utils.exceptions import (
-    BaseHTTPException,
-    BaseServerException,
-    ClientSideException,
-    ExceptionStorage,
-    UncaughtException,
-    ValidationException,
-)
+from utils import exceptions
 from utils.log import logger
 
 from .application import app
 
 
-@app.exception_handler(BaseServerException)
-async def exceptionHandler(request: Request, exc: BaseServerException) -> JSONResponse:
+@app.exception_handler(exceptions.BaseServerException)
+async def exceptionHandler(
+    request: Request,
+    exc: exceptions.BaseServerException,
+) -> Response:
+    if isinstance(exc, exceptions.UncaughtException):
+        exc.data.trace = (
+            exceptions.ExceptionInfo.new(exc.exc.__traceback__).persist().id
+        )
     exc.data.url = str(request.url)  # type:ignore
-    try:
-        raise exc
-    except UncaughtException as e:
-        exc.data.trace = ExceptionStorage.save(e.exc.__traceback__)
-    except BaseServerException:
-        pass
     if exc.data.code >= 500:
         logger.opt(exception=exc).exception(
             f"Error occurred during parsing <r><b>({exc.data=})</b></r>:"
         )
-    return JSONResponse(
-        content=exc.data.dict(exclude_none=True, exclude_defaults=True),
-        headers=exc.data.headers,
+    return Response(
+        content=exc.data.json(),
         status_code=exc.data.code,
+        headers=exc.data.headers,
+        media_type="application/json",
     )
 
 
 @app.exception_handler(StarletteHTTPException)
-async def overrideHandler(request: Request, exc: StarletteHTTPException):
+async def overrideHandler(
+    request: Request,
+    exc: StarletteHTTPException,
+):
     return await exceptionHandler(
         request,
-        BaseHTTPException(
+        exceptions.BaseHTTPException(
             exc.detail,
             code=exc.status_code,
             headers={} if not isinstance(exc, FastAPIHTTPException) else exc.headers,
@@ -54,7 +49,8 @@ async def overrideHandler(request: Request, exc: StarletteHTTPException):
 @app.exception_handler(AssertionError)
 async def assertionHandler(request: Request, exc: AssertionError):
     return await exceptionHandler(
-        request, ClientSideException(detail=f"Assertion: {exc}")
+        request,
+        exceptions.ClientSideException(detail=f"Assertion: {exc}"),
     )
 
 
@@ -62,5 +58,6 @@ async def assertionHandler(request: Request, exc: AssertionError):
 @app.exception_handler(PydanticValidationError)
 async def validationHandler(request: Request, exc: PydanticValidationError):
     return await exceptionHandler(
-        request, ValidationException(detail=str(exc), validation=exc.errors())
+        request,
+        exceptions.ValidationException(detail=str(exc), validation=exc.errors()),
     )
