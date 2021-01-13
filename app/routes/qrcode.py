@@ -7,8 +7,9 @@ from utils.temp import TempFile
 from utils.utils import SlashRouter
 
 QR_CALLBACK_TEMPLATE = (
-    """function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""
+    r"""function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""
 )
+
 
 router = SlashRouter(tags=["QRCode"])
 
@@ -39,6 +40,7 @@ async def qrcode_api(
         text, size=size, logo=logo, level=level, bgcolor=bgcolor, fgcolor=fgcolor
     )
     qr.url = TempFile.to_url(request, qr.path)  # type:ignore
+    """function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""
     return (
         qr
         if encode == ReturnEncode.json
@@ -55,7 +57,11 @@ async def qrcode_api(
         )
         if encode == ReturnEncode.jsc
         else Response(
-            content=QR_CALLBACK_TEMPLATE.format(url=qr.url, fun=fun),
+            content="function "
+            + fun
+            + '''(){document.write('<img class="qrcode" src="'''
+            + qr.url
+            + """"/>');}""",
             media_type="text/javascript",
         )
     )

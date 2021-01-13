@@ -3,7 +3,7 @@ from os import get_terminal_size
 import uvicorn  # type:ignore
 
 from app import app as AppRoot
-from utils.config import Config
+from utils.config import DEBUG, VERSION, Config
 from utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
@@ -18,13 +18,15 @@ An alternative implement of Imjad API
 Project: https://github.com/mixmoe/HibiAPI
 </e></b>"""  # noqa:W291,W293
 
-DEBUG: bool = Config["debug"].as_bool()
 
 if __name__ == "__main__":
     width, height = get_terminal_size()
     logger.warning("\n".join(i.center(width) for i in COPYRIGHT.splitlines()))
-    if DEBUG:
-        logger.warning("<b>Server is running under <r>debug</r> mode!</b>")
+    logger.info("HibiAPI version: <g><b>%s</b></g>" % VERSION)
+    logger.info(
+        "Server is running under <b>%s</b> mode!"
+        % ("<r>debug</r>" if DEBUG else "<g>production</g>")
+    )
     uvicorn.run(
         AppRoot,
         host=Config["server"]["host"].as_str(),
