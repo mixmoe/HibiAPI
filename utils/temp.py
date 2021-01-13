@@ -2,15 +2,17 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from secrets import token_hex
+from typing import Optional
 from urllib.parse import ParseResult
 
 from fastapi import Request
 
+from .config import DATA_PATH, Config
 from .decorators import ToAsync
 
 
 class TempFile:
-    path = Path(".") / "data" / "temp"
+    path = DATA_PATH / "data" / "temp"
     path_depth = 3
     name_length = 16
 
@@ -34,7 +36,8 @@ class TempFile:
 
     @classmethod
     @ToAsync
-    def clean(cls, expiry: timedelta = timedelta(days=7)) -> int:
+    def clean(cls, expiry: Optional[timedelta] = None) -> int:
+        expiry = expiry or timedelta(days=Config["data"]["temp-expiry"].get(float))
         now = datetime.now().timestamp()
         removed = 0
         for parent, folders, files in os.walk(cls.path):

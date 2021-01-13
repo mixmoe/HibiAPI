@@ -123,3 +123,5 @@ class APIConfig(GeneralConfig):
 
 
 Config = GeneralConfig("general")
+DATA_PATH = Config["data"]["path"].as_path().expanduser().absolute()
+DEBUG, VERSION = Config["debug"].as_bool(), Config["version"].as_str()

@@ -3,18 +3,17 @@ import re
 import sys
 from asyncio.log import logger as _asyncioLogger
 from datetime import timedelta
-from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 from loguru import logger as _logger
 
-from .config import Config
+from .config import DATA_PATH, Config
 
 if TYPE_CHECKING:
     from loguru import Logger
 
 
-LOG_PATH = Path(".") / "data" / "logs"
+LOG_PATH = DATA_PATH / "data" / "logs"
 LOG_PATH.mkdir(parents=True, exist_ok=True)
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
 LOG_LEVEL = (

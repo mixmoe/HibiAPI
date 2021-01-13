@@ -1,7 +1,6 @@
 import json
 from datetime import date, timedelta
 from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 from httpx import HTTPError, HTTPStatusError
@@ -11,7 +10,7 @@ from utils.utils import BaseEndpoint
 from .constants import PixivConstants
 from .net import NetRequest, UserInfo
 
-USER_TEMP_DATA = Path(".") / "data" / "pixiv_account.json"
+USER_TEMP_DATA = PixivConstants.ACCOUNT_DATA_PATH / "pixiv_account.json"
 
 
 class EndpointsType(str, Enum):

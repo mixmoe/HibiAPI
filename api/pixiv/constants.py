@@ -1,6 +1,7 @@
+from pathlib import Path
 from typing import Any, Dict
 
-from utils.config import APIConfig
+from utils.config import DATA_PATH, APIConfig
 
 
 class PixivConstants:
@@ -19,3 +20,4 @@ class PixivConstants:
     APP_HOST: str = "https://app-api.pixiv.net"
     PUB_HOST: str = "https://public-api.secure.pixiv.net"
     AUTH_HOST: str = "https://oauth.secure.pixiv.net"
+    ACCOUNT_DATA_PATH: Path = DATA_PATH
