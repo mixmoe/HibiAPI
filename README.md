@@ -27,57 +27,33 @@
 
 ## 前言
 
-由于Imjad API使用人数过多致使调用超出限制, 所以本人希望提供一个开源替代来供社区进行自由的部署和使用, 从而减轻一部分该API的使用压力
+- 由于Imjad API<sup>[这是什么?](https://github.com/mixmoe/HibiAPI/wiki/FAQ#%E4%BB%80%E4%B9%88%E6%98%AFimjad-api)</sup>使用人数过多, 致使调用超出限制, 所以本人希望提供一个开源替代来供社区进行自由的部署和使用, 从而减轻一部分该API的使用压力
+
+## 优势
+
+### 开源
+
+- 本项目以[Apache-2.0](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)许可开源, 这意味着你可以在**注明版权信息**的情况下进行任意使用
+
+### 高效
+
+- 使用Python的[异步机制](https://docs.python.org/zh-cn/3/library/asyncio.html), 由[FastAPI](https://fastapi.tiangolo.com/)驱动, 带来高效的使用体验 ~~虽然性能瓶颈压根不在这~~
+
+### 稳定
+
+- 在代码中大量使用[PEP-484](https://www.python.org/dev/peps/pep-0484/)引入的类型标记语法
+
+- 使用[PyLance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), [Flake8](https://flake8.pycqa.org/en/latest/)和[MyPy](https://mypy.readthedocs.io/)对代码进行类型推断和纠错
+
+- 不直接使用第三方API库, 而是全部用更加适合Web应用的逻辑重写第三方API请求, 更加可控 ~~疯狂造轮子~~
 
 ## 实现进度
 
-***[请点击此处查看](https://github.com/mixmoe/HibiAPI/issues/1)***
+***[Imjad原有API实现请求  (#1)](https://github.com/mixmoe/HibiAPI/issues/1)***
 
 ## 部署指南
 
-### 准备环境
-
-部署本项目, 你需要:
-
-- Python 3.8 及以上
-
-- 一个通畅的网络
-  - 为了使用Pixiv等API功能, 您可能需要设置一个HTTP代理
-  - 如果依赖安装过慢, 请更换一个在您地区速度较快的pip镜像
-
-### 安装依赖
-
-#### 使用传统 `pip`
-
-> `requirements.txt` 生成状态: ![Generate Requirements](https://github.com/mixmoe/HibiAPI/workflows/Generate%20Requirements/badge.svg)
-
-1. 保存本仓库到本地目录, 命令行进入该目录
-
-2. **(推荐)** 使用 `virtualenv` 等工具设置虚拟环境
-
-3. 安装依赖
-    - 通常来讲,你只需要执行 `pip install -r requirements.txt`
-    - 如果你遇到一些权限问题或者安装后无法使用, 请自行解决
-
-#### 使用 `poetry` (推荐)
-
-1. 保存本仓库到本地目录, 命令行进入该目录
-
-2. [安装`poetry`](https://python-poetry.org/docs/#installation)
-
-3. 激活虚拟环境
-    - `poetry install` 安装本项目依赖 (可能需要较长时间)
-    - `poetry shell` 进入激活了虚拟环境的shell
-
-### 运行程序
-
-1. 首次运行生成配置文件
-    - `python main.py` 直接运行, 如果有未生成的配置文件会报错退出
-    - 进入`config`目录修改对应的配置文件
-    - **注意!后缀为.default.yml的配置文件为默认配置文件,不建议修改**
-
-2. 运行程序
-    - 在虚拟环境中直接输入 `python main.py` 即可
+***[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)***
 
 ## 鸣谢
 
