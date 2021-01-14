@@ -1,3 +1,6 @@
 net:
-  cookie: "DedeUserID=; DedeUserID__ckMd5=; SESSDATA=;"
-  user-agent: "HibiAPI/latest mixmoe@GitHub"
+  cookie: >
+    DedeUserID=; 
+    DedeUserID__ckMd5=; 
+    SESSDATA=;
+  user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810"
