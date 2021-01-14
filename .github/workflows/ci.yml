@@ -64,27 +64,3 @@ jobs:
       - name: Test building Docker image
         run: |
           docker build .
-
-  deploy:
-    runs-on: ubuntu-latest
-    name: Deployment
-    needs: [test, docker]
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-
-      - name: Add environment files
-        env:
-          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
-        run: |
-          echo $ENVIRONMENTS > configs/.env
-
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.8.9
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_KEY }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_app_name: hibiapi
-          usedocker: true
-          dontuseforce: true
