@@ -18,9 +18,13 @@ An alternative implement of Imjad API
 Project: https://github.com/mixmoe/HibiAPI
 </e></b>"""  # noqa:W291,W293
 
+try:
+    width, height = get_terminal_size()
+except OSError:
+    width, height = 0, 0
+
 
 if __name__ == "__main__":
-    width, height = get_terminal_size()
     logger.warning("\n".join(i.center(width) for i in COPYRIGHT.splitlines()))
     logger.info("HibiAPI version: <g><b>%s</b></g>" % VERSION)
     logger.info(

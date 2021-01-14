@@ -12,7 +12,7 @@ from .decorators import ToAsync
 
 
 class TempFile:
-    path = DATA_PATH / "data" / "temp"
+    path = DATA_PATH / "temp"
     path_depth = 3
     name_length = 16
 

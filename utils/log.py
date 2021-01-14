@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from loguru import Logger
 
 
-LOG_PATH = DATA_PATH / "data" / "logs"
+LOG_PATH = DATA_PATH / "logs"
 LOG_PATH.mkdir(parents=True, exist_ok=True)
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
 LOG_LEVEL = (

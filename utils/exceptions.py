@@ -9,7 +9,7 @@ from pydantic import AnyHttpUrl, BaseModel, Extra, Field, Protocol, conint, cons
 
 from .config import DATA_PATH
 
-EXCEPTION_PATH = DATA_PATH / "data" / "errors"
+EXCEPTION_PATH = DATA_PATH / "errors"
 EXCEPTION_PATH_DEPTH = 3
 TRACE_ID_LENGTH = 8
 
