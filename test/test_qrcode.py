@@ -17,7 +17,13 @@ def client():
 
 def test_qrcode_generate(client: TestClient):
     sleep(1)
-    response = client.get("/qrcode/", params={"text": "Hello, World!", "encode": "raw"})
+    response = client.get(
+        "/api/qrcode/",
+        params={
+            "text": "Hello, World!",
+            "encode": "raw",
+        },
+    )
     assert response.status_code == 200
     assert "image/png" in response.headers["content-type"]
 

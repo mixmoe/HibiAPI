@@ -12,7 +12,7 @@ version: 0.3.0 # 程序版本, 勿动
 
 data:
   temp-expiry: 7
-  path: ./
+  path: ./data
 
 server:
   host: 127.0.0.1 # 监听主机

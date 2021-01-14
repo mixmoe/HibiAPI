@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/netease/") as client:
+    with TestClient(APIAppRoot, base_url="http://testserver/api/netease/") as client:
         yield client
 
 

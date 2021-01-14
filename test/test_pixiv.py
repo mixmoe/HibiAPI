@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/pixiv/") as client:
+    with TestClient(APIAppRoot, base_url="http://testserver/api/pixiv/") as client:
         yield client
 
 

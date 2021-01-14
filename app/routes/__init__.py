@@ -1,12 +1,12 @@
-from fastapi import APIRouter
 from utils.exceptions import ExceptionReturn
+from utils.utils import SlashRouter
 
 from .bilibili import router as BilibiliRouter
 from .netease import router as NeteaseRouter
 from .pixiv import router as PixivRouter
 from .qrcode import router as QRCodeRouter
 
-router = APIRouter(
+router = SlashRouter(
     responses={
         code: {
             "model": ExceptionReturn,
