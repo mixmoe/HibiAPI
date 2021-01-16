@@ -4,10 +4,10 @@
 
 # HibiAPI
 
-[![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
+[![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fhibiapi.herokuapp.com%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
 ![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
-![Testing](https://github.com/mixmoe/HibiAPI/workflows/Testing/badge.svg)
+![CI](https://github.com/mixmoe/HibiAPI/workflows/CI/badge.svg)
 
 ![Version](https://img.shields.io/badge/dynamic/yaml?color=green&label=version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fmixmoe%2FHibiAPI%2Fmain%2Fconfigs%2Fgeneral.default.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
