@@ -4,7 +4,7 @@
 
 # HibiAPI
 
-[![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fhibiapi.herokuapp.com%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
+[![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fhibiapi.herokuapp.com%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://hibiapi.herokuapp.com)
 
 ![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
 ![CI](https://github.com/mixmoe/HibiAPI/workflows/CI/badge.svg)
@@ -62,3 +62,4 @@
 >   - Pixiv: [`Mikubill/pixivpy-async`](https://github.com/Mikubill/pixivpy-async) [`upbit/pixivpy`](https://github.com/upbit/pixivpy)
 >   - Bilibili: [`SocialSisterYi/bilibili-API-collect`](https://github.com/SocialSisterYi/bilibili-API-collect) [`soimort/you-get`](https://github.com/soimort/you-get)
 >   - 网易云音乐: [`metowolf/NeteaseCloudMusicApi`](https://github.com/metowolf/NeteaseCloudMusicApi) [`greats3an/pyncm`](https://github.com/greats3an/pyncm) [`Binaryify/NeteaseCloudMusicApi`](https://github.com/Binaryify/NeteaseCloudMusicApi)
+>   - 百度贴吧: [`libsgh/tieba-api`](https://github.com/libsgh/tieba-api)
