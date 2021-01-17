@@ -1,10 +1,18 @@
 import hashlib
+from enum import Enum
 from random import randint
 from typing import Any, Dict, Optional
 
 from httpx import URL, HTTPError, HTTPStatusError
 from utils.exceptions import UpstreamAPIException
 from utils.utils import BaseEndpoint
+
+
+class EndpointsType(str, Enum):
+    post_list = "post_list"
+    post_detail = "post_detail"
+    subpost_detail = "subpost_detail"
+    user_profile = "user_profile"
 
 
 class TiebaEndpoint(BaseEndpoint):
