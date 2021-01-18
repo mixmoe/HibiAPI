@@ -35,14 +35,14 @@ jobs:
         run: |
           pip install poetry
           poetry export -f requirements.txt -o requirements.txt
-          sed -i '1s/^/'"# $(date -R)"'\n/' requirements.txt
           pip install -r requirements.txt
+          cat requirements.txt
 
       - name: Push to repository
         run: |
-          cat requirements.txt
-          git config --global user.name github-action
-          git config --global user.email noreply@github.com
+          [[ -z "$(git status -s)" ]] && exit
+          git config user.name github-action
+          git config user.email noreply@github.com
           git add requirements.txt
           git commit -am ":pushpin: 更新requirements.txt"
           git push

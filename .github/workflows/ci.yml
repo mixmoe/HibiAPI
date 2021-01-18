@@ -10,9 +10,27 @@ on:
       - master
 
 jobs:
+  count:
+    runs-on: ubuntu-latest
+    name: Count lines of code
+
+    if: "!contains(github.event.head_commit.message,'forward:')"
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Count lines with CLoC
+        run: |
+          echo "::group:: Install CLoC"
+          sudo apt-get install -y cloc
+          echo "::endgroup::"
+          cloc .
+
   test:
     runs-on: ubuntu-latest
     name: Testing
+    needs: [count]
 
     if: "!contains(github.event.head_commit.message,'forward:')"
 
@@ -45,12 +63,20 @@ jobs:
           ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
         run: |
           export $ENVIRONMENTS
-          echo $ENVIRONMENTS > configs/.env
+          touch configs/.env
           pytest
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: data/logs
 
   docker:
     runs-on: ubuntu-latest
     name: Build Docker Image
+    needs: [count]
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
