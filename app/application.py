@@ -1,7 +1,12 @@
+import asyncio
+from typing import NoReturn
 from urllib.parse import ParseResult
 
 from fastapi import FastAPI, Request, Response
+from fastapi.staticfiles import StaticFiles
 from utils.config import Config
+from utils.log import logger
+from utils.temp import TempFile
 
 from .routes import router as ImplRouter
 
@@ -14,6 +19,11 @@ app = FastAPI(
     redoc_url="/docs",
 )
 app.include_router(ImplRouter, prefix="/api")
+app.mount(
+    "/temp",
+    StaticFiles(directory=str(TempFile.path), check_dir=False),
+    "Temporary file directory",
+)
 
 
 @app.get("/", include_in_schema=False)
@@ -31,6 +41,19 @@ async def redirect(request: Request, to: str = "/docs", code: int = 302):
             ).geturl()
         },
     )
+
+
+@app.on_event("startup")
+async def cleaner():
+    async def clean() -> NoReturn:
+        while True:
+            try:
+                await TempFile.clean()
+            except Exception:
+                logger.exception("Exception occurred during executing cleaning task:")
+            await asyncio.sleep(3600)
+
+    asyncio.ensure_future(clean())
 
 
 """
