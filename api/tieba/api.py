@@ -4,8 +4,11 @@ from random import randint
 from typing import Any, Dict, Optional
 
 from httpx import URL, HTTPError, HTTPStatusError
+from utils.config import APIConfig
 from utils.exceptions import UpstreamAPIException
 from utils.utils import BaseEndpoint
+
+Config = APIConfig("tieba")
 
 
 class EndpointsType(str, Enum):
@@ -13,6 +16,7 @@ class EndpointsType(str, Enum):
     post_detail = "post_detail"
     subpost_detail = "subpost_detail"
     user_profile = "user_profile"
+    user_subscribed = "user_subscribed"
 
 
 class TiebaEndpoint(BaseEndpoint):
@@ -27,6 +31,11 @@ class TiebaEndpoint(BaseEndpoint):
                 "_client_id": "wappc_" + random_digit(13) + "_" + random_digit(3),
                 "_client_type": 2,
                 "_client_version": "9.9.8.32",
+                **{
+                    k.upper(): v
+                    for k, v in Config["net"]["params"].as_dict().items()
+                    if v
+                },
             }
         )
         params = {k: params[k] for k in sorted(params.keys())}
@@ -106,5 +115,14 @@ class TiebaEndpoint(BaseEndpoint):
                 "uid": uid,
                 "need_post_count": 1,
                 "has_plist": 1,
+            },
+        )
+
+    async def user_subscribed(self, *, uid: int):  # XXX This API required user login!
+        return await self.request(
+            "c/f/forum/like",
+            params={
+                "friend_uid": uid,
+                "uid": uid,
             },
         )

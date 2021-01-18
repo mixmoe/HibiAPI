@@ -1,0 +1,4 @@
+net:
+  user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810"
+  params:
+    BDUSS: "" # 百度的BDUSS登录凭证, 在使用部分API时需要

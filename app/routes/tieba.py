@@ -58,3 +58,8 @@ async def subpost_detail(
 @router.get(EndpointsType.user_profile)
 async def user_profile(uid: int, endpoint: TiebaEndpoint = Depends(requestClient)):
     return await endpoint.user_profile(uid=uid)
+
+
+@router.get(EndpointsType.user_subscribed)
+async def user_subscribed(uid: int, endpoint: TiebaEndpoint = Depends(requestClient)):
+    return await endpoint.user_subscribed(uid=uid)
