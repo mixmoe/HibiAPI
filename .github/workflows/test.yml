@@ -63,7 +63,9 @@ jobs:
       - name: Cache poetry
         uses: actions/cache@v2
         with:
-          path: ~/.cache/pypoetry/cache
+          path: |
+            ~/.cache/pypoetry/cache
+            ~/.cache/pypoetry/artifacts
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: ${{ runner.os }}-poetry-
 
