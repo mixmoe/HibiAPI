@@ -6,8 +6,8 @@
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fhibiapi.herokuapp.com%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://hibiapi.herokuapp.com)
 
-![Code Linting](https://github.com/mixmoe/HibiAPI/workflows/Code%20Linting/badge.svg)
-![CI](https://github.com/mixmoe/HibiAPI/workflows/CI/badge.svg)
+![Lint](https://github.com/mixmoe/HibiAPI/workflows/Lint/badge.svg)
+![Test](https://github.com/mixmoe/HibiAPI/workflows/Test/badge.svg)
 
 ![Version](https://img.shields.io/badge/dynamic/yaml?color=green&label=version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fmixmoe%2FHibiAPI%2Fmain%2Fconfigs%2Fgeneral.default.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
