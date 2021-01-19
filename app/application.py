@@ -2,13 +2,28 @@ import asyncio
 from typing import NoReturn
 from urllib.parse import ParseResult
 
+import sentry_sdk
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
+from sentry_sdk.integrations.logging import LoggingIntegration
 from utils.config import Config
 from utils.log import logger
 from utils.temp import TempFile
 
 from .routes import router as ImplRouter
+
+if Config["log"]["sentry"]["enabled"].as_bool():
+    sentry_sdk.init(
+        dsn=Config["log"]["sentry"]["dsn"].as_str(),
+        send_default_pii=Config["log"]["sentry"]["pii"].as_bool(),
+        integrations=[
+            LoggingIntegration(
+                level=None,
+                event_level=None,
+            )
+        ],
+    )
+
 
 app = FastAPI(
     debug=Config["debug"].as_bool(),

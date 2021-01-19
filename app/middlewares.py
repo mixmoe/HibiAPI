@@ -3,6 +3,7 @@ from typing import Any, Callable, Coroutine, List
 
 from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from utils.config import Config
 from utils.exceptions import UncaughtException
 from utils.log import logger
@@ -17,8 +18,10 @@ app.add_middleware(
     allow_methods=Config["server"]["cors"]["methods"].get(List[str]),
     allow_headers=Config["server"]["cors"]["headers"].get(List[str]),
 )
+app.add_middleware(SentryAsgiMiddleware)
 
 
+@app.middleware("http")
 @app.middleware("http")
 async def uncaught_exception_handler(
     request: Request, call_next: Callable[[Request], Coroutine[Any, Any, Response]]

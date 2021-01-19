@@ -21,7 +21,7 @@ async def exceptionHandler(
     exc.data.url = str(request.url)  # type:ignore
     if exc.data.code >= 500:
         logger.opt(exception=exc).exception(
-            f"Error occurred during parsing <r><b>({exc.data=})</b></r>:"
+            f"Error occurred during parsing {exc.data}:"
         )
     return Response(
         content=exc.data.json(),

@@ -5,6 +5,7 @@ from asyncio.log import logger as _asyncioLogger
 from datetime import timedelta
 from typing import TYPE_CHECKING, Literal
 
+import sentry_sdk.integrations.logging as sentry
 from loguru import logger as _logger
 
 from .config import DATA_PATH, Config
@@ -40,6 +41,8 @@ logger.add(
     filter=lambda record: record["level"].no < 30,
 )
 logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
+logger.add(sentry.BreadcrumbHandler(), level=LOG_LEVEL)
+logger.add(sentry.EventHandler(), level="ERROR")
 logger.level(LOG_LEVEL)
 
 

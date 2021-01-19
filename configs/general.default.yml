@@ -35,3 +35,8 @@ log:
     <v>{level:<8}</v>
     [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}:{line}</d>]</level>
     {message}
+
+  sentry:
+    enabled: false
+    dsn: ""
+    pii: false
