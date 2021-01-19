@@ -1,4 +1,4 @@
-name: CI
+name: Test
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 jobs:
   count:
     runs-on: ubuntu-latest
-    name: Count lines of code
+    name: Count Code
 
     if: "!contains(github.event.head_commit.message,'forward:')"
 
@@ -20,17 +20,36 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Count lines with CLoC
+      - name: Install CLoC
         run: |
-          echo "::group:: Install CLoC"
           sudo apt-get install -y cloc
-          echo "::endgroup::"
+
+      - name: Count lines of code
+        run: |
           cloc .
+
+  docker:
+    runs-on: ubuntu-latest
+    name: Docker Build
+    needs: [count]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Test Docker build
+        run: |
+          docker build .
 
   test:
     runs-on: ubuntu-latest
     name: Testing
     needs: [count]
+
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+      fail-fast: false
 
     steps:
       - name: Clone repository
@@ -39,7 +58,7 @@ jobs:
       - name: Set up python environment
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
 
       - name: Cache poetry
         uses: actions/cache@v2
@@ -61,6 +80,7 @@ jobs:
           poetry install -vvv
 
       - name: Testing with pytest
+        continue-on-error: true
         env:
           ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
         run: |
@@ -73,22 +93,3 @@ jobs:
         with:
           name: logs
           path: data/logs
-
-  docker:
-    runs-on: ubuntu-latest
-    name: Build Docker Image
-    needs: [count]
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-
-      - name: Add environment files
-        env:
-          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
-        run: |
-          echo $ENVIRONMENTS > configs/.env
-
-      - name: Test building Docker image
-        run: |
-          docker build .
