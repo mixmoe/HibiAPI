@@ -17,6 +17,7 @@ data:
 server:
   host: 127.0.0.1 # 监听主机
   port: 8080 # 端口
+  gzip: true
 
   cors:
     origins:

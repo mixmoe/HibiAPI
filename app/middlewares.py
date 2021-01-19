@@ -3,6 +3,7 @@ from typing import Any, Callable, Coroutine, List
 
 from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from utils.config import Config
 from utils.exceptions import UncaughtException
@@ -11,6 +12,8 @@ from utils.log import logger
 from .application import app
 from .handlers import exceptionHandler
 
+if Config["server"]["gzip"].as_bool():
+    app.add_middleware(GZipMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=Config["server"]["cors"]["origins"].get(List[str]),
@@ -21,7 +24,6 @@ app.add_middleware(
 app.add_middleware(SentryAsgiMiddleware)
 
 
-@app.middleware("http")
 @app.middleware("http")
 async def uncaught_exception_handler(
     request: Request, call_next: Callable[[Request], Coroutine[Any, Any, Response]]
