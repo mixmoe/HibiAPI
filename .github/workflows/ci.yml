@@ -32,8 +32,6 @@ jobs:
     name: Testing
     needs: [count]
 
-    if: "!contains(github.event.head_commit.message,'forward:')"
-
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -43,20 +41,24 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Cache poetry
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/cache
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
+
       - name: Cache pip
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
+          restore-keys: ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
           pip install poetry
-          poetry export -f requirements.txt -o /tmp/requirements.txt --dev
-          pip install -r /tmp/requirements.txt
+          poetry install -vvv
 
       - name: Testing with pytest
         env:
@@ -64,7 +66,7 @@ jobs:
         run: |
           export $ENVIRONMENTS
           touch configs/.env
-          pytest
+          poetry run pytest
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
