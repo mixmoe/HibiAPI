@@ -1,7 +1,7 @@
 qrcode:
-  max-size: 1000
-  min-size: 50
-  icon-site:
+  max-size: 1000 # 允许的二维码最大尺寸, 单位像素
+  min-size: 50 # 允许的二维码最小尺寸, 单位像素
+  icon-site: # 图标支持的站点, 可以阻止服务器ip泄漏, 支持通配符
     - localhost
     - i.loli.net
     # - "*"

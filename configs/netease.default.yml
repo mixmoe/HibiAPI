@@ -1,8 +1,8 @@
 net:
-  cookie: >
+  cookie: > # 网易云的Cookie, 可能有些API需要
     os=pc;
     osver=Microsoft-Windows-10-Professional-build-10586-64bit; 
     appver=2.0.3.131777; 
     channel=netease; 
     __remember_me=true
-  user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810"
+  user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改

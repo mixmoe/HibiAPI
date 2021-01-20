@@ -11,8 +11,8 @@ debug: false # 是否开启Debug模式
 version: 0.3.0 # 程序版本, 勿动
 
 data:
-  temp-expiry: 7
-  path: ./data
+  temp-expiry: 7 # 临时文件目录文件过期时间, 单位为天
+  path: ./data # data目录所在位置
 
 server:
   host: 127.0.0.1 # 监听主机
