@@ -55,12 +55,12 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Set up python environment
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Cache poetry
+      - name: Cache Poetry
         uses: actions/cache@v2
         with:
           path: |
@@ -93,5 +93,5 @@ jobs:
       - name: Upload logs
         uses: actions/upload-artifact@v2
         with:
-          name: logs
+          name: logs-${{ matrix.python-version }}
           path: data/logs
