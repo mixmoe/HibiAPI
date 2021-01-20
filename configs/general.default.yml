@@ -39,5 +39,6 @@ log:
 
   sentry:
     enabled: false
+    sample: 1
     dsn: ""
     pii: false

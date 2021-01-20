@@ -16,12 +16,8 @@ if Config["log"]["sentry"]["enabled"].as_bool():
     sentry_sdk.init(
         dsn=Config["log"]["sentry"]["dsn"].as_str(),
         send_default_pii=Config["log"]["sentry"]["pii"].as_bool(),
-        integrations=[
-            LoggingIntegration(
-                level=None,
-                event_level=None,
-            )
-        ],
+        integrations=[LoggingIntegration(level=None, event_level=None)],
+        traces_sample_rate=Config["log"]["sentry"]["sample"].get(float),
     )
 
 
