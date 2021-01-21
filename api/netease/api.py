@@ -31,6 +31,21 @@ class EndpointsType(str, Enum):
 
 
 class SearchType(IntEnum):
+    """
+    搜索内容类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 1  | 单曲 |
+    | 10  | 专辑 |
+    | 100  | 歌手 |
+    | 1000  | 歌单 |
+    | 1002  | 用户 |
+    | 1004  | mv |
+    | 1006  | 歌词 |
+    | 1009  | 主播电台 |
+    """
+
     SONG = 1
     ALBUM = 10
     ARTIST = 100
@@ -43,6 +58,10 @@ class SearchType(IntEnum):
 
 
 class BitRateType(IntEnum):
+    """
+    歌曲码率
+    """
+
     LOW = 64000
     MEDIUM = 128000
     STANDARD = 198000
@@ -50,6 +69,15 @@ class BitRateType(IntEnum):
 
 
 class RecordPeriodType(IntEnum):
+    """
+    听歌记录时段类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 0 | 所有时段 |
+    | 1 | 本周 |
+    """
+
     WEEKLY = 1
     ALL = 0
 

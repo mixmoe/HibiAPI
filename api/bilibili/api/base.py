@@ -12,17 +12,49 @@ from ..constants import BilibiliConstants
 
 
 class TimelineType(str, Enum):
+    """
+    番剧时间线类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | global  | 番剧 |
+    | cn  | 国产动画 |
+    """
+
     CN = "cn"
     GLOBAL = "global"
 
 
 class CommentSortType(IntEnum):
+    """
+    评论排序类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 0 | 按时间 |
+    | 1 | 按热评 |
+    | 2 | 按点赞 |
+    """
+
     LIKES = 2
     HOT = 1
     TIME = 0
 
 
 class CommentType(IntEnum):
+    """
+    评论来源类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 1 | 视频 |
+    | 12 | 文章 |
+    | 11 | 含图片的动态 |
+    | 17 | 不含图片的动态 |
+    | 14 | 音乐 |
+    | 19 | 歌单 |
+    """
+
     VIDEO = 1
     ARTICLE = 12
     DYNAMIC_PICTURE = 11
@@ -32,6 +64,22 @@ class CommentType(IntEnum):
 
 
 class VideoQualityType(IntEnum):
+    """
+    视频质量类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 6 | 240P |
+    | 16 | 360P |
+    | 32 | 480P |
+    | 64 | 720P |
+    | 74 | 720P 60FPS |
+    | 80 | 1080P |
+    | 112 | 1080P+ |
+    | 116 | 1080P 60FPS |
+    | 120 | 4K |
+    """
+
     VIDEO_240P = 6
     VIDEO_360P = 16
     VIDEO_480P = 32
@@ -44,34 +92,85 @@ class VideoQualityType(IntEnum):
 
 
 class VideoFormatType(IntEnum):
+    """
+    视频格式类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 0 | FLV |
+    | 2 | MP4 |
+    | 16 | DASH |
+    """
+
     FLV = 0
     MP4 = 2
     DASH = 16
 
 
 class RankBangumiType(str, Enum):
+    """
+    番剧排行榜类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | global  | 番剧 |
+    | cn  | 国产动画 |
+    """
+
     CN = "cn"
     GLOBAL = "global"
 
 
 class RankContentType(IntEnum):
-    FULL_SITE = 0  # 0 	全站
-    DOUGA = 1  # 1 	动画
-    GUOCHUANG = 168  # 168 	国创相关
-    MUSIC = 3  # 3 	音乐
-    DANCE = 129  # 129 	舞蹈
-    GAME = 4  # 4 	游戏
-    TECHNOLOGY = 36  # 36 	科技
-    LIFE = 160  # 160 	生活
-    KICHIKU = 119  # 119 	鬼畜
-    FASHION = 155  # 155 	时尚
-    INFORMATION = 165  # 165 	广告
-    ENT = 5  # 5 	娱乐
-    MOVIE = 23  # 23 	电影
-    TV = 11  # 11 	电视剧
+    """
+    视频排行榜内容类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 0  | 全站 |
+    | 1  | 动画 |
+    | 168  | 国创相关 |
+    | 3  | 音乐 |
+    | 129  | 舞蹈 |
+    | 4  | 游戏 |
+    | 36  | 科技 |
+    | 160  | 生活 |
+    | 119  | 鬼畜 |
+    | 155  | 时尚 |
+    | 165  | 广告 |
+    | 5  | 娱乐 |
+    | 23  | 电影 |
+    | 11  | 电视剧 |
+    """
+
+    FULL_SITE = 0
+    DOUGA = 1
+    GUOCHUANG = 168
+    MUSIC = 3
+    DANCE = 129
+    GAME = 4
+    TECHNOLOGY = 36
+    LIFE = 160
+    KICHIKU = 119
+    FASHION = 155
+    INFORMATION = 165
+    ENT = 5
+    MOVIE = 23
+    TV = 11
 
 
 class RankDurationType(IntEnum):
+    """
+    排行榜时间段类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | 1  | 日排行 |
+    | 3  | 三日排行 |
+    | 7  | 周排行 |
+    | 30  | 月排行 |
+    """
+
     DAILY = 1
     THREE_DAY = 3
     WEEKLY = 7
