@@ -8,7 +8,7 @@ from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
 from httpx import URL, AsyncClient, Cookies, Request, Response, TransportError
-from pydantic import Extra, validate_arguments
+from pydantic import validate_arguments
 
 from .decorators import Retry
 from .log import logger
@@ -135,10 +135,4 @@ class BaseEndpoint:
             return obj
         elif not self.type_checking:
             return obj
-        return validate_arguments(
-            obj,
-            config={
-                "extra": Extra.forbid,
-                "allow_mutation": False,
-            },
-        )
+        return validate_arguments(obj)
