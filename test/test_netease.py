@@ -64,20 +64,24 @@ def test_comments(client: TestClient):
 
 
 def test_record(client: TestClient):
-    # TODO: add a test case
-    pass
+    response = client.get("record", params={"id": 286609438})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
 
 
 def test_djradio(client: TestClient):
-    # TODO: add a test case
-    pass
+    response = client.get("djradio", params={"id": 350596191})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
 
 
 def test_dj(client: TestClient):
-    # TODO: add a test case
-    pass
+    response = client.get("dj", params={"id": 10785929})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
 
 
 def test_detail_dj(client: TestClient):
-    # TODO: add a test case
-    pass
+    response = client.get("detail_dj", params={"id": 1370045285})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
