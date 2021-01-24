@@ -67,6 +67,15 @@ async def cleaner():
     asyncio.ensure_future(clean())
 
 
+@app.on_event("shutdown")
+def flush_sentry():
+    client = sentry_sdk.Hub.current.client
+    if client is not None:
+        client.close()
+    sentry_sdk.flush()
+    logger.info("Sentry client has been closed")
+
+
 """
 Temporary redirection solution below for #12
 """
