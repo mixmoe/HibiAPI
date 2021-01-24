@@ -1,6 +1,6 @@
 {{! FastAPI Automatic docstring}}
 
-Name: `{{name}}`
+## Name: `{{name}}`
 
 > {{summaryPlaceholder}} {{extendedSummaryPlaceholder}}
 {{#argsExist}}
@@ -10,7 +10,7 @@ Name: `{{name}}`
 ### Required:
 
 {{#args}}
-- `{{typePlaceholder}}` **`{{var}}`** 
+- ***{{typePlaceholder}}*** **`{{var}}`** 
     - Description: {{descriptionPlaceholder}}
 {{/args}}
 {{/argsExist}}
@@ -20,7 +20,7 @@ Name: `{{name}}`
 
 ### Optional:
 {{#kwargs}}
-- `{{typePlaceholder}}` **`{{var}}`** = *`{{default}}`*
+- ***{{typePlaceholder}}*** `{{var}}` = `{{default}}`
     - Description: {{descriptionPlaceholder}}
 {{/kwargs}}
 {{/kwargsExist}}

@@ -57,11 +57,37 @@ async def matchAll(
 
 @router.get(EndpointsType.illust)
 async def illust(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+    """
+    ## Name: `illust`
+
+    > 通过插画ID获取插画信息
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 插画ID
+
+    """
     return await endpoint.illust(id=id)
 
 
 @router.get(EndpointsType.member)
 async def member(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+    """
+    ## Name: `member`
+
+    > 通过用户ID获取用户信息
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    """
     return await endpoint.member(id=id)
 
 
@@ -73,6 +99,29 @@ async def member_illust(
     size: int = 20,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
+    """
+    ## Name: `member_illust`
+
+    > 通过用户ID获取用户作品列表
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    ---
+
+    ### Optional:
+    - ***IllustType*** `illust_type` = `IllustType.illust`
+        - Description: 插画类型
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `20`
+        - Description: 包含插画大小
+
+    """
     return await endpoint.member_illust(
         id=id, illust_type=illust_type, page=page, size=size
     )
@@ -84,6 +133,25 @@ async def favorite(
     tag: Optional[str] = None,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
+    """
+    ## Name: `favorite`
+
+    > 查看用户收藏
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    ---
+
+    ### Optional:
+    - ***Optional[str]*** `tag` = `None`
+        - Description: 包含的标签
+
+    """
     return await endpoint.favorite(id=id, tag=tag)
 
 
@@ -94,6 +162,27 @@ async def following(
     size: int = 20,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
+    """
+    ## Name: `following`
+
+    > 获取用户关注列表
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    ---
+
+    ### Optional:
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `20`
+        - Description: 页面包含用户数目
+
+    """
     return await endpoint.following(id=id, page=page, size=size)
 
 
@@ -104,6 +193,27 @@ async def follower(
     size: int = 20,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
+    """
+    ## Name: `following`
+
+    > 获取用户粉丝列表
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    ---
+
+    ### Optional:
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `20`
+        - Description: 页面包含用户数目
+
+    """
     return await endpoint.follower(id=id, page=page, size=size)
 
 
@@ -115,6 +225,24 @@ async def rank(
     size: int = 50,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
+    """
+    ## Name: `rank`
+
+    > 获取作品排行榜
+
+    ---
+
+    ### Optional:
+    - ***RankingType*** `mode` = `RankingType.week`
+        - Description: 排行榜类型
+    - ***Optional[RankingDate]*** `date` = `None`
+        - Description: 日期, 格式 `yyyy-mm-dd`
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `50`
+        - Description: 页面包含插画数
+
+    """
     return await endpoint.rank(mode=mode, date=date, page=page, size=size)
 
 
