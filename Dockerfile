@@ -1,8 +1,9 @@
 FROM python:3.8-buster
+EXPOSE 8080
+ENV PORT=8080
 COPY . /hibi
 WORKDIR /hibi
 RUN pip install -r requirements.txt --prefer-binary && \
     touch configs/.env
-ENV PORT=8080
-EXPOSE 8080
-CMD pythoh main.py --port $PORT
+CMD cd /hibi && \
+    python main.py --port $PORT
