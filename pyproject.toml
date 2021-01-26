@@ -23,7 +23,7 @@ pydantic = "~1.5.0"
 black = "^20.8b1"
 mypy = "^0.800"
 flake8 = "^3.8.4"
-pytest = "^6.2.1"
+pytest = "^6.2.2"
 requests = "^2.25.1"
 
 [build-system]
