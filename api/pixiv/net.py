@@ -42,7 +42,7 @@ class UserInfo(BaseModel):
             **PixivConstants.DEFAULT_HEADERS,
             "X-Client-Time": time,
             "X-Client-Hash": hashlib.md5(
-                time.encode() + PixivConstants.HASH_SECRET.encode()
+                time.encode() + PixivConstants.HASH_SECRET
             ).hexdigest(),
         }
         data = {
