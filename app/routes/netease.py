@@ -48,16 +48,18 @@ async def search(
 
     ### Required:
 
-    - ***string*** **`s`**
+    - ***str*** **`s`**
         - Description: 关键词
 
-    ### Optional
-    - ***Optional[str]*** `search_type` = `1`
+    ---
+
+    ### Optional:
+    - ***SearchType*** `search_type` = `SearchType.SONG`
         - Description: 搜索类型
-    - ***int*** `offset` = `0`
-        - Description: 指定偏移数量，用于分页
     - ***int*** `limit` = `20`
         - Description: 指定返回结果数量
+    - ***int*** `offset` = `0`
+        - Description: 指定偏移数量，用于分页
 
     """
     return await endpoint.search(
@@ -73,7 +75,7 @@ async def artist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `artist`
 
-    > 获取歌手详细
+    > 歌手
 
     ---
 
@@ -91,7 +93,7 @@ async def album(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `album`
 
-    > 获取专辑内容
+    > 专辑
 
     ---
 
@@ -109,14 +111,14 @@ async def detail(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `detail`
 
-    > 获取单曲详情
+    > 歌曲详情
 
     ---
 
     ### Required:
 
     - ***int*** **`id`**
-        - Description: 单曲ID
+        - Description: 歌曲ID
 
     """
     return await endpoint.detail(id=id)
@@ -131,7 +133,7 @@ async def song(
     """
     ## Name: `song`
 
-    > 获取单曲内容
+    > 单曲
 
     ---
 
@@ -140,8 +142,11 @@ async def song(
     - ***int*** **`id`**
         - Description: 单曲ID
 
+    ---
+
     ### Optional:
-    - ***Optional[int]*** `br` = `128000`
+    - ***BitRateType*** `br` = `BitRateType.STANDARD`
+        - Description: 指定歌曲码率，可用值为 64000,128000,198000,320000
 
     """
     return await endpoint.song(id=id, br=br)
@@ -152,7 +157,7 @@ async def playlist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `playlist`
 
-    > 获取歌单内容
+    > 歌单
 
     ---
 
@@ -170,7 +175,7 @@ async def lyric(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `lyric`
 
-    > 获取单曲歌词
+    > 歌词
 
     ---
 
@@ -188,7 +193,7 @@ async def mv(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `mv`
 
-    > MV搜索
+    > MV
 
     ---
 
@@ -211,7 +216,7 @@ async def comments(
     """
     ## Name: `comments`
 
-    > 获取单曲评论
+    > 评论
 
     ---
 
@@ -220,7 +225,9 @@ async def comments(
     - ***int*** **`id`**
         - Description: 单曲ID
 
-    ### Optional
+    ---
+
+    ### Optional:
     - ***int*** `offset` = `0`
         - Description: 指定偏移数量，用于分页
     - ***int*** `limit` = `20`
@@ -243,7 +250,7 @@ async def record(
     """
     ## Name: `record`
 
-    > 获取用户听歌记录
+    > 听歌记录
 
     ---
 
@@ -252,8 +259,10 @@ async def record(
     - ***int*** **`id`**
         - Description: 用户ID
 
-    ### Optional
-    - ***int*** `period` = `0`
+    ---
+
+    ### Optional:
+    - ***RecordPeriodType*** `period` = `RecordPeriodType.ALL`
         - Description: 为 1 时返回最近一周，为 0 时返回所有时间
 
     """
@@ -265,7 +274,7 @@ async def djradio(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
     """
     ## Name: `djradio`
 
-    > 获取主播电台内容
+    > 主播电台
 
     ---
 
@@ -289,7 +298,7 @@ async def dj(
     """
     ## Name: `dj`
 
-    > 主播电台单曲ID
+    > 主播电台单曲
 
     ---
 
@@ -297,6 +306,8 @@ async def dj(
 
     - ***int*** **`id`**
         - Description: 电台单曲ID
+
+    ---
 
     ### Optional:
     - ***int*** `offset` = `0`
@@ -327,7 +338,7 @@ async def detail_dj(id: int, endpoint: NeteaseEndpoint = Depends(requestClient))
     ### Required:
 
     - ***int*** **`id`**
-        - Description: 电台ID
+        - Description: 电台歌曲ID
 
     """
     return await endpoint.detail_dj(id=id)
