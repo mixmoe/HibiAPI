@@ -131,6 +131,7 @@ async def member_illust(
 async def favorite(
     id: int,
     tag: Optional[str] = None,
+    max_bookmark_id: Optional[int] = None,
     endpoint: PixivEndpoints = Depends(requestClient),
 ):
     """
@@ -150,9 +151,13 @@ async def favorite(
     ### Optional:
     - ***Optional[str]*** `tag` = `None`
         - Description: 包含的标签
+    - ***Optional[int]*** `max_bookmark_id` = `None`
+        - Description: 意义不明
 
     """
-    return await endpoint.favorite(id=id, tag=tag)
+    return await endpoint.favorite(
+        id=id, tag=tag, max_bookmark_id=max_bookmark_id
+    )
 
 
 @router.get(EndpointsType.following)
