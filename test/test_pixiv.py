@@ -31,7 +31,6 @@ def test_member_illust(client: TestClient):
 
 
 def test_favorite(client: TestClient):
-    # TODO: add test case
     response = client.get("favorite", params={"id": 3036679})
     assert response.status_code == 200
 

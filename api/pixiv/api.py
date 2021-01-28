@@ -197,12 +197,20 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
-    async def favorite(self, *, id: int, tag: Optional[str] = None):
+    async def favorite(
+        self,
+        *,
+        id: int,
+        tag: Optional[str] = None,
+        max_bookmark_id: Optional[int] = None,
+    ):
         return await self.request(
             "v1/user/bookmarks/illust",
             params={
                 "user_id": id,
                 "tag": tag,
+                "restrict": "public",
+                "max_bookmark_id": max_bookmark_id
             },
         )
 
