@@ -14,6 +14,21 @@
         }
     },
     "autoDocstring.customTemplatePath": ".vscode/docstring.mustache",
+    "editor.formatOnSave": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/.hg/store/**": true,
+        "**/.venv/**": true,
+        "**/.mypy_cache/**": true,
+    },
+    "files.trimTrailingWhitespace": true,
+    "files.encoding": "utf8",
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "jupyter.jupyterServerType": "local",
     "cSpell.words": [
         "Bilibili",
         "DOUGA",
@@ -57,17 +72,4 @@
         "vmid",
         "weapi"
     ],
-    "editor.formatOnSave": true,
-    "files.watcherExclude": {
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/node_modules/**": true,
-        "**/.hg/store/**": true,
-        "**/.venv/**": true,
-        "**/.mypy_cache/**": true,
-    },
-    "git.autofetch": true,
-    "git.enableSmartCommit": true,
-    "python.analysis.diagnosticMode": "workspace",
-    "jupyter.jupyterServerType": "local"
 }
