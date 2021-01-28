@@ -210,7 +210,7 @@ class PixivEndpoints(BaseEndpoint):
                 "user_id": id,
                 "tag": tag,
                 "restrict": "public",
-                "max_bookmark_id": max_bookmark_id
+                "max_bookmark_id": max_bookmark_id,
             },
         )
 

@@ -155,9 +155,7 @@ async def favorite(
         - Description: 意义不明
 
     """
-    return await endpoint.favorite(
-        id=id, tag=tag, max_bookmark_id=max_bookmark_id
-    )
+    return await endpoint.favorite(id=id, tag=tag, max_bookmark_id=max_bookmark_id)
 
 
 @router.get(EndpointsType.following)
