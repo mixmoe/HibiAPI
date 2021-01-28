@@ -56,8 +56,10 @@ async def search(
     ### Optional:
     - ***SearchType*** `search_type` = `SearchType.SONG`
         - Description: 搜索类型
+
     - ***int*** `limit` = `20`
         - Description: 指定返回结果数量
+
     - ***int*** `offset` = `0`
         - Description: 指定偏移数量，用于分页
 
@@ -146,7 +148,7 @@ async def song(
 
     ### Optional:
     - ***BitRateType*** `br` = `BitRateType.STANDARD`
-        - Description: 指定歌曲码率，可用值为 64000,128000,198000,320000
+        - Description: 歌曲码率
 
     """
     return await endpoint.song(id=id, br=br)
@@ -263,7 +265,7 @@ async def record(
 
     ### Optional:
     - ***RecordPeriodType*** `period` = `RecordPeriodType.ALL`
-        - Description: 为 1 时返回最近一周，为 0 时返回所有时间
+        - Description: 听歌记录时段
 
     """
     return await endpoint.record(id=id, period=period)
@@ -312,10 +314,12 @@ async def dj(
     ### Optional:
     - ***int*** `offset` = `0`
         - Description: 指定偏移数量，用于分页
+
     - ***int*** `limit` = `20`
         - Description: 指定返回结果数量
+
     - ***bool*** `asc` = `False`
-        - Description: 意义不明
+        - Description: 是否按升序排列
 
     """
     return await endpoint.dj(
