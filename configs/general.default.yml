@@ -29,6 +29,8 @@ server:
     methods: ["*"]
     headers: ["*"]
 
+  allowed-forward: null # Reference: https://stackoverflow.com/questions/63511413
+
 log:
   level: INFO # 日志等级, 可选 [TRACE,DEBUG,INFO,WARNING,ERROR]
   format: > # 输出日志格式, 如果没有必要请不要修改

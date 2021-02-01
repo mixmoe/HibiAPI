@@ -1,4 +1,5 @@
 from os import get_terminal_size
+from typing import Optional
 
 import click
 import uvicorn  # type:ignore
@@ -8,12 +9,12 @@ from utils.config import DEBUG, VERSION, Config
 from utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
-  _    _ _ _     _          _____ _____ 
- | |  | (_) |   (_)   /\   |  __ \_   _|
- | |__| |_| |__  _   /  \  | |__) || |  
- |  __  | | '_ \| | / /\ \ |  ___/ | |  
- | |  | | | |_) | |/ ____ \| |    _| |_ 
- |_|  |_|_|_.__/|_/_/    \_\_|   |_____|
+  _    _ _ _     _          _____ _____  
+ | |  | (_) |   (_)   /\   |  __ \_   _| 
+ | |__| |_| |__  _   /  \  | |__) || |   
+ |  __  | | '_ \| | / /\ \ |  ___/ | |   
+ | |  | | | |_) | |/ ____ \| |    _| |_  
+ |_|  |_|_|_.__/|_/_/    \_\_|   |_____| 
 </g><e>
 An alternative implement of Imjad API
 Project: https://github.com/mixmoe/HibiAPI
@@ -86,6 +87,9 @@ def main(host: str, port: int, workers: int, reload: bool):
         log_config=LOG_CONFIG,
         workers=workers,
         reload=reload,
+        forwarded_allow_ips=Config["server"]["allowed-forward"].get(
+            Optional[str]  # type:ignore
+        ),
     )
 
 

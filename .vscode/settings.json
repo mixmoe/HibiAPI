@@ -23,7 +23,6 @@
         "**/.venv/**": true,
         "**/.mypy_cache/**": true,
     },
-    "files.trimTrailingWhitespace": true,
     "files.encoding": "utf8",
     "git.autofetch": true,
     "git.enableSmartCommit": true,
