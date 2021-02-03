@@ -19,29 +19,26 @@ jobs:
     name: Lint Code
 
     steps:
-      - name: Clone Repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Set up Python Environment
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
 
-      - name: Cache pip
-        uses: actions/cache@v2
+      - uses: Gr1N/setup-poetry@v4
+
+      - uses: actions/cache@v1
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-pip-
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
 
       - name: Install Dependencies
         run: |
-          pip install poetry
           poetry export -f requirements.txt -o /tmp/requirements.txt --dev
           pip install -r /tmp/requirements.txt
 
-      - name: Run Linters
-        uses: wearerequired/lint-action@v1
+      - uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.github_token }}
           auto_fix: true

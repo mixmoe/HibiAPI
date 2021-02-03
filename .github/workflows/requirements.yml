@@ -15,26 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
-      - name: Cache pip
-        uses: actions/cache@v2
+      - uses: Gr1N/setup-poetry@v4
+
+      - uses: actions/cache@v1
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-pip-
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: ${{ runner.os }}-poetry-
 
       - name: Generate dependencies
         run: |
-          pip install poetry
           poetry export -f requirements.txt -o requirements.txt
-          pip install -r requirements.txt
 
       - name: Push to repository
         run: |

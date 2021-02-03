@@ -17,8 +17,7 @@ jobs:
     if: "!contains(github.event.head_commit.message,'forward:')"
 
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Install CLoC
         run: |
@@ -42,56 +41,43 @@ jobs:
           docker build .
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     name: Testing
     needs: [count]
 
     strategy:
       matrix:
-        python-version: [3.8, 3.9]
+        python: [3.8, 3.9]
+        os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
 
-      - name: Cache Poetry
-        uses: actions/cache@v2
+      - uses: Gr1N/setup-poetry@v4
+
+      - uses: actions/cache@v1
         with:
-          path: |
-            ~/.cache/pypoetry/cache
-            ~/.cache/pypoetry/artifacts
+          path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: ${{ runner.os }}-poetry-
 
-      - name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-pip-
-
       - name: Install dependencies
-        run: |
-          pip install poetry
-          poetry install -vvv
+        run: poetry install -vvv
 
       - name: Testing with pytest
         continue-on-error: true
-        env:
-          ENVIRONMENTS: ${{ secrets.DOTENV_FILE }}
         run: |
-          export $ENVIRONMENTS
-          touch configs/.env
+          curl -L ${{ secrets.DOTENV_LINK }} > configs/.env
           poetry run pytest
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
+        if: failure()
         with:
-          name: logs-${{ matrix.python-version }}
+          name: logs-${{ matrix.python }}
           path: data/logs
