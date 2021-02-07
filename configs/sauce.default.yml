@@ -1,0 +1,12 @@
+net:
+  api-key: ""
+  user-agent: &ua "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810"
+
+image:
+  max-size: 4096 # unit is KB
+  timeout: 12
+  headers: { "user-agent": *ua }
+  allowed:
+    - localhost
+    - i.loli.net
+    # - "*"
