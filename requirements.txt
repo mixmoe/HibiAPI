@@ -121,6 +121,8 @@ pydantic==1.5.1; python_version >= "3.6" \
 python-dotenv==0.15.0 \
     --hash=sha256:587825ed60b1711daea4832cf37524dfd404325b7db5e25ebe88c495c9f807a0 \
     --hash=sha256:0c8d1b80d1a1e91717ea7d526178e3882732420b03f08afea0406db6402e220e
+python-multipart==0.0.5 \
+    --hash=sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43
 pyyaml==5.3.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4" \
     --hash=sha256:74809a57b329d6cc0fdccee6318f44b9b8649961fa73144a98735b0aaf029f1f \
     --hash=sha256:240097ff019d7c70a4922b6869d8a86407758333f02203e0fc6ff79c5dcede76 \
