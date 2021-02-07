@@ -1,25 +1,17 @@
 from datetime import datetime
 from enum import Enum
-from fnmatch import fnmatch
 from io import BytesIO
 from pathlib import Path
-from typing import Dict, List, Literal, Optional, Tuple
+from typing import List, Literal, Optional
 
 from PIL import Image  # type:ignore
-from pydantic import (
-    AnyHttpUrl,
-    BaseModel,
-    Field,
-    UrlHostError,
-    conint,
-    validate_arguments,
-)
+from pydantic import AnyHttpUrl, BaseModel, Field, conint, validate_arguments
 from pydantic.color import Color
 from utils.config import APIConfig
 from utils.decorators import ToAsync
 from utils.exceptions import ClientSideException
 from utils.temp import TempFile
-from utils.utils import BaseNetClient
+from utils.utils import BaseHostUrl, BaseNetClient
 
 from qrcode import QRCode, constants  # type:ignore
 from qrcode.image.pil import PilImage  # type:ignore
@@ -27,24 +19,8 @@ from qrcode.image.pil import PilImage  # type:ignore
 Config = APIConfig("qrcode")
 
 
-class HostUrl(AnyHttpUrl):
-    @classmethod
-    def validate_host(
-        cls, parts: Dict[str, str]
-    ) -> Tuple[str, Optional[str], str, bool]:
-        host, tld, host_type, rebuild = super().validate_host(parts)
-        if not cls._check_domain(host):
-            raise UrlHostError()
-        return host, tld, host_type, rebuild
-
-    @staticmethod
-    def _check_domain(host: str) -> bool:
-        return any(
-            filter(
-                lambda x: fnmatch(host, x),  # type:ignore
-                Config["qrcode"]["icon-site"].get(List[str]),
-            )
-        )
+class HostUrl(BaseHostUrl):
+    allowed_hosts = Config["qrcode"]["icon-site"].get(List[str])
 
 
 class QRCodeLevel(str, Enum):

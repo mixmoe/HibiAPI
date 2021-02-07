@@ -1,14 +1,16 @@
 import asyncio
 import inspect
 from enum import Enum
+from fnmatch import fnmatch
 from threading import current_thread
 from types import TracebackType
-from typing import Any, Callable, Dict, Mapping, Optional, Type, Union
+from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Type, Union
 from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
 from httpx import URL, AsyncClient, Cookies, Request, Response, TransportError
-from pydantic import validate_arguments
+from pydantic import AnyHttpUrl, validate_arguments
+from pydantic.errors import UrlHostError
 
 from .decorators import Retry
 from .log import logger
@@ -136,3 +138,25 @@ class BaseEndpoint:
         elif not self.type_checking:
             return obj
         return validate_arguments(obj)
+
+
+class BaseHostUrl(AnyHttpUrl):
+    allowed_hosts: List[str] = []
+
+    @classmethod
+    def validate_host(
+        cls, parts: Dict[str, str]
+    ) -> Tuple[str, Optional[str], str, bool]:
+        host, tld, host_type, rebuild = super().validate_host(parts)
+        if not cls._check_domain(host):
+            raise UrlHostError(allowed=cls.allowed_hosts)
+        return host, tld, host_type, rebuild
+
+    @classmethod
+    def _check_domain(cls, host: str) -> bool:
+        return any(
+            filter(
+                lambda x: fnmatch(host, x),  # type:ignore
+                cls.allowed_hosts,
+            )
+        )
