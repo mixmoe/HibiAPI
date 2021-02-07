@@ -26,6 +26,18 @@ class HostUrl(BaseHostUrl):
     allowed_hosts = SauceConstants.IMAGE_ALLOWED_HOST
 
 
+class UploadFileIO(BytesIO):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v: Any) -> BytesIO:
+        if not isinstance(v, BytesIO):
+            raise ValueError(f"Expected UploadFile, received: {type(v)}")
+        return v
+
+
 class DeduplicateType(IntEnum):
     """
     0=no result deduping
@@ -36,14 +48,14 @@ class DeduplicateType(IntEnum):
 
     DISABLED = 0
     IDENTIFIER = 1
-    ALL = 3
+    ALL = 2
 
 
 class SauceEndpoint(BaseEndpoint):
     base = "https://saucenao.com"
 
-    async def fetch(self, host: HostUrl) -> BytesIO:
-        file, size = BytesIO(), 0
+    async def fetch(self, host: HostUrl) -> UploadFileIO:
+        file, size = UploadFileIO(), 0
         try:
             async with self.client.stream(
                 "GET",
@@ -65,7 +77,9 @@ class SauceEndpoint(BaseEndpoint):
             raise UnavailableSourceException(detail=str(e))
         return file
 
-    async def request(self, *, file: BytesIO, params: Dict[str, Any]) -> Dict[str, Any]:
+    async def request(
+        self, *, file: UploadFileIO, params: Dict[str, Any]
+    ) -> Dict[str, Any]:
         params.update({"api_key": SauceConstants.API_KEY, "output_type": 2})
         try:
             response = await self.client.post(
@@ -95,7 +109,7 @@ class SauceEndpoint(BaseEndpoint):
     async def search(
         self,
         *,
-        file: BytesIO,
+        file: UploadFileIO,
         size: int = 30,
         deduplicate: DeduplicateType = DeduplicateType.ALL,
         database: Optional[int] = None,
@@ -108,7 +122,7 @@ class SauceEndpoint(BaseEndpoint):
         self,
         *,
         url: Optional[HostUrl] = None,
-        file: Optional[BytesIO] = None,
+        file: Optional[UploadFileIO] = None,
         size: int = 30,
         deduplicate: DeduplicateType = DeduplicateType.ALL,
         database: Optional[int] = None,

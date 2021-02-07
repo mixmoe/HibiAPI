@@ -1,4 +1,3 @@
-from io import BytesIO
 from typing import Optional
 
 from api.sauce import (
@@ -7,6 +6,7 @@ from api.sauce import (
     NetRequest,
     SauceConstants,
     SauceEndpoint,
+    UploadFileIO,
 )
 from fastapi import Depends, File, Form
 from utils.utils import SlashRouter
@@ -52,7 +52,7 @@ async def sauce_form(
     endpoint: SauceEndpoint = Depends(requestClient),
 ):
     return await endpoint.search(
-        file=BytesIO(file),
+        file=UploadFileIO(file),
         size=size,
         deduplicate=deduplicate,
         database=database,
