@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from secrets import token_hex
+from threading import Lock
 from typing import Optional
 from urllib.parse import ParseResult
 
@@ -16,11 +17,14 @@ class TempFile:
     path_depth = 3
     name_length = 16
 
+    _lock = Lock()
+
     @classmethod
     def create(cls, ext: str = ".tmp") -> Path:
-        filename = token_hex(cls.name_length) + ext
-        path: Path = cls.path / "/".join(filename[: cls.path_depth]) / filename
-        path.parent.mkdir(exist_ok=True, parents=True)
+        with cls._lock:
+            filename = token_hex(cls.name_length) + ext
+            path: Path = cls.path / "/".join(filename[: cls.path_depth]) / filename
+            path.parent.mkdir(exist_ok=True, parents=True)
         return path
 
     @classmethod
