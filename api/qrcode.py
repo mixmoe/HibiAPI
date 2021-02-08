@@ -67,13 +67,12 @@ class QRInfo(BaseModel):
     ):
         icon_stream = None
         if logo is not None:
-            icon_stream = BytesIO()
             async with BaseNetClient() as client:
                 response = await client.get(
                     logo, headers={"user-agent": "HibiAPI@GitHub"}, timeout=6
                 )
                 response.raise_for_status()
-                icon_stream.write(response.content)
+            icon_stream = BytesIO(response.content)
         return cls(
             data=text,
             logo=logo,
@@ -121,8 +120,8 @@ class QRInfo(BaseModel):
         if icon_stream is not None:
             try:
                 icon = Image.open(icon_stream)
-            except ValueError:
-                raise ClientSideException("Invalid image format.")
+            except ValueError as e:
+                raise ClientSideException("Invalid image format.") from e
             icon_width, icon_height = icon.size
             image.paste(
                 icon,

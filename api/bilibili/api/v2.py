@@ -27,7 +27,7 @@ def process_keyerror(function: _AnyCallable) -> _AnyCallable:
         try:
             return await function(*args, **kwargs)
         except KeyError as e:
-            raise ClientSideException(detail=str(e))
+            raise ClientSideException(detail=str(e)) from None
 
     return wrapper  # type:ignore
 

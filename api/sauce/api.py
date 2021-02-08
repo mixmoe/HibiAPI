@@ -2,8 +2,9 @@ from enum import IntEnum
 from io import BytesIO
 from typing import Any, Dict, Optional, overload
 
-from httpx import HTTPError, HTTPStatusError
-from utils.exceptions import ClientSideException, UpstreamAPIException
+from httpx import HTTPError
+from utils.exceptions import ClientSideException
+from utils.net import catch_network_error
 from utils.routing import BaseEndpoint, BaseHostUrl
 
 from .constants import SauceConstants
@@ -66,21 +67,17 @@ class SauceEndpoint(BaseEndpoint):
                 raise ImageSourceOversizedException
             return UploadFileIO(response.content)
         except HTTPError as e:
-            raise UnavailableSourceException(detail=str(e))
+            raise UnavailableSourceException(detail=str(e)) from e
 
+    @catch_network_error
     async def request(
         self, *, file: UploadFileIO, params: Dict[str, Any]
     ) -> Dict[str, Any]:
         params.update({"api_key": SauceConstants.API_KEY, "output_type": 2})
-        try:
-            response = await self.client.post(
-                url=self._join(self.base, "search.php", params), files={"file": file}
-            )
-            response.raise_for_status()
-        except HTTPStatusError as e:
-            raise UpstreamAPIException(detail=e.response.text)
-        except HTTPError:
-            raise UpstreamAPIException
+        response = await self.client.post(
+            url=self._join(self.base, "search.php", params), files={"file": file}
+        )
+        response.raise_for_status()
         return response.json()
 
     @overload
