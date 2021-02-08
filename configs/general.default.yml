@@ -8,7 +8,7 @@
 # An alternative implement of Imjad API
 
 debug: false # 是否开启Debug模式
-version: 0.4.0 # 程序版本, 勿动
+version: 0.5.0 # 程序版本, 勿动
 
 data:
   temp-expiry: 7 # 临时文件目录文件过期时间, 单位为天
