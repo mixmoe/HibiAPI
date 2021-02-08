@@ -31,6 +31,32 @@ async def sauce_url(
     disabled_mask: Optional[int] = None,
     endpoint: SauceEndpoint = Depends(requestClient),
 ):
+    """
+    ## Name: `sauce_url`
+
+    > 使用SauceNAO检索网络图片
+
+    ---
+
+    ### Required:
+
+    - ***HostUrl*** **`url`**
+        - Description: 图片URL
+
+    ---
+
+    ### Optional:
+    - ***int*** `size` = `30`
+        - Description: 搜索结果数目
+    - ***DeduplicateType*** `deduplicate` = `DeduplicateType.ALL`
+        - Description: 结果去重模式
+    - ***Optional[int]*** `database` = `None`
+        - Description: 检索的数据库ID, 999为全部检索
+    - ***Optional[int]*** `enabled_mask` = `None`
+        - Description: 启用的检索数据库
+    - ***Optional[int]*** `disabled_mask` = `None`
+        - Description: 禁用的检索数据库
+    """
     return await endpoint.search(
         url=url,
         size=size,
@@ -51,6 +77,32 @@ async def sauce_form(
     disabled_mask: Optional[int] = Form(None),
     endpoint: SauceEndpoint = Depends(requestClient),
 ):
+    """
+    ## Name: `sauce_form`
+
+    > 使用SauceNAO检索表单上传图片
+
+    ---
+
+    ### Required:
+    - ***bytes*** `file`
+        - Description: 上传的图片
+
+    ---
+
+    ### Optional:
+    - ***int*** `size` = `30`
+        - Description: 搜索结果数目
+    - ***DeduplicateType*** `deduplicate` = `DeduplicateType.ALL`
+        - Description: 结果去重模式
+    - ***Optional[int]*** `database` = `None`
+        - Description: 检索的数据库ID, 999为全部检索
+    - ***Optional[int]*** `enabled_mask` = `None`
+        - Description: 启用的检索数据库
+    - ***Optional[int]*** `disabled_mask` = `None`
+        - Description: 禁用的检索数据库
+
+    """
     return await endpoint.search(
         file=UploadFileIO(file),
         size=size,

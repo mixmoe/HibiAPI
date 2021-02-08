@@ -2,7 +2,6 @@ import asyncio
 import inspect
 from enum import Enum
 from fnmatch import fnmatch
-from functools import wraps
 from threading import current_thread
 from types import TracebackType
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Type, Union

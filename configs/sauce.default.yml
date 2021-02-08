@@ -8,14 +8,14 @@
 proxy: {}
 
 net:
-  api-key: ""
-  user-agent: &ua "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810"
+  api-key: "" # SauceNAO 的API KEY
+  user-agent: &ua "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改
 
 image:
-  max-size: 4096 # unit is KB
-  timeout: 12
-  headers: { "user-agent": *ua }
-  allowed:
+  max-size: 4096 # 获取图片最大大小, 单位为 KBytes
+  timeout: 6 # 获取图片超时时间, 单位为秒
+  headers: { "user-agent": *ua } # 获取图片时携带的请求头
+  allowed: # 获取图片的站点白名单, 可以阻止服务器ip泄漏, 支持通配符
     - localhost
     - i.loli.net
     # - "*"
