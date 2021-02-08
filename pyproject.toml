@@ -8,7 +8,7 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.63.0"
-httpx = "^0.16.1"
+httpx = {extras = ["http2"], version = "^0.16.1"}
 uvicorn = "^0.13.1"
 confuse = "^1.4.0"
 loguru = "^0.5.3"
