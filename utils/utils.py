@@ -2,13 +2,22 @@ import asyncio
 import inspect
 from enum import Enum
 from fnmatch import fnmatch
+from functools import wraps
 from threading import current_thread
 from types import TracebackType
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Type, Union
 from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
-from httpx import URL, AsyncClient, Cookies, Request, Response, TransportError
+from httpx import (
+    URL,
+    AsyncClient,
+    Cookies,
+    Request,
+    Response,
+    ResponseNotRead,
+    TransportError,
+)
 from pydantic import AnyHttpUrl, validate_arguments
 from pydantic.errors import UrlHostError
 
@@ -28,23 +37,6 @@ class SlashRouter(APIRouter):
 
 
 class AsyncHTTPClient(AsyncClient):
-    @Retry(exceptions=[TransportError])
-    async def request(self, method: str, url: Union[URL, str], **kwargs):
-        return await super().request(method, url, **kwargs)
-
-
-class BaseNetClient:
-    def __init__(
-        self,
-        headers: Optional[Dict[str, Any]] = None,
-        cookies: Optional[Cookies] = None,
-        proxies: Optional[Dict[str, str]] = None,
-    ):
-        self.headers: Dict[str, Any] = headers or {}
-        self.cookies: Cookies = cookies or Cookies()
-        self.proxies: Dict[str, str] = proxies or {}
-        self.clients: Dict[int, AsyncHTTPClient] = {}
-
     @staticmethod
     async def _log_request(request: Request):
         method, url = request.method, request.url
@@ -55,23 +47,46 @@ class BaseNetClient:
     @staticmethod
     async def _log_response(response: Response):
         method, url = response.request.method, response.url
-        length, code = len(response.content), response.status_code
+        try:
+            length, code = len(response.content), response.status_code
+        except ResponseNotRead:
+            length, code = -1, response.status_code
         logger.debug(
             f"Network request <g>finished</g>: <b><e>{method}</e> "
             f"<u>{url}</u> <m>{code}</m></b> <m>{length}</m>"
         )
 
+    @Retry(exceptions=[TransportError])
+    async def request(self, method: str, url: Union[URL, str], **kwargs):
+        self.event_hooks = {
+            "request": [self._log_request],
+            "response": [self._log_response],
+        }
+        return await super().request(method, url, **kwargs)
+
+
+class BaseNetClient:
+    def __init__(
+        self,
+        headers: Optional[Dict[str, Any]] = None,
+        cookies: Optional[Cookies] = None,
+        proxies: Optional[Dict[str, str]] = None,
+        client_class: Optional[Type[AsyncHTTPClient]] = None,
+    ):
+        self.headers: Dict[str, Any] = headers or {}
+        self.cookies: Cookies = cookies or Cookies()
+        self.proxies: Dict[str, str] = proxies or {}
+        self.clients: Dict[int, AsyncHTTPClient] = {}
+        self.client_class: Type[AsyncHTTPClient] = client_class or AsyncHTTPClient
+
     async def __aenter__(self) -> AsyncHTTPClient:
         tid = current_thread().ident or 1
         if tid not in self.clients:
-            self.clients[tid] = AsyncHTTPClient(
+            self.clients[tid] = self.client_class(
                 headers=self.headers,
                 proxies=self.proxies,  # type:ignore
                 cookies=self.cookies,
-                event_hooks={
-                    "request": [self._log_request],
-                    "response": [self._log_response],
-                },
+                http2=True,
             )
         return await self.clients[tid].__aenter__()
 
