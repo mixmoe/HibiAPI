@@ -55,27 +55,18 @@ class SauceEndpoint(BaseEndpoint):
     base = "https://saucenao.com"
 
     async def fetch(self, host: HostUrl) -> UploadFileIO:
-        file, size = UploadFileIO(), 0
         try:
-            async with self.client.stream(
-                "GET",
+            response = await self.client.get(
                 url=host,
                 headers=SauceConstants.IMAGE_HEADERS,
                 timeout=SauceConstants.IMAGE_TIMEOUT,
-            ) as response:
-                if (
-                    response.headers.get("content-length", -1)
-                    > SauceConstants.IMAGE_MAXIMUM_SIZE
-                ):
-                    raise ImageSourceOversizedException
-                async for stream in response.stream:  # type:ignore
-                    size += file.write(stream)
-                    if size > SauceConstants.IMAGE_MAXIMUM_SIZE:
-                        raise ImageSourceOversizedException
-            file.seek(0)
+            )
+            response.raise_for_status()
+            if len(response.content) > SauceConstants.IMAGE_MAXIMUM_SIZE:
+                raise ImageSourceOversizedException
+            return UploadFileIO(response.content)
         except HTTPError as e:
             raise UnavailableSourceException(detail=str(e))
-        return file
 
     async def request(
         self, *, file: UploadFileIO, params: Dict[str, Any]
