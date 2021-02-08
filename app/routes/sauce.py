@@ -9,7 +9,7 @@ from api.sauce import (
     UploadFileIO,
 )
 from fastapi import Depends, File, Form
-from utils.utils import SlashRouter
+from utils.routing import SlashRouter
 
 router = SlashRouter(tags=["SauceNAO"])
 

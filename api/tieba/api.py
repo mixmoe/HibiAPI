@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional
 from httpx import URL, HTTPError, HTTPStatusError
 from utils.config import APIConfig
 from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.routing import BaseEndpoint
 
 Config = APIConfig("tieba")
 

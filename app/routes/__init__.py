@@ -1,5 +1,5 @@
 from utils.exceptions import ExceptionReturn
-from utils.utils import SlashRouter
+from utils.routing import SlashRouter
 
 from .bilibili import router as BilibiliRouter
 from .netease import router as NeteaseRouter

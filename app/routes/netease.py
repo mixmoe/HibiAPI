@@ -9,7 +9,7 @@ from api.netease import (
     SearchType,
 )
 from fastapi import Depends, Request
-from utils.utils import SlashRouter, exclude_params
+from utils.routing import SlashRouter, exclude_params
 
 router = SlashRouter(tags=["Netease"])
 

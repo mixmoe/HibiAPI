@@ -9,7 +9,7 @@ from Cryptodome.Util.Padding import pad
 from httpx import HTTPError, HTTPStatusError
 from utils.decorators import ToAsync
 from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.routing import BaseEndpoint
 
 from .constants import NeteaseConstants
 

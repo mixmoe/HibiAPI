@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError, HTTPStatusError
 from utils.exceptions import ClientSideException, UpstreamAPIException
-from utils.utils import BaseEndpoint, BaseHostUrl
+from utils.routing import BaseEndpoint, BaseHostUrl
 
 from .constants import SauceConstants
 

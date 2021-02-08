@@ -10,8 +10,9 @@ from pydantic.color import Color
 from utils.config import APIConfig
 from utils.decorators import ToAsync
 from utils.exceptions import ClientSideException
+from utils.net import BaseNetClient
+from utils.routing import BaseHostUrl
 from utils.temp import TempFile
-from utils.utils import BaseHostUrl, BaseNetClient
 
 from qrcode import QRCode, constants  # type:ignore
 from qrcode.image.pil import PilImage  # type:ignore

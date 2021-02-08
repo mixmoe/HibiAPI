@@ -1,4 +1,4 @@
-from utils.utils import SlashRouter
+from utils.routing import SlashRouter
 
 from .v2 import router as RouterV2
 from .v3 import router as RouterV3

@@ -3,7 +3,8 @@ from functools import wraps
 from typing import Callable, Coroutine, Optional, TypeVar, Union
 
 from utils.exceptions import ClientSideException
-from utils.utils import AsyncHTTPClient, BaseEndpoint
+from utils.net import AsyncHTTPClient
+from utils.routing import BaseEndpoint
 
 from .base import (
     BaseBilibiliEndpoint,

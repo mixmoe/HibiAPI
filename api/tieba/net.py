@@ -1,4 +1,4 @@
-from utils.utils import BaseNetClient
+from utils.net import BaseNetClient
 
 
 class NetRequest(BaseNetClient):

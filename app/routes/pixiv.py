@@ -15,7 +15,7 @@ from api.pixiv import (
 )
 from fastapi import Depends, Request
 from utils.log import logger
-from utils.utils import SlashRouter, exclude_params
+from utils.routing import SlashRouter, exclude_params
 
 router = SlashRouter(tags=["Pixiv"])
 

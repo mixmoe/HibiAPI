@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional
 from httpx import HTTPError, HTTPStatusError
 from utils.config import DATA_PATH
 from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.routing import BaseEndpoint
 
 from .constants import PixivConstants
 from .net import NetRequest, UserInfo

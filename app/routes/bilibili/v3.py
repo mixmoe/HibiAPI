@@ -14,7 +14,7 @@ from api.bilibili import (
     VideoQualityType,
 )
 from fastapi import Depends, Request
-from utils.utils import SlashRouter, exclude_params
+from utils.routing import SlashRouter, exclude_params
 
 router = SlashRouter(tags=["Bilibili V3"])
 

@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional, overload
 
 from httpx import URL, HTTPError, HTTPStatusError
 from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.routing import BaseEndpoint
 
 from ..constants import BilibiliConstants
 
