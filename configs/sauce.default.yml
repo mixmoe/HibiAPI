@@ -1,0 +1,21 @@
+# HTTP代理地址
+# 示例格式
+# proxy:
+# {
+#   " http_proxy://": http://127.0.0.1:1081,
+#   "https_proxy://": https://127.0.0.1:1081,
+# }
+proxy: {}
+
+net:
+  api-key: "" # SauceNAO 的API KEY
+  user-agent: &ua "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改
+
+image:
+  max-size: 4096 # 获取图片最大大小, 单位为 KBytes
+  timeout: 6 # 获取图片超时时间, 单位为秒
+  headers: { "user-agent": *ua } # 获取图片时携带的请求头
+  allowed: # 获取图片的站点白名单, 可以阻止服务器ip泄漏, 支持通配符
+    - localhost
+    - i.loli.net
+    # - "*"

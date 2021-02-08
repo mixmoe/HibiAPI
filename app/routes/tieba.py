@@ -2,7 +2,7 @@ from typing import Callable, Coroutine
 
 from api.tieba import EndpointsType, NetRequest, TiebaEndpoint
 from fastapi import Depends, Request
-from utils.utils import SlashRouter, exclude_params
+from utils.routing import SlashRouter, exclude_params
 
 TiebaAPIRoot = NetRequest()
 router = SlashRouter(tags=["Tieba"])

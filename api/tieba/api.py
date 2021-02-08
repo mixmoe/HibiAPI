@@ -3,10 +3,10 @@ from enum import Enum
 from random import randint
 from typing import Any, Dict, Optional
 
-from httpx import URL, HTTPError, HTTPStatusError
+from httpx import URL
 from utils.config import APIConfig
-from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.net import catch_network_error
+from utils.routing import BaseEndpoint
 
 Config = APIConfig("tieba")
 
@@ -47,20 +47,16 @@ class TiebaEndpoint(BaseEndpoint):
         )
         return URL(url, params={"sign": sign})
 
+    @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        try:
-            response = await self.client.post(
-                (url := self._sign(endpoint, params or {})),
-                content=url.query,
-            )
-            response.raise_for_status()
-            return response.json()
-        except HTTPStatusError as e:
-            raise UpstreamAPIException(detail=e.response.text)
-        except HTTPError:
-            raise UpstreamAPIException
+        response = await self.client.post(
+            (url := self._sign(endpoint, params or {})),
+            content=url.query,
+        )
+        response.raise_for_status()
+        return response.json()
 
     async def post_list(self, *, name: str, page: int = 1, size: int = 50):
         return await self.request(

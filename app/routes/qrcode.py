@@ -3,8 +3,8 @@ from typing import Optional
 from api.qrcode import HostUrl, QRCodeLevel, QRInfo, ReturnEncode
 from fastapi import Request, Response
 from pydantic.color import Color
+from utils.routing import SlashRouter
 from utils.temp import TempFile
-from utils.utils import SlashRouter
 
 QR_CALLBACK_TEMPLATE = (
     r"""function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""

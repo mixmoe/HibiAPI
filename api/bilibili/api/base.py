@@ -4,9 +4,9 @@ from enum import Enum, IntEnum
 from time import time
 from typing import Any, Dict, Optional, overload
 
-from httpx import URL, HTTPError, HTTPStatusError
-from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from httpx import URL
+from utils.net import catch_network_error
+from utils.routing import BaseEndpoint
 
 from ..constants import BilibiliConstants
 
@@ -222,6 +222,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     ) -> Dict[str, Any]:
         ...
 
+    @catch_network_error
     async def request(
         self,
         endpoint: str,
@@ -240,14 +241,9 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             if not sign
             else self._sign(base=host, endpoint=endpoint, params=params or {})
         )
-        try:
-            response = await self.client.get(url)
-            response.raise_for_status()
-            return self._parse_json(response.text)
-        except HTTPStatusError as e:
-            raise UpstreamAPIException(detail=e.response.text)
-        except HTTPError:
-            raise UpstreamAPIException
+        response = await self.client.get(url)
+        response.raise_for_status()
+        return self._parse_json(response.text)
 
     async def playurl(
         self,

@@ -3,10 +3,9 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from httpx import HTTPError, HTTPStatusError
 from utils.config import DATA_PATH
-from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.net import catch_network_error
+from utils.routing import BaseEndpoint
 
 from .constants import PixivConstants
 from .net import NetRequest, UserInfo
@@ -157,22 +156,18 @@ class PixivAPI:
 
 
 class PixivEndpoints(BaseEndpoint):
+    @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        try:
-            response = await self.client.get(
-                self._join(
-                    base=PixivConstants.APP_HOST,
-                    endpoint=endpoint,
-                    params=params or {},
-                )
+        response = await self.client.get(
+            self._join(
+                base=PixivConstants.APP_HOST,
+                endpoint=endpoint,
+                params=params or {},
             )
-            return response.json()
-        except HTTPStatusError as e:
-            raise UpstreamAPIException(detail=e.response.text)
-        except HTTPError:
-            raise UpstreamAPIException
+        )
+        return response.json()
 
     async def illust(self, *, id: int):
         return await self.request("v1/illust/detail", params={"illust_id": id})

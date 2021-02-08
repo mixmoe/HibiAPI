@@ -76,47 +76,47 @@ def Retry(  # type:ignore
 ) -> Union[_AnyCallable, Callable[[_AnyCallable], _AnyCallable]]:
     if function is None:
         return partial(
-            Retry, retries=retries, delay=delay, exceptions=exceptions
+            Retry,
+            retries=retries,
+            delay=delay,
+            exceptions=exceptions,
         )  # type:ignore
 
+    function = TimeIt(function)
     allowedExceptions: Tuple[Type[Exception], ...] = tuple(exceptions or [Exception])
     assert (retries >= 1) and (delay >= 0)
 
     @wraps(function)
     def syncWrapper(*args, **kwargs):
-        exception: Optional[Exception] = None
         for retried in range(retries):
             try:
                 return function(*args, **kwargs)
-            except Exception as e:
-                if not isinstance(e, allowedExceptions):
+            except Exception as exception:
+                if (remain := retries - retried) <= 0 or (
+                    not isinstance(exception, allowedExceptions)
+                ):
                     raise
-                exception, remain = e, retries - retried
-                logger.debug(
-                    f"Retry of {function=} trigged due to "
-                    f"{exception=} raised ({remain=})"
+                logger.opt().debug(
+                    f"Retry of {function=} trigged due to {exception=} raised ({remain=})"
                 )
                 syncSleep(delay)
-                continue
-        raise exception  # type:ignore
 
     @wraps(function)
     async def asyncWrapper(*args, **kwargs):
-        exception: Optional[Exception] = None
         for retried in range(retries):
             try:
                 return await function(*args, **kwargs)
-            except Exception as e:
-                if not isinstance(e, allowedExceptions):
+            except Exception as exception:
+                if (remain := retries - retried) <= 0 or (
+                    not isinstance(exception, allowedExceptions)
+                ):
                     raise
-                exception = e
+                logger.opt().debug(
+                    f"Retry of {function=} trigged due to {exception=} raised ({remain=})"
+                )
                 await asyncSleep(delay)
-                continue
-        raise exception  # type:ignore
 
-    return TimeIt(
-        asyncWrapper if iscoroutinefunction(function) else syncWrapper
-    )  # type:ignore
+    return asyncWrapper if iscoroutinefunction(function) else syncWrapper  # type:ignore
 
 
 def ToAsync(function: Callable[..., _T]) -> Callable[..., Coroutine[Any, Any, _T]]:

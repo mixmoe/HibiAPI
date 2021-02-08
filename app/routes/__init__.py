@@ -1,10 +1,11 @@
 from utils.exceptions import ExceptionReturn
-from utils.utils import SlashRouter
+from utils.routing import SlashRouter
 
 from .bilibili import router as BilibiliRouter
 from .netease import router as NeteaseRouter
 from .pixiv import router as PixivRouter
 from .qrcode import router as QRCodeRouter
+from .sauce import router as SauceRouter
 from .tieba import router as TiebaRouter
 
 router = SlashRouter(
@@ -20,3 +21,4 @@ router.include_router(BilibiliRouter, prefix="/bilibili")
 router.include_router(QRCodeRouter, prefix="/qrcode")
 router.include_router(NeteaseRouter, prefix="/netease")
 router.include_router(TiebaRouter, prefix="/tieba")
+router.include_router(SauceRouter, prefix="/sauce")

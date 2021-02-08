@@ -3,7 +3,8 @@ from functools import wraps
 from typing import Callable, Coroutine, Optional, TypeVar, Union
 
 from utils.exceptions import ClientSideException
-from utils.utils import AsyncHTTPClient, BaseEndpoint
+from utils.net import AsyncHTTPClient
+from utils.routing import BaseEndpoint
 
 from .base import (
     BaseBilibiliEndpoint,
@@ -26,7 +27,7 @@ def process_keyerror(function: _AnyCallable) -> _AnyCallable:
         try:
             return await function(*args, **kwargs)
         except KeyError as e:
-            raise ClientSideException(detail=str(e))
+            raise ClientSideException(detail=str(e)) from None
 
     return wrapper  # type:ignore
 

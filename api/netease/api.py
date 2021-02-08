@@ -6,10 +6,9 @@ from typing import Any, Dict, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
-from httpx import HTTPError, HTTPStatusError
 from utils.decorators import ToAsync
-from utils.exceptions import UpstreamAPIException
-from utils.utils import BaseEndpoint
+from utils.net import catch_network_error
+from utils.routing import BaseEndpoint
 
 from .constants import NeteaseConstants
 
@@ -121,25 +120,21 @@ class _EncryptUtil:
 
 
 class NeteaseEndpoint(BaseEndpoint):
+    @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         params = {**(params or {}), "csrf_token": ""}
-        try:
-            response = await self.client.post(
-                self._join(
-                    NeteaseConstants.HOST,
-                    endpoint=endpoint,
-                    params=params,
-                ),
-                data=await _EncryptUtil.encrypt(params),
-            )
-            response.raise_for_status()
-            return response.json()
-        except HTTPStatusError as e:
-            raise UpstreamAPIException(detail=e.response.text)
-        except HTTPError:
-            raise UpstreamAPIException
+        response = await self.client.post(
+            self._join(
+                NeteaseConstants.HOST,
+                endpoint=endpoint,
+                params=params,
+            ),
+            data=await _EncryptUtil.encrypt(params),
+        )
+        response.raise_for_status()
+        return response.json()
 
     async def search(
         self,

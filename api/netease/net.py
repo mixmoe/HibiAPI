@@ -1,5 +1,5 @@
 from httpx import Cookies
-from utils.utils import BaseNetClient
+from utils.net import BaseNetClient
 
 from .constants import NeteaseConstants
 

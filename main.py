@@ -70,6 +70,7 @@ except OSError:
     default=DEBUG,
     help="automatic reload while file changes",
     show_default=True,
+    is_flag=True,
 )
 def main(host: str, port: int, workers: int, reload: bool):
     logger.warning("\n".join(i.center(width) for i in COPYRIGHT.splitlines()))
