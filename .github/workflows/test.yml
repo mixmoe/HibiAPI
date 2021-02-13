@@ -50,7 +50,7 @@ jobs:
         python: [3.8, 3.9]
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: true
-      max-parallel: 2
+      max-parallel: 3
 
     steps:
       - uses: actions/checkout@v2
@@ -61,13 +61,15 @@ jobs:
 
       - uses: Gr1N/setup-poetry@v4
 
+      - name: Get poetry cache directory
+        id: cache-poetry
+        run: |
+          echo "::set-output name=dir::$(poetry config cache-dir)"
+
       - uses: actions/cache@v1
         with:
-          path: ~/.cache/pypoetry
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-
-            ${{ runner.os }}-
+          path: ${{ steps.cache-poetry.outputs.dir }}
+          key: ${{ runner.os }}-poetry-py${{ matrix.python }}-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies
         run: poetry install -vvv
