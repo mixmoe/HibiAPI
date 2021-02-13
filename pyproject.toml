@@ -16,7 +16,7 @@ python-dotenv = "^0.15.0"
 qrcode = {extras = ["pil"], version = "^6.1"}
 aiofiles = "^0.6.0"
 pycryptodomex = "^3.9.9"
-sentry-sdk = "^0.19.5"
+sentry-sdk = "^0.20.1"
 pydantic = "~1.5.0"
 python-multipart = "^0.0.5"
 
