@@ -27,16 +27,16 @@ jobs:
 
       - uses: Gr1N/setup-poetry@v4
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: ${{ runner.os }}-poetry-
 
       - name: Install Dependencies
+        env:
+          POETRY_VIRTUALENVS_CREATE: "false"
         run: |
-          poetry export -f requirements.txt -o /tmp/requirements.txt --dev
-          pip install -r /tmp/requirements.txt
+          poetry install
 
       - uses: wearerequired/lint-action@v1
         with:

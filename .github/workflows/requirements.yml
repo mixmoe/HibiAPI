@@ -23,7 +23,7 @@ jobs:
 
       - uses: Gr1N/setup-poetry@v4
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
