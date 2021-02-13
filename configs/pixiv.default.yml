@@ -8,8 +8,9 @@
 proxy: {}
 
 account:
-  username: "" # Pixiv帐号
-  password: "" # Pixiv密码
+  username: "" # Pixiv帐号 (Deprecated)
+  password: "" # Pixiv密码 (Deprecated)
+  token: "" # Pixiv Refresh Token
   refresh-interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
 
 language: zh-cn # 返回语言, 会影响标签的翻译
