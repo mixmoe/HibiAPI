@@ -69,16 +69,18 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ steps.cache-poetry.outputs.dir }}
-          key: ${{ runner.os }}-poetry-py${{ matrix.python }}-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies
+        env:
+          POETRY_VIRTUALENVS_CREATE: "false"
         run: |
-          poetry install
+          poetry install -vvv
 
       - name: Testing with pytest
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > configs/.env
-          poetry run pytest test/
+          pytest test/
 
       - uses: actions/upload-artifact@v2
         if: failure()
