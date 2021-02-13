@@ -32,7 +32,7 @@ class TiebaEndpoint(BaseEndpoint):
                 "_client_type": 2,
                 "_client_version": "9.9.8.32",
                 **{
-                    k.upper(): v
+                    k.upper(): str(v).strip()
                     for k, v in Config["net"]["params"].as_dict().items()
                     if v
                 },
@@ -114,11 +114,14 @@ class TiebaEndpoint(BaseEndpoint):
             },
         )
 
-    async def user_subscribed(self, *, uid: int):  # XXX This API required user login!
+    async def user_subscribed(
+        self, *, uid: int, page: int = 1
+    ):  # XXX This API required user login!
         return await self.request(
             "c/f/forum/like",
             params={
-                "friend_uid": uid,
+                "is_guest": 0,
                 "uid": uid,
+                "page_no": page,
             },
         )

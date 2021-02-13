@@ -61,5 +61,7 @@ async def user_profile(uid: int, endpoint: TiebaEndpoint = Depends(requestClient
 
 
 @router.get(EndpointsType.user_subscribed)
-async def user_subscribed(uid: int, endpoint: TiebaEndpoint = Depends(requestClient)):
-    return await endpoint.user_subscribed(uid=uid)
+async def user_subscribed(
+    uid: int, page: int = 1, endpoint: TiebaEndpoint = Depends(requestClient)
+):
+    return await endpoint.user_subscribed(uid=uid, page=page)
