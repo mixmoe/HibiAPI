@@ -1,9 +1,8 @@
 import asyncio
 from typing import NoReturn
-from urllib.parse import ParseResult
 
 import sentry_sdk
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from sentry_sdk.integrations.logging import LoggingIntegration
 from utils.config import Config
@@ -51,20 +50,8 @@ app.mount(
 
 
 @app.get("/", include_in_schema=False)
-async def redirect(request: Request, to: str = "/docs", code: int = 302):
-    return Response(
-        status_code=code,
-        headers={
-            "Location": ParseResult(
-                scheme=request.url.scheme,
-                netloc=request.url.netloc,
-                path=to,
-                params="",
-                query=request.url.query,
-                fragment=request.url.fragment,
-            ).geturl()
-        },
-    )
+async def redirect():
+    return Response(status_code=302, headers={"Location": "/docs"})
 
 
 @app.on_event("startup")
@@ -95,20 +82,20 @@ Temporary redirection solution below for #12
 
 
 @app.get("/qrcode/{path:path}", include_in_schema=False)
-async def _qr_redirect(request: Request, path: str):
-    return await redirect(request, to="/api/qrcode/" + path, code=301)
+async def _qr_redirect(path: str):
+    return Response(status_code=301, headers={"Location": "/api/qrcode/" + path})
 
 
 @app.get("/pixiv/{path:path}", include_in_schema=False)
-async def _pixiv_redirect(request: Request, path: str):
-    return await redirect(request, to="/api/pixiv/" + path, code=301)
+async def _pixiv_redirect(path: str):
+    return Response(status_code=301, headers={"Location": "/api/pixiv/" + path})
 
 
 @app.get("/netease/{path:path}", include_in_schema=False)
-async def _netease_redirect(request: Request, path: str):
-    return await redirect(request, to="/api/netease/" + path, code=301)
+async def _netease_redirect(path: str):
+    return Response(status_code=301, headers={"Location": "/api/netease/" + path})
 
 
 @app.get("/bilibili/{path:path}", include_in_schema=False)
-async def _bilibili_redirect(request: Request, path: str):
-    return await redirect(request, to="/api/bilibili/" + path, code=301)
+async def _bilibili_redirect(path: str):
+    return Response(status_code=301, headers={"Location": "/api/bilibili/" + path})
