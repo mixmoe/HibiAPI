@@ -10,18 +10,18 @@ LOCAL_SAUCE_PATH = Path(__file__).parent / "test_sauce.jpg"
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/") as client:
+    with TestClient(APIAppRoot, base_url="http://testserver/api/") as client:
         yield client
 
 
 def test_sauce_url(client: TestClient):
-    response = client.get("/api/sauce/", params={"url": REMOTE_SAUCE_URL})
+    response = client.get("sauce/", params={"url": REMOTE_SAUCE_URL})
     assert response.status_code == 200
     assert response.json()["header"]["status"] == 0, response.json()
 
 
 def test_sauce_file(client: TestClient):
     with open(LOCAL_SAUCE_PATH, "rb") as file:
-        response = client.post("/api/sauce/", files={"file": file})
+        response = client.post("sauce/", files={"file": file})
     assert response.status_code == 200
     assert response.json()["header"]["status"] == 0, response.json()

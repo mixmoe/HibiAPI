@@ -11,14 +11,14 @@ from requests.models import Response
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot) as client:
+    with TestClient(APIAppRoot, base_url="http://testserver/api/") as client:
         yield client
 
 
 def test_qrcode_generate(client: TestClient):
     sleep(1)
     response = client.get(
-        "/api/qrcode/",
+        "qrcode/",
         params={
             "text": "Hello, World!",
             "encode": "raw",
@@ -37,7 +37,7 @@ def test_qrcode_all(client: TestClient):
     for encode in encodes:
         for level in levels:
             response = client.get(
-                "/qrcode/",
+                "qrcode/",
                 params={"text": "Hello, World!", "encode": encode, "level": level},
             )
             responses.append(response)
@@ -48,7 +48,7 @@ def test_qrcode_stress(client: TestClient):
     executor = ThreadPoolExecutor(16)
 
     def request(content: str):
-        response = client.get("/qrcode/", params={"text": content, "level": "H"})
+        response = client.get("qrcode/", params={"text": content, "level": "H"})
         assert response.status_code == 200
 
     return [*executor.map(request, [token_urlsafe(32) for _ in range(128)])]
