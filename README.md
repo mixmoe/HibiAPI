@@ -53,7 +53,9 @@ _An alternative implement of Imjad API._
 
 ## 部署指南
 
-**_[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)_**
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+- 手动部署指南: **[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)**
 
 ## 鸣谢
 
@@ -74,7 +76,9 @@ _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://
 ### 贡献者们
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些为这个项目作出贡献的朋友们 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
