@@ -1,12 +1,9 @@
+from utils.config import APIConfig
 from utils.exceptions import ExceptionReturn
+from utils.log import logger
 from utils.routing import SlashRouter
 
-from .bilibili import router as BilibiliRouter
-from .netease import router as NeteaseRouter
-from .pixiv import router as PixivRouter
-from .qrcode import router as QRCodeRouter
-from .sauce import router as SauceRouter
-from .tieba import router as TiebaRouter
+from . import bilibili, netease, pixiv, qrcode, sauce, tieba
 
 router = SlashRouter(
     responses={
@@ -16,9 +13,18 @@ router = SlashRouter(
         for code in (400, 422, 500, 502)
     }
 )
-router.include_router(PixivRouter, prefix="/pixiv")
-router.include_router(BilibiliRouter, prefix="/bilibili")
-router.include_router(QRCodeRouter, prefix="/qrcode")
-router.include_router(NeteaseRouter, prefix="/netease")
-router.include_router(TiebaRouter, prefix="/tieba")
-router.include_router(SauceRouter, prefix="/sauce")
+
+modules = [bilibili, netease, pixiv, qrcode, sauce, tieba]
+
+for module in modules:
+    route: SlashRouter = getattr(module, "router")
+    mount: str = getattr(module, "__mount__")
+    config: APIConfig = getattr(module, "__config__")
+    mount = mount if mount.startswith("/") else ("/" + mount)
+    if not config["enabled"].as_bool():
+        logger.warning(
+            f"API Route <y><b>{mount}</b></y> <e>{route}</e> "
+            "has been <r><b>disabled</b></r> in config."
+        )
+        continue
+    router.include_router(route, prefix=mount)
