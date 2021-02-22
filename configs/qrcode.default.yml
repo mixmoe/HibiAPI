@@ -1,3 +1,5 @@
+enabled: true
+
 qrcode:
   max-size: 1000 # 允许的二维码最大尺寸, 单位像素
   min-size: 50 # 允许的二维码最小尺寸, 单位像素

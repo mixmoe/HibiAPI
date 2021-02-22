@@ -1,3 +1,5 @@
+enabled: true
+
 net:
   cookie: > # Bilibili的Cookie, 在一些需要用户登录的场景下需要
     DedeUserID=; 

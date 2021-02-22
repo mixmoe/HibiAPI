@@ -1,3 +1,5 @@
+enabled: true
+
 net:
   cookie: > # 网易云的Cookie, 可能有些API需要
     os=pc;

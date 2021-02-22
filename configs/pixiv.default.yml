@@ -1,3 +1,5 @@
+enabled: true
+
 # HTTP代理地址
 # 示例格式
 # proxy:
