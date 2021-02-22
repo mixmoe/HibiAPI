@@ -4,9 +4,9 @@
 
 # HibiAPI
 
-**Imjad API 的开源替代.**
+**_Imjad API 的开源替代._**
 
-_An alternative implement of Imjad API._
+**_An alternative implement of Imjad API._**
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
@@ -34,6 +34,8 @@ _An alternative implement of Imjad API._
 ### 开源
 
 - 本项目以[Apache-2.0](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)许可开源, 这意味着你可以在**注明版权信息**的情况下进行任意使用
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI?ref=badge_large)
 
 ### 高效
 
