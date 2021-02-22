@@ -54,6 +54,7 @@ _An alternative implement of Imjad API._
 ## 部署指南
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI?ref=badge_shield)
 
 - 手动部署指南: **[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)**
 
@@ -98,3 +99,7 @@ _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 _本段符合 [all-contributors](https://github.com/all-contributors/all-contributors) 规范_
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI?ref=badge_large)
