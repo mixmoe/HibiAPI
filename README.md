@@ -1,8 +1,12 @@
-<div align="center">
+<img src=".github/logo.svg" align="right">
 
-![HibiAPI Logo](.github/logo.svg)
+<div align="left">
 
 # HibiAPI
+
+**Imjad API 的开源替代.**
+
+_An alternative implement of Imjad API._
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
@@ -16,10 +20,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/network)
 [![GitHub issues](https://img.shields.io/github/issues/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/issues)
 ![Python version](https://img.shields.io/badge/python-3.8%2B-yellowgreen)
-
-**An alternative implement of Imjad API.**
-
-**Imjad API 的开源替代.**
 
 </div>
 
@@ -57,9 +57,16 @@
 
 ## 鸣谢
 
-> - [@journey-ad](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)
-> - 为本项目实现 API 提供参考的各种开源项目
->   - Pixiv: [`Mikubill/pixivpy-async`](https://github.com/Mikubill/pixivpy-async) [`upbit/pixivpy`](https://github.com/upbit/pixivpy)
->   - Bilibili: [`SocialSisterYi/bilibili-API-collect`](https://github.com/SocialSisterYi/bilibili-API-collect) [`soimort/you-get`](https://github.com/soimort/you-get)
->   - 网易云音乐: [`metowolf/NeteaseCloudMusicApi`](https://github.com/metowolf/NeteaseCloudMusicApi) [`greats3an/pyncm`](https://github.com/greats3an/pyncm) [`Binaryify/NeteaseCloudMusicApi`](https://github.com/Binaryify/NeteaseCloudMusicApi)
->   - 百度贴吧: [`libsgh/tieba-api`](https://github.com/libsgh/tieba-api)
+_[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)_
+
+### 参考项目
+
+> **正是因为有了你们, 这个项目才得以存在**
+
+- Pixiv: [`Mikubill/pixivpy-async`](https://github.com/Mikubill/pixivpy-async) [`upbit/pixivpy`](https://github.com/upbit/pixivpy)
+
+- Bilibili: [`SocialSisterYi/bilibili-API-collect`](https://github.com/SocialSisterYi/bilibili-API-collect) [`soimort/you-get`](https://github.com/soimort/you-get)
+
+- 网易云音乐: [`metowolf/NeteaseCloudMusicApi`](https://github.com/metowolf/NeteaseCloudMusicApi) [`greats3an/pyncm`](https://github.com/greats3an/pyncm) [`Binaryify/NeteaseCloudMusicApi`](https://github.com/Binaryify/NeteaseCloudMusicApi)
+
+- 百度贴吧: [`libsgh/tieba-api`](https://github.com/libsgh/tieba-api)
