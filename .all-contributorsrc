@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Kyomotoi",
+      "name": "Kyomotoi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37587870?v=4",
+      "profile": "http://kyomotoi.moe",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "HibiAPI",
+  "projectOwner": "mixmoe",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
