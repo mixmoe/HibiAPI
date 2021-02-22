@@ -11,6 +11,7 @@ from api.sauce import (
 from fastapi import Depends, File, Form
 from utils.routing import SlashRouter
 
+__mount__, __config__ = "sauce", SauceConstants.CONFIG
 router = SlashRouter(tags=["SauceNAO"])
 
 SauceAPIRoot = NetRequest()

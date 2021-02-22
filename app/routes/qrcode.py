@@ -1,6 +1,6 @@
 from typing import Optional
 
-from api.qrcode import HostUrl, QRCodeLevel, QRInfo, ReturnEncode
+from api.qrcode import Config, HostUrl, QRCodeLevel, QRInfo, ReturnEncode
 from fastapi import Request, Response
 from pydantic.color import Color
 from utils.routing import SlashRouter
@@ -10,7 +10,7 @@ QR_CALLBACK_TEMPLATE = (
     r"""function {fun}(){document.write('<img class="qrcode" src="{url}"/>');}"""
 )
 
-
+__mount__, __config__ = "qrcode", Config
 router = SlashRouter(tags=["QRCode"])
 
 

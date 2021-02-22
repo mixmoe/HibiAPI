@@ -1,3 +1,3 @@
 # flake8:noqa:F401
-from .api import EndpointsType, TiebaEndpoint
+from .api import Config, EndpointsType, TiebaEndpoint
 from .net import NetRequest

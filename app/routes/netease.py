@@ -3,6 +3,7 @@ from typing import Callable, Coroutine
 from api.netease import (
     BitRateType,
     EndpointsType,
+    NeteaseConstants,
     NeteaseEndpoint,
     NetRequest,
     RecordPeriodType,
@@ -11,6 +12,7 @@ from api.netease import (
 from fastapi import Depends, Request
 from utils.routing import SlashRouter, exclude_params
 
+__mount__, __config__ = "netease", NeteaseConstants.CONFIG
 router = SlashRouter(tags=["Netease"])
 
 NeteaseAPIRoot = NetRequest()

@@ -1,11 +1,13 @@
 from typing import Callable, Coroutine
 
-from api.tieba import EndpointsType, NetRequest, TiebaEndpoint
+from api.tieba import Config, EndpointsType, NetRequest, TiebaEndpoint
 from fastapi import Depends, Request
 from utils.routing import SlashRouter, exclude_params
 
-TiebaAPIRoot = NetRequest()
+__mount__, __config__ = "tieba", Config
 router = SlashRouter(tags=["Tieba"])
+
+TiebaAPIRoot = NetRequest()
 
 
 async def requestClient():

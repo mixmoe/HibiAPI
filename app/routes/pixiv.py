@@ -17,8 +17,8 @@ from fastapi import Depends, Request
 from utils.log import logger
 from utils.routing import SlashRouter, exclude_params
 
+__mount__, __config__ = "pixiv", PixivConstants.CONFIG
 router = SlashRouter(tags=["Pixiv"])
-
 
 PixivAPIRoot = PixivAPI()
 
