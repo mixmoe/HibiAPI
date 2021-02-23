@@ -162,9 +162,9 @@ starlette==0.13.6; python_version >= "3.6" \
 urllib3==1.26.2; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4" \
     --hash=sha256:d8ff90d979214d7b4f8ce956e80f4028fc6860e4431f731ea4a8c08f23f99473 \
     --hash=sha256:19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08
-uvicorn==0.13.3 \
-    --hash=sha256:1079c50a06f6338095b4f203e7861dbff318dde5f22f3a324fc6e94c7654164c \
-    --hash=sha256:ef1e0bb5f7941c6fe324e06443ddac0331e1632a776175f87891c7bd02694355
+uvicorn==0.13.4 \
+    --hash=sha256:7587f7b08bd1efd2b9bad809a3d333e972f1d11af8a5e52a9371ee3a5de71524 \
+    --hash=sha256:3292251b3c7978e8e4a7868f4baf7f7f7bb7e40c759ecc125c37e99cdea34202
 win32-setctime==1.0.3; sys_platform == "win32" and python_version >= "3.5" \
     --hash=sha256:dc925662de0a6eb987f0b01f599c01a8236cb8c62831c22d9cada09ad958243e \
     --hash=sha256:4e88556c32fdf47f64165a2180ba4552f8bb32c1103a2fafd05723a0bd42bd4b
