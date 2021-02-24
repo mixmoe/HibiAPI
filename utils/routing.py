@@ -6,9 +6,10 @@ from urllib.parse import ParseResult, urlparse
 
 from fastapi.routing import APIRouter
 from httpx import URL
-from pydantic import AnyHttpUrl, validate_arguments
+from pydantic import AnyHttpUrl
 from pydantic.errors import UrlHostError
 
+from .cache import endpoint_cache
 from .net import AsyncHTTPClient
 
 
@@ -23,7 +24,16 @@ class SlashRouter(APIRouter):
         return super().api_route(path, **kwargs)
 
 
-class BaseEndpoint:
+class EndpointMeta(type):
+    def __new__(cls, name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]):
+        for name, func in namespace.items():
+            if name.startswith("_") or not inspect.iscoroutinefunction(func):
+                continue
+            namespace[name] = endpoint_cache(func)
+        return super().__new__(cls, name, bases, namespace)
+
+
+class BaseEndpoint(metaclass=EndpointMeta):
     type_checking: bool = True
 
     def __init__(self, client: AsyncHTTPClient):
@@ -48,16 +58,6 @@ class BaseEndpoint:
             ).geturl(),
             params=params,
         )
-
-    def __getattribute__(self, name: str) -> Any:
-        obj = super().__getattribute__(name)
-        if name.startswith("_"):
-            return obj
-        elif not callable(obj):
-            return obj
-        elif not self.type_checking:
-            return obj
-        return validate_arguments(obj)
 
 
 class BaseHostUrl(AnyHttpUrl):

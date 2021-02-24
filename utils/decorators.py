@@ -1,3 +1,4 @@
+import asyncio
 from asyncio import sleep as asyncSleep
 from datetime import datetime
 from functools import partial, wraps
@@ -16,11 +17,10 @@ from typing import (
     overload,
 )
 
-from starlette.concurrency import run_in_threadpool
-
 from .log import logger
 
 _AnyCallable = TypeVar("_AnyCallable", bound=Callable)
+
 _T = TypeVar("_T")
 
 
@@ -123,6 +123,8 @@ def ToAsync(function: Callable[..., _T]) -> Callable[..., Coroutine[Any, Any, _T
     @TimeIt
     @wraps(function)
     async def wrapper(*args, **kwargs):
-        return await run_in_threadpool(function, *args, **kwargs)
+        return await asyncio.get_running_loop().run_in_executor(
+            None, lambda: function(*args, **kwargs)
+        )
 
     return wrapper

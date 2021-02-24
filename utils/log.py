@@ -71,3 +71,7 @@ class LoguruHandler(logging.Handler):
 
 _asyncioLogger.handlers.clear()
 _asyncioLogger.addHandler(LoguruHandler())
+
+_aiocacheLogger = logging.getLogger("aiocache")
+_aiocacheLogger.handlers.clear()
+_aiocacheLogger.addHandler(LoguruHandler())
