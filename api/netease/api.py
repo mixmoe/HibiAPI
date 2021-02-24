@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
-from utils.decorators import ToAsync
+from utils.cache import disable_cache
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint
 
@@ -103,7 +103,6 @@ class _EncryptUtil:
         return f"{result:0>256x}"
 
     @classmethod
-    @ToAsync
     def encrypt(cls, data: Dict[str, Any]) -> Dict[str, str]:
         secret = token_urlsafe(12).encode()
         secure_key = cls._rsa(bytes(reversed(secret)))
@@ -120,6 +119,7 @@ class _EncryptUtil:
 
 
 class NeteaseEndpoint(BaseEndpoint):
+    @disable_cache
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
@@ -131,7 +131,7 @@ class NeteaseEndpoint(BaseEndpoint):
                 endpoint=endpoint,
                 params=params,
             ),
-            data=await _EncryptUtil.encrypt(params),
+            data=_EncryptUtil.encrypt(params),
         )
         response.raise_for_status()
         return response.json()

@@ -5,6 +5,7 @@ from time import time
 from typing import Any, Dict, Optional, overload
 
 from httpx import URL
+from utils.cache import disable_cache
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint
 
@@ -222,6 +223,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     ) -> Dict[str, Any]:
         ...
 
+    @disable_cache
     @catch_network_error
     async def request(
         self,

@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
+from utils.cache import disable_cache
 from utils.config import DATA_PATH
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint
@@ -168,6 +169,7 @@ class PixivAPI:
 
 
 class PixivEndpoints(BaseEndpoint):
+    @disable_cache
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None

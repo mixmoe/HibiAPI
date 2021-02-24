@@ -4,6 +4,7 @@ from random import randint
 from typing import Any, Dict, Optional
 
 from httpx import URL
+from utils.cache import disable_cache
 from utils.config import APIConfig
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint
@@ -47,6 +48,7 @@ class TiebaEndpoint(BaseEndpoint):
         )
         return URL(url, params={"sign": sign})
 
+    @disable_cache
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None

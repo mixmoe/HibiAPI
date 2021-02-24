@@ -3,6 +3,7 @@ from io import BytesIO
 from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError
+from utils.cache import disable_cache
 from utils.exceptions import ClientSideException
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint, BaseHostUrl
@@ -69,6 +70,7 @@ class SauceEndpoint(BaseEndpoint):
         except HTTPError as e:
             raise UnavailableSourceException(detail=str(e)) from e
 
+    @disable_cache
     @catch_network_error
     async def request(
         self, *, file: UploadFileIO, params: Dict[str, Any]
@@ -106,6 +108,7 @@ class SauceEndpoint(BaseEndpoint):
     ):
         ...
 
+    @disable_cache
     async def search(
         self,
         *,

@@ -34,8 +34,6 @@ class EndpointMeta(type):
 
 
 class BaseEndpoint(metaclass=EndpointMeta):
-    type_checking: bool = True
-
     def __init__(self, client: AsyncHTTPClient):
         self.client = client
 

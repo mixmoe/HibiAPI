@@ -44,7 +44,6 @@ class BilibiliEndpointV3(BaseEndpoint):
     def __init__(self, client: AsyncHTTPClient):
         super().__init__(client)
         self.base = BaseBilibiliEndpoint(client)
-        self.base.type_checking = False
 
     async def video_info(self, *, aid: int):
         return await self.base.view(aid=aid)

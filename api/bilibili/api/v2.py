@@ -58,7 +58,6 @@ class BilibiliEndpointV2(BaseEndpoint):
     def __init__(self, client: AsyncHTTPClient):
         super().__init__(client)
         self.base = BaseBilibiliEndpoint(client)
-        self.base.type_checking = False
 
     @process_keyerror
     async def playurl(
