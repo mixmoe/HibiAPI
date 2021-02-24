@@ -3,11 +3,12 @@ from datetime import timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
 
-from aiocache import Cache as AioCache
-from aiocache.base import BaseCache
+from aiocache import Cache as AioCache  # type: ignore
+from aiocache.base import BaseCache  # type:ignore
 from pydantic import BaseModel
 from pydantic.decorator import ValidatedFunction
 
+from .config import Config
 from .log import logger
 
 _AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
@@ -17,7 +18,7 @@ class CacheConfig(BaseModel):
     endpoint: Callable[..., Coroutine]
     namespace: str
     enabled: bool = True
-    ttl: timedelta = timedelta(hours=1)
+    ttl: timedelta = timedelta(seconds=Config["cache"]["ttl"].as_number())
     refresh_key: Optional[str] = None
 
     @staticmethod
@@ -59,7 +60,7 @@ class CachedValidatedFunction(ValidatedFunction):
 
 def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     vf = CachedValidatedFunction(function)
-    cache: BaseCache = AioCache.from_url("memory://")  # type:ignore
+    cache: BaseCache = AioCache.from_url(Config["cache"]["uri"].as_str())  # type:ignore
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
