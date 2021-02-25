@@ -62,7 +62,7 @@ class CachedValidatedFunction(ValidatedFunction):
 def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     from .routing import request_headers, response_headers  # noqa:F401
 
-    vf = CachedValidatedFunction(function)
+    vf = CachedValidatedFunction(function, config={})
     cache: BaseCache = AioCache.from_url(CACHE_URI)  # type:ignore
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
