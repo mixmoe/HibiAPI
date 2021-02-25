@@ -32,7 +32,7 @@ server:
   allowed-forward: null # Reference: https://stackoverflow.com/questions/63511413
 
 cache:
-  enabled: false
+  enabled: true
   ttl: 3600
   uri: "memory://"
 

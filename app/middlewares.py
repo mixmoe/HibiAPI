@@ -5,9 +5,11 @@ from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
+from starlette.datastructures import MutableHeaders
 from utils.config import Config
 from utils.exceptions import UncaughtException
 from utils.log import logger
+from utils.routing import request_headers, response_headers
 
 from .application import app
 from .handlers import exceptionHandler
@@ -24,34 +26,16 @@ app.add_middleware(
 app.add_middleware(SentryAsgiMiddleware)
 
 
-@app.middleware("http")
-async def uncaught_exception_handler(
-    request: Request, call_next: Callable[[Request], Coroutine[Any, Any, Response]]
-) -> Response:
-    try:
-        response = await call_next(request)
-    except Exception as error:
-        response = await exceptionHandler(
-            request, exc=UncaughtException.with_exception(error)
-        )
-    return response
+RequestHandler = Callable[[Request], Coroutine[Any, Any, Response]]
 
 
 @app.middleware("http")
-async def request_log_handler(
-    request: Request, call_next: Callable[[Request], Coroutine[Any, Any, Response]]
-) -> Response:
+async def request_logger(request: Request, call_next: RequestHandler) -> Response:
     start_time = datetime.now()
     host, port = request.client
-    try:
-        response = await call_next(request)
-    except Exception as e:
-        response = await exceptionHandler(
-            request,
-            UncaughtException.with_exception(e),
-        )
+    response = await call_next(request)
     process_time = (datetime.now() - start_time).total_seconds() * 1000
-    response.headers["X-Process-Time"] = f"{process_time:.3f}"
+    response_headers.get().setdefault("X-Process-Time", f"{process_time:.3f}")
     color = (
         "green"
         if response.status_code < 400
@@ -71,4 +55,26 @@ async def request_log_handler(
             ]
         )
     )
+    return response
+
+
+@app.middleware("http")
+async def contextvar_setter(request: Request, call_next: RequestHandler):
+    request_headers.set(request.headers)
+    response_headers.set(MutableHeaders())
+    response = await call_next(request)
+    response.headers.update({**response_headers.get()})
+    return response
+
+
+@app.middleware("http")
+async def uncaught_exception_handler(
+    request: Request, call_next: RequestHandler
+) -> Response:
+    try:
+        response = await call_next(request)
+    except Exception as error:
+        response = await exceptionHandler(
+            request, exc=UncaughtException.with_exception(error)
+        )
     return response

@@ -1,5 +1,5 @@
 import hashlib
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
 
@@ -19,7 +19,6 @@ class CacheConfig(BaseModel):
     namespace: str
     enabled: bool = True
     ttl: timedelta = timedelta(seconds=Config["cache"]["ttl"].as_number())
-    refresh_key: Optional[str] = None
 
     @staticmethod
     def new(function: Callable[..., Coroutine]):
@@ -29,7 +28,6 @@ class CacheConfig(BaseModel):
 def cache_config(
     enabled: bool = True,
     ttl: timedelta = timedelta(hours=1),
-    refresh_key: Optional[str] = None,
     namespace: Optional[str] = None,
 ):
     def decorator(endpoint: _AsyncCallable) -> _AsyncCallable:
@@ -41,7 +39,6 @@ def cache_config(
                 namespace=namespace or endpoint.__qualname__,
                 enabled=enabled,
                 ttl=ttl,
-                refresh_key=refresh_key,
             ),
         )
         return endpoint
@@ -59,6 +56,8 @@ class CachedValidatedFunction(ValidatedFunction):
 
 
 def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
+    from .routing import request_headers, response_headers  # noqa:F401
+
     vf = CachedValidatedFunction(function)
     cache: BaseCache = AioCache.from_url(Config["cache"]["uri"].as_str())  # type:ignore
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
@@ -67,7 +66,9 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
 
     @wraps(function)
     async def wrapper(*args, **kwargs):
-        if not config.enabled:
+        cache_policy: str = request_headers.get().get("cache-control", "public")
+
+        if (not config.enabled) or (cache_policy.casefold() == "no-store"):
             return await vf.call(*args, **kwargs)
 
         key = hashlib.md5(
@@ -76,7 +77,7 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
             .encode()
         ).hexdigest()
 
-        if model.dict().get(config.refresh_key or "", False):
+        if cache_policy.casefold() == "no-cache":
             await cache.delete(key)
 
         if await cache.exists(key):
@@ -84,9 +85,18 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
                 f"Request to endpoint <g>{function.__qualname__}</g> "
                 f"restoring from <e>{key=}</e> in cache data."
             )
-            return await cache.get(key)
+            result, cache_date = await cache.get(key)
+        else:
+            result, cache_date = await vf.execute(model), datetime.now()
+            await cache.set(key, (result, cache_date))
 
-        await cache.set(key, result := await vf.execute(model))
+        max_age = cache_date + timedelta(seconds=cache.ttl) - datetime.now()
+        if max_age.total_seconds() > 0:
+            response_headers.get().setdefault(
+                "Cache-Control",
+                "max-age=%d" % max_age.total_seconds(),
+            )
+
         return result
 
     return wrapper  # type:ignore

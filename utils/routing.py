@@ -1,4 +1,5 @@
 import inspect
+from contextvars import ContextVar
 from enum import Enum
 from fnmatch import fnmatch
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
@@ -8,6 +9,7 @@ from fastapi.routing import APIRouter
 from httpx import URL
 from pydantic import AnyHttpUrl
 from pydantic.errors import UrlHostError
+from starlette.datastructures import Headers, MutableHeaders
 
 from .cache import disable_cache, endpoint_cache
 from .config import Config
@@ -80,3 +82,7 @@ class BaseHostUrl(AnyHttpUrl):
                 cls.allowed_hosts,
             )
         )
+
+
+request_headers = ContextVar("request_headers", default=Headers())
+response_headers = ContextVar("response_headers", default=MutableHeaders())
