@@ -17,7 +17,7 @@ qrcode = {extras = ["pil"], version = "^6.1"}
 aiofiles = "^0.6.0"
 pycryptodomex = "^3.10.1"
 sentry-sdk = "^0.20.3"
-pydantic = "~1.5.0"
+pydantic = "^1.7.3"
 python-multipart = "^0.0.5"
 aiocache = "^0.11.1"
 
