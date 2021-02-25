@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from utils.cache import disable_cache
+from utils.cache import cache_config, disable_cache
 from utils.config import DATA_PATH
 from utils.net import catch_network_error
 from utils.routing import BaseEndpoint
@@ -183,6 +183,7 @@ class PixivEndpoints(BaseEndpoint):
         )
         return response.json()
 
+    @cache_config(ttl=timedelta(days=1))
     async def illust(self, *, id: int):
         return await self.request("v1/illust/detail", params={"illust_id": id})
 
@@ -241,6 +242,7 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
+    @cache_config(ttl=timedelta(hours=12))
     async def rank(
         self,
         *,
@@ -282,6 +284,7 @@ class PixivEndpoints(BaseEndpoint):
     async def tags(self):
         return await self.request("v1/trending-tags/illust")
 
+    @cache_config(ttl=timedelta(days=3))
     async def related(self, id: int, page: int = 1, size: int = 20):
         return await self.request(
             "v2/illust/related",

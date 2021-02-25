@@ -2,14 +2,18 @@ import hashlib
 from datetime import datetime, timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
+from wsgiref.handlers import format_date_time
 
-from aiocache import Cache as AioCache  # type: ignore
+from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
 from pydantic import BaseModel
 from pydantic.decorator import ValidatedFunction
 
 from .config import Config
 from .log import logger
+
+CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
+CACHE_URI = Config["cache"]["uri"].as_str()
 
 _AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
 
@@ -59,10 +63,13 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     from .routing import request_headers, response_headers  # noqa:F401
 
     vf = CachedValidatedFunction(function)
-    cache: BaseCache = AioCache.from_url(Config["cache"]["uri"].as_str())  # type:ignore
+    cache: BaseCache = AioCache.from_url(CACHE_URI)  # type:ignore
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
+
+    if not CACHE_ENABLED:
+        config.enabled = False
 
     @wraps(function)
     async def wrapper(*args, **kwargs):
@@ -85,17 +92,18 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
                 f"Request to endpoint <g>{function.__qualname__}</g> "
                 f"restoring from <e>{key=}</e> in cache data."
             )
+            response_headers.get().setdefault("X-Cache-Hit", key)
             result, cache_date = await cache.get(key)
         else:
             result, cache_date = await vf.execute(model), datetime.now()
             await cache.set(key, (result, cache_date))
 
-        max_age = cache_date + timedelta(seconds=cache.ttl) - datetime.now()
-        if max_age.total_seconds() > 0:
-            response_headers.get().setdefault(
-                "Cache-Control",
-                "max-age=%d" % max_age.total_seconds(),
-            )
+        response_headers.get().update(
+            {
+                "Cache-Control": "public",
+                "Expires": format_date_time(cache_date.timestamp() + cache.ttl),
+            }
+        )
 
         return result
 
