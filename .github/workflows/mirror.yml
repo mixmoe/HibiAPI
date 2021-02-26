@@ -1,6 +1,10 @@
 name: Gitee Mirror
 
-on: [push, delete, create]
+on:
+  - push
+  - delete
+  - create
+  - workflow_dispatch
 
 jobs:
   git-mirror:
