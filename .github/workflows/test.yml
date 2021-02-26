@@ -24,8 +24,18 @@ jobs:
           sudo apt-get install -y cloc
 
       - name: Count lines of code
+        id: cloc
         run: |
-          cloc .
+          cloc --vcs=git --md . | tee report.md
+          content="$(cat report.md)"
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=content::$content"
+
+      - uses: peter-evans/commit-comment@v1
+        with:
+          body: ${{ steps.cloc.outputs.content }}
 
   docker:
     runs-on: ubuntu-latest
@@ -80,7 +90,12 @@ jobs:
       - name: Testing with pytest
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > configs/.env
-          pytest test/
+          coverage run -m pytest test/
+
+      - name: Report test coverage
+        id: coverage
+        run: |
+          coverage report -m
 
       - uses: actions/upload-artifact@v2
         if: failure()
