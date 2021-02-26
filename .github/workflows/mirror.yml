@@ -1,0 +1,16 @@
+name: Gitee Mirror
+
+on: [push, delete, create]
+
+jobs:
+  git-mirror:
+    name: Mirror
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: wearerequired/git-mirror-action@v1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+        with:
+          source-repo: "git@github.com:mixmoe/HibiAPI.git"
+          destination-repo: "git@gitee.com:mixmoe/HibiAPI.git"
