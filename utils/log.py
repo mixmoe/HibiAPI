@@ -3,7 +3,7 @@ import re
 import sys
 from asyncio.log import logger as _asyncioLogger
 from datetime import timedelta
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 import sentry_sdk.integrations.logging as sentry
 from loguru import logger as _logger
@@ -17,11 +17,7 @@ if TYPE_CHECKING:
 LOG_PATH = DATA_PATH / "logs"
 LOG_PATH.mkdir(parents=True, exist_ok=True)
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
-LOG_LEVEL = (
-    Config["log"]["level"]
-    .get(Literal["TRACE", "DEBUG", "INFO", "WARNING", "ERROR"])  # type:ignore
-    .upper()
-)
+LOG_LEVEL = Config["log"]["level"].get(str).upper()
 
 
 logger: "Logger" = _logger.opt(colors=True)

@@ -56,7 +56,7 @@ disable_cache = cache_config(enabled=False)
 class CachedValidatedFunction(ValidatedFunction):
     def serialize(self, args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> BaseModel:
         values = self.build_values(args=args, kwargs=kwargs)
-        return self.model(**values)
+        return self.model(**values)  # type:ignore
 
 
 def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
