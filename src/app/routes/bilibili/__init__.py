@@ -1,5 +1,5 @@
-from api.bilibili import BilibiliConstants
-from utils.routing import SlashRouter
+from src.api.bilibili import BilibiliConstants
+from src.utils.routing import SlashRouter
 
 from .v2 import router as RouterV2
 from .v3 import router as RouterV3

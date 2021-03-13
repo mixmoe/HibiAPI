@@ -1,5 +1,5 @@
 import pytest
-from app import app as APIAppRoot
+from src.app import app as APIAppRoot
 from fastapi.testclient import TestClient
 
 

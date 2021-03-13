@@ -1,4 +1,4 @@
-from utils.net import BaseNetClient
+from src.utils.net import BaseNetClient
 
 from .constants import SauceConstants
 

@@ -1,7 +1,7 @@
 from http.cookies import SimpleCookie
 from typing import Dict
 
-from utils.config import APIConfig
+from src.utils.config import APIConfig
 
 _Config = APIConfig("netease")
 

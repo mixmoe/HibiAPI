@@ -5,9 +5,9 @@ from time import time
 from typing import Any, Dict, Optional, overload
 
 from httpx import URL
-from utils.cache import disable_cache
-from utils.net import catch_network_error
-from utils.routing import BaseEndpoint
+from src.utils.cache import disable_cache
+from src.utils.net import catch_network_error
+from src.utils.routing import BaseEndpoint
 
 from ..constants import BilibiliConstants
 

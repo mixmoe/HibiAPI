@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional, Tuple, overload
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
-from utils.net import AsyncHTTPClient, BaseNetClient
+from src.utils.net import AsyncHTTPClient, BaseNetClient
 
 from .constants import PixivConstants
 

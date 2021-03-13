@@ -1,7 +1,7 @@
-from utils.config import APIConfig
-from utils.exceptions import ExceptionReturn
-from utils.log import logger
-from utils.routing import SlashRouter
+from src.utils.config import APIConfig
+from src.utils.exceptions import ExceptionReturn
+from src.utils.log import logger
+from src.utils.routing import SlashRouter
 
 from . import bilibili, netease, pixiv, qrcode, sauce, tieba
 

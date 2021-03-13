@@ -1,6 +1,6 @@
 import pytest
-from app import app as APIAppRoot
 from fastapi.testclient import TestClient
+from src.app import app as APIAppRoot
 
 
 @pytest.fixture(scope="package")
@@ -16,7 +16,7 @@ def test_openapi(client: TestClient):
 
 
 def test_notfound(client: TestClient):
-    from utils.exceptions import ExceptionReturn
+    from src.utils.exceptions import ExceptionReturn
 
     response = client.get("/notexistpath")
     assert response.status_code == 404

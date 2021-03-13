@@ -1,6 +1,7 @@
 from typing import Callable, Coroutine
 
-from api.netease import (
+from fastapi import Depends, Request
+from src.api.netease import (
     BitRateType,
     EndpointsType,
     NeteaseConstants,
@@ -9,8 +10,7 @@ from api.netease import (
     RecordPeriodType,
     SearchType,
 )
-from fastapi import Depends, Request
-from utils.routing import SlashRouter, exclude_params
+from src.utils.routing import SlashRouter, exclude_params
 
 __mount__, __config__ = "netease", NeteaseConstants.CONFIG
 router = SlashRouter(tags=["Netease"])

@@ -2,9 +2,9 @@ from enum import Enum
 from functools import wraps
 from typing import Callable, Coroutine, Optional, TypeVar, Union
 
-from utils.exceptions import ClientSideException
-from utils.net import AsyncHTTPClient
-from utils.routing import BaseEndpoint
+from src.utils.exceptions import ClientSideException
+from src.utils.net import AsyncHTTPClient
+from src.utils.routing import BaseEndpoint
 
 from .base import (
     BaseBilibiliEndpoint,

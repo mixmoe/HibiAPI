@@ -1,6 +1,7 @@
 from typing import Optional
 
-from api.sauce import (
+from fastapi import Depends, File, Form
+from src.api.sauce import (
     DeduplicateType,
     HostUrl,
     NetRequest,
@@ -8,8 +9,7 @@ from api.sauce import (
     SauceEndpoint,
     UploadFileIO,
 )
-from fastapi import Depends, File, Form
-from utils.routing import SlashRouter
+from src.utils.routing import SlashRouter
 
 __mount__, __config__ = "sauce", SauceConstants.CONFIG
 router = SlashRouter(tags=["SauceNAO"])

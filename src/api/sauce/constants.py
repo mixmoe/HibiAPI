@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from utils.config import APIConfig
+from src.utils.config import APIConfig
 
 _Config = APIConfig("sauce")
 

@@ -1,7 +1,7 @@
 from enum import Enum
 
-from utils.net import AsyncHTTPClient
-from utils.routing import BaseEndpoint
+from src.utils.net import AsyncHTTPClient
+from src.utils.routing import BaseEndpoint
 
 from .base import (
     BaseBilibiliEndpoint,

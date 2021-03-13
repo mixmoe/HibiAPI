@@ -4,9 +4,9 @@ from typing import Optional
 import click
 import uvicorn  # type:ignore
 
-from app import app as AppRoot  # noqa:F401
-from utils.config import DEBUG, VERSION, Config
-from utils.log import LOG_LEVEL, logger
+from src.app import app as AppRoot  # noqa:F401
+from src.utils.config import DEBUG, VERSION, Config
+from src.utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
   _    _ _ _     _          _____ _____  
@@ -25,7 +25,7 @@ LOG_CONFIG = {
     "disable_existing_loggers": False,
     "handlers": {
         "default": {
-            "class": "utils.log.LoguruHandler",
+            "class": "src.utils.log.LoguruHandler",
         },
     },
     "loggers": {
@@ -80,7 +80,7 @@ def main(host: str, port: int, workers: int, reload: bool):
         % ("<r>debug</r>" if DEBUG else "<g>production</g>")
     )
     uvicorn.run(
-        "app:app",
+        "main:AppRoot",
         host=host,
         port=port,
         debug=DEBUG,

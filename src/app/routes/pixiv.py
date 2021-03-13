@@ -1,7 +1,8 @@
 import asyncio
 from typing import Callable, Coroutine, NoReturn, Optional
 
-from api.pixiv import (
+from fastapi import Depends, Request
+from src.api.pixiv import (
     EndpointsType,
     IllustType,
     PixivAPI,
@@ -13,9 +14,8 @@ from api.pixiv import (
     SearchModeType,
     SearchSortType,
 )
-from fastapi import Depends, Request
-from utils.log import logger
-from utils.routing import SlashRouter, exclude_params
+from src.utils.log import logger
+from src.utils.routing import SlashRouter, exclude_params
 
 __mount__, __config__ = "pixiv", PixivConstants.CONFIG
 router = SlashRouter(tags=["Pixiv"])
