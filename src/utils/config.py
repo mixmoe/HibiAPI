@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Generic, Optional, Type, TypeVar
+from typing import Any, Dict, Generic, Optional, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
@@ -39,6 +39,14 @@ class _TypeChecker(GenericModel, Generic[_T]):
 
 
 class ConfigSubView(confuse.Subview):
+    @overload
+    def get(self) -> Any:
+        ...
+
+    @overload
+    def get(self, template: Type[_T]) -> _T:
+        ...
+
     def get(self, template: Optional[Type[_T]] = None) -> _T:
         return _TypeChecker[template or Any](value=super().get()).value  # type:ignore
 
