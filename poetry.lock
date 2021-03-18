@@ -205,7 +205,7 @@ http2 = ["h2 (>=3,<5)"]
 
 [[package]]
 name = "httpx"
-version = "0.17.0"
+version = "0.17.1"
 description = "The next generation HTTP client."
 category = "main"
 optional = false
@@ -214,7 +214,7 @@ python-versions = ">=3.6"
 [package.dependencies]
 certifi = "*"
 h2 = {version = ">=3.0.0,<4.0.0", optional = true, markers = "extra == \"http2\""}
-httpcore = ">=0.12.0,<0.13.0"
+httpcore = ">=0.12.1,<0.13"
 rfc3986 = {version = ">=1.3,<2", extras = ["idna2008"]}
 sniffio = "*"
 
@@ -617,7 +617,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "75dfc4fc4191c2990be1fb504d59710b5f8a142864178e9ba734cc4b3782cf7f"
+content-hash = "2dc1a437c393f5869f0ddb3b537fddf47a0308af430720157140de067c668f2d"
 
 [metadata.files]
 aiocache = [
@@ -742,8 +742,8 @@ httpcore = [
     {file = "httpcore-0.12.2.tar.gz", hash = "sha256:dd1d762d4f7c2702149d06be2597c35fb154c5eff9789a8c5823fbcf4d2978d6"},
 ]
 httpx = [
-    {file = "httpx-0.17.0-py3-none-any.whl", hash = "sha256:fe19522f7b0861a1f6ac83306360bb5b7fb1ed64633a1a04a33f04102a1bea60"},
-    {file = "httpx-0.17.0.tar.gz", hash = "sha256:4f7ab2fef7f929c5531abd4f413b41ce2c820e3202f2eeee498f2d92b6849f8d"},
+    {file = "httpx-0.17.1-py3-none-any.whl", hash = "sha256:d379653bd457e8257eb0df99cb94557e4aac441b7ba948e333be969298cac272"},
+    {file = "httpx-0.17.1.tar.gz", hash = "sha256:cc2a55188e4b25272d2bcd46379d300f632045de4377682aa98a8a6069d55967"},
 ]
 hyperframe = [
     {file = "hyperframe-5.2.0-py2.py3-none-any.whl", hash = "sha256:5187962cb16dcc078f23cb5a4b110098d546c3f41ff2d4038a9896893bbd0b40"},
