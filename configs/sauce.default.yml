@@ -5,9 +5,7 @@ enabled: true
 # proxy:
 #   http_proxy: http://127.0.0.1:1081
 #   https_proxy: https://127.0.0.1:1081
-proxy:
-  http_proxy: ""
-  https_proxy: ""
+proxy: {}
 
 net:
   api-key: "" # SauceNAO 的API KEY
