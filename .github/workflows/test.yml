@@ -36,6 +36,7 @@ jobs:
       - uses: peter-evans/commit-comment@v1
         with:
           body: ${{ steps.cloc.outputs.content }}
+          token: ${{ secrets.access_token }}
 
   docker:
     runs-on: ubuntu-latest
