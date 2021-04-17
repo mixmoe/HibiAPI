@@ -12,6 +12,7 @@
 
 ![Lint](https://github.com/mixmoe/HibiAPI/workflows/Lint/badge.svg)
 ![Test](https://github.com/mixmoe/HibiAPI/workflows/Test/badge.svg)
+[![Coverage](https://codecov.io/gh/mixmoe/HibiAPI/branch/main/graph/badge.svg)](https://codecov.io/gh/mixmoe/HibiAPI)
 
 ![Version](https://img.shields.io/badge/dynamic/yaml?color=green&label=version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fmixmoe%2FHibiAPI%2Fmain%2Fconfigs%2Fgeneral.default.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
@@ -78,7 +79,9 @@ _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://
 ### 贡献者们
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些为这个项目作出贡献的朋友们 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
