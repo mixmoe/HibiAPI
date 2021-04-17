@@ -6,6 +6,7 @@ from wsgiref.handlers import format_date_time
 
 from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
+from aiocache.serializers import PickleSerializer  # type:ignore
 from pydantic import BaseModel
 from pydantic.decorator import ValidatedFunction
 
@@ -67,6 +68,7 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
+    cache.serializer = PickleSerializer(encoding="utf-8")
 
     if not CACHE_ENABLED:
         config.enabled = False
