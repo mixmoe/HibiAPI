@@ -1,4 +1,6 @@
+import base64
 import hashlib
+import pickle
 from datetime import datetime, timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
@@ -6,7 +8,7 @@ from wsgiref.handlers import format_date_time
 
 from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
-from aiocache.serializers import PickleSerializer  # type:ignore
+from aiocache.serializers import BaseSerializer  # type:ignore
 from pydantic import BaseModel
 from pydantic.decorator import ValidatedFunction
 
@@ -17,6 +19,14 @@ CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
 CACHE_URI = Config["cache"]["uri"].as_str()
 
 _AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
+
+
+class Base85Serializer(BaseSerializer):
+    def dumps(self, value: Any) -> str:
+        return base64.b85encode(pickle.dumps(value)).decode()
+
+    def loads(self, value: Optional[str]) -> Any:
+        return pickle.loads(base64.b85decode(value)) if value else None
 
 
 class CacheConfig(BaseModel):
@@ -68,7 +78,7 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
-    cache.serializer = PickleSerializer(encoding="utf-8")
+    cache.serializer = Base85Serializer(encoding="utf-8")
 
     if not CACHE_ENABLED:
         config.enabled = False
@@ -97,13 +107,13 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
             response_headers.get().setdefault("X-Cache-Hit", key)
             result, cache_date = await cache.get(key)
         else:
-            result, cache_date = await vf.execute(model), datetime.now()
+            result, cache_date = await vf.execute(model), datetime.now().timestamp()
             await cache.set(key, (result, cache_date))
 
         response_headers.get().update(
             {
                 "Cache-Control": "public",
-                "Expires": format_date_time(cache_date.timestamp() + cache.ttl),
+                "Expires": format_date_time(cache_date + cache.ttl),
             }
         )
 
