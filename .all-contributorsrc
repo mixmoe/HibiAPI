@@ -14,6 +14,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "shirokurakana",
+      "name": "城倉奏",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46120251?v=4",
+      "profile": "http://thdog.moe",
+      "contributions": [
+        "example"
+      ]
     }
   ],
   "contributorsPerLine": 7,
