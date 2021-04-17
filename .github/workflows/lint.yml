@@ -40,7 +40,6 @@ jobs:
 
       - uses: wearerequired/lint-action@v1
         with:
-          github_token: ${{ secrets.access_token }}
           auto_fix: true
           flake8: true
           flake8_args: "--config .flake8"

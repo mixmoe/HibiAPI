@@ -1,10 +1,8 @@
 name: Gitee Mirror
 
 on:
-  - push
-  - delete
-  - create
-  - workflow_dispatch
+  push:
+    branches: [master]
 
 jobs:
   git-mirror:

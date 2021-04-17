@@ -34,6 +34,7 @@ jobs:
           echo "::set-output name=content::$content"
 
       - uses: peter-evans/commit-comment@v1
+        if: "!!github.head_ref"
         with:
           body: ${{ steps.cloc.outputs.content }}
           token: ${{ secrets.access_token }}
