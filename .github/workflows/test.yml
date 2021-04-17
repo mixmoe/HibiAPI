@@ -34,7 +34,7 @@ jobs:
           echo "::set-output name=content::$content"
 
       - uses: peter-evans/commit-comment@v1
-        if: "!!github.head_ref"
+        if: "!github.head_ref"
         with:
           body: ${{ steps.cloc.outputs.content }}
           token: ${{ secrets.access_token }}
@@ -95,10 +95,11 @@ jobs:
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > configs/.env
           coverage run -m pytest test/
+          coverage xml
 
-      - name: Report test coverage
-        run: |
-          coverage report -m
+      - uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
 
       - uses: actions/upload-artifact@v2
         if: failure()
