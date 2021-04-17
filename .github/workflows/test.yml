@@ -37,7 +37,6 @@ jobs:
         if: "!github.head_ref"
         with:
           body: ${{ steps.cloc.outputs.content }}
-          token: ${{ secrets.access_token }}
 
   docker:
     runs-on: ubuntu-latest
