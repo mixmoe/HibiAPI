@@ -220,7 +220,7 @@ python-versions = "*"
 
 [[package]]
 name = "httpcore"
-version = "0.12.2"
+version = "0.13.0"
 description = "A minimal low-level HTTP client."
 category = "main"
 optional = false
@@ -235,7 +235,7 @@ http2 = ["h2 (>=3,<5)"]
 
 [[package]]
 name = "httpx"
-version = "0.17.1"
+version = "0.18.0"
 description = "The next generation HTTP client."
 category = "main"
 optional = false
@@ -244,7 +244,7 @@ python-versions = ">=3.6"
 [package.dependencies]
 certifi = "*"
 h2 = {version = ">=3.0.0,<4.0.0", optional = true, markers = "extra == \"http2\""}
-httpcore = ">=0.12.1,<0.13"
+httpcore = ">=0.13.0,<0.14.0"
 rfc3986 = {version = ">=1.3,<2", extras = ["idna2008"]}
 sniffio = "*"
 
@@ -647,7 +647,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d066704e1cfd5754b6c625b0a7441872d2dc4d0763bd8a97f02061a720c4aff1"
+content-hash = "841165fada082de013e7e1dd3b98100d20067897a1e08eb216ba4ece086542c1"
 
 [metadata.files]
 aiocache = [
@@ -820,12 +820,12 @@ hpack = [
     {file = "hpack-3.0.0.tar.gz", hash = "sha256:8eec9c1f4bfae3408a3f30500261f7e6a65912dc138526ea054f9ad98892e9d2"},
 ]
 httpcore = [
-    {file = "httpcore-0.12.2-py3-none-any.whl", hash = "sha256:420700af11db658c782f7e8fda34f9dcd95e3ee93944dd97d78cb70247e0cd06"},
-    {file = "httpcore-0.12.2.tar.gz", hash = "sha256:dd1d762d4f7c2702149d06be2597c35fb154c5eff9789a8c5823fbcf4d2978d6"},
+    {file = "httpcore-0.13.0-py3-none-any.whl", hash = "sha256:1aab7711fa42a5df6043fdb62a3fb0f7a5899bccb53d0b0e500aa038acb0976c"},
+    {file = "httpcore-0.13.0.tar.gz", hash = "sha256:d5602a0a9a5aa29937be6060acb2ac31461217d33e3e5e993038e51c841e0dec"},
 ]
 httpx = [
-    {file = "httpx-0.17.1-py3-none-any.whl", hash = "sha256:d379653bd457e8257eb0df99cb94557e4aac441b7ba948e333be969298cac272"},
-    {file = "httpx-0.17.1.tar.gz", hash = "sha256:cc2a55188e4b25272d2bcd46379d300f632045de4377682aa98a8a6069d55967"},
+    {file = "httpx-0.18.0-py3-none-any.whl", hash = "sha256:72a87c5f9f88443bf6875d14dad453f27092abcc27c86fa78ae2575ee9411885"},
+    {file = "httpx-0.18.0.tar.gz", hash = "sha256:46cfb242ae6b85c3f21f7774cb42a465acdf73741e49f6746ab481f16d0e0590"},
 ]
 hyperframe = [
     {file = "hyperframe-5.2.0-py2.py3-none-any.whl", hash = "sha256:5187962cb16dcc078f23cb5a4b110098d546c3f41ff2d4038a9896893bbd0b40"},
