@@ -75,7 +75,7 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "black"
-version = "21.4b0"
+version = "21.4b2"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -85,7 +85,7 @@ python-versions = ">=3.6.2"
 appdirs = "*"
 click = ">=7.1.2"
 mypy-extensions = ">=0.4.3"
-pathspec = ">=0.6,<1"
+pathspec = ">=0.8.1,<1"
 regex = ">=2020.1.8"
 toml = ">=0.10.1"
 
@@ -647,7 +647,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0a27ba2dc7026567d5ed410b5a60b80c2f9f8571b8dcec9a16b878c0f9b655ea"
+content-hash = "77e9660b64118541eaef985783c6daf435e90f7c69bc01953cac7110c73c513a"
 
 [metadata.files]
 aiocache = [
@@ -679,8 +679,8 @@ attrs = [
     {file = "attrs-20.3.0.tar.gz", hash = "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"},
 ]
 black = [
-    {file = "black-21.4b0-py3-none-any.whl", hash = "sha256:2db7040bbbbaa46247bfcc05c6efdebd7ebe50c1c3ca745ca6e0f6776438c96c"},
-    {file = "black-21.4b0.tar.gz", hash = "sha256:915d916c48646dbe8040d5265cff7111421a60a3dfe7f7e07273176a57c24a34"},
+    {file = "black-21.4b2-py3-none-any.whl", hash = "sha256:bff7067d8bc25eb21dcfdbc8c72f2baafd9ec6de4663241a52fb904b304d391f"},
+    {file = "black-21.4b2.tar.gz", hash = "sha256:fc9bcf3b482b05c1f35f6a882c079dc01b9c7795827532f4cc43c0ec88067bbc"},
 ]
 certifi = [
     {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
