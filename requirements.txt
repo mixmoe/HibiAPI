@@ -79,9 +79,9 @@ hpack==3.0.0; python_version >= "3.6" \
 httpcore==0.13.0; python_version >= "3.6" \
     --hash=sha256:1aab7711fa42a5df6043fdb62a3fb0f7a5899bccb53d0b0e500aa038acb0976c \
     --hash=sha256:d5602a0a9a5aa29937be6060acb2ac31461217d33e3e5e993038e51c841e0dec
-httpx==0.18.0; python_version >= "3.6" \
-    --hash=sha256:72a87c5f9f88443bf6875d14dad453f27092abcc27c86fa78ae2575ee9411885 \
-    --hash=sha256:46cfb242ae6b85c3f21f7774cb42a465acdf73741e49f6746ab481f16d0e0590
+httpx==0.18.1; python_version >= "3.6" \
+    --hash=sha256:ad2e3db847be736edc4b272c4d5788790a7e5789ef132fc6b5fef8aeb9e9f6e0 \
+    --hash=sha256:0a2651dd2b9d7662c70d12ada5c290abcf57373b9633515fe4baa9f62566086f
 hyperframe==5.2.0; python_version >= "3.6" \
     --hash=sha256:5187962cb16dcc078f23cb5a4b110098d546c3f41ff2d4038a9896893bbd0b40 \
     --hash=sha256:a9f5c17f2cc3c719b917c4f33ed1c61bd1f8dfac4b1bd23b7c80b3400971b41f
