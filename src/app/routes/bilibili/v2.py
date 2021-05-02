@@ -49,7 +49,7 @@ async def play_url(
 
 @router.get(V2EndpointsType.seasoninfo)
 async def seasoninfo(
-    self, season_id: int, endpoint: BilibiliEndpointV2 = Depends(requestClient)
+    season_id: int, endpoint: BilibiliEndpointV2 = Depends(requestClient)
 ):
     return await endpoint.seasoninfo(season_id=season_id)
 
