@@ -1,6 +1,6 @@
 import pytest
-from src.app import app as APIAppRoot
 from fastapi.testclient import TestClient
+from src.app import app as APIAppRoot
 
 
 @pytest.fixture(scope="package")
