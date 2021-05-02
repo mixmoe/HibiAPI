@@ -60,6 +60,9 @@
 
 - 手动部署指南: **[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)**
 
+## 分流站点
+[轻零API](http://hibiapi.lite0.com/)
+
 ## 鸣谢
 
 _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)_
