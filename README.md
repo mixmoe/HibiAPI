@@ -62,9 +62,27 @@
 
 ## 应用实例
 
-- 分流站点:
+**我有更多的应用实例?** [立即 PR!](https://github.com/mixmoe/HibiAPI/pulls)
 
-[![轻零API](https://img.shields.io/website?label=%E8%BD%BB%E9%9B%B6API&style=flat-square&url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json)](https://hibiapi.lite0.com/openapi.json)
+- [`journey-ad/pixiv-viewer`](https://github.com/journey-ad/pixiv-viewer)
+
+  - **又一个 Pixiv 阅览工具**
+
+- [`mnixry/coolQPythonBot`](https://github.com/mnixry/coolQPythonBot)
+
+  - **基于酷 Q+CQHTTP 的功能性 QQ 机器人**
+  - ~~因为应用实例不够多所以拿自己项目凑数是屑~~
+
+- 公开搭建实例
+  | **站点名称** | **网址** | **状态** |
+  | :-----------------: | :-----------------------------: | :-------------------: |
+  | **官方 Demo** | <https://api.obfs.dev> | ![official][official] |
+  | 轻零 API | <https://hibiapi.lite0.com> | ![lite0][lite0] |
+  | Kyomotoi の菜几服务 | <https://api.kyomotoi.moe/docs> | ![kyo][kyo] |
+
+[official]: https://img.shields.io/website?url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json
+[lite0]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json
+[kyo]: https://img.shields.io/website?url=https%3A%2F%2Fapi.kyomotoi.moe%2Fopenapi.json
 
 ## 鸣谢
 
@@ -85,7 +103,9 @@ _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://
 ### 贡献者们
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些为这个项目作出贡献的朋友们 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
