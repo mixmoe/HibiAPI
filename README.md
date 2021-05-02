@@ -64,7 +64,7 @@
 
 - 分流站点:
 
-[轻零API](http://hibiapi.lite0.com/)
+[![轻零API](https://img.shields.io/website?label=%E8%BD%BB%E9%9B%B6API&style=flat-square&url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json)](https://hibiapi.lite0.com/openapi.json)
 
 ## 鸣谢
 
