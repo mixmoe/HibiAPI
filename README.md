@@ -60,6 +60,12 @@
 
 - 手动部署指南: **[点击此处查看](https://github.com/mixmoe/HibiAPI/wiki/Deployment)**
 
+## 应用实例
+
+- 分流站点:
+
+[![轻零API](https://img.shields.io/website?label=%E8%BD%BB%E9%9B%B6API&style=flat-square&url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json)](https://hibiapi.lite0.com/openapi.json)
+
 ## 鸣谢
 
 _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)_
