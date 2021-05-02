@@ -1,5 +1,4 @@
 import json
-import warnings
 from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
@@ -147,21 +146,13 @@ class PixivAPI:
                 refresh_token := PixivConstants.CONFIG["account"]["token"]
                 .as_str()
                 .strip()
-            ) :
+            ):
                 user = await UserInfo.login(refresh_token=refresh_token)
             else:
-                warnings.warn(
-                    "Login via account username and password is deprecated, "
-                    "please use refresh_token!"
-                )
-                user = await UserInfo.login(
-                    account=(
-                        PixivConstants.CONFIG["account"]["username"].as_str(),
-                        PixivConstants.CONFIG["account"]["password"].as_str(),
-                    )
-                )
+                raise ValueError("Pixiv account refresh_token is not configured.")
         self.user = user
         self.net = NetRequest(user)
+
         USER_TEMP_DATA.write_text(
             user.json(sort_keys=True, indent=4, ensure_ascii=False),
             encoding="utf-8",

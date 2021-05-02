@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from typing import Any, Dict, Optional, Tuple, overload
+from typing import Any, Dict
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
@@ -18,25 +18,9 @@ class UserInfo(BaseModel):
     class Config:
         extra = Extra.allow
 
-    @overload
     @classmethod
-    async def login(cls, *, account: Tuple[str, str]) -> "UserInfo":
-        ...
-
-    @overload
-    @classmethod
-    async def login(cls, *, refresh_token: str) -> "UserInfo":
-        ...
-
-    @classmethod
-    async def login(
-        cls,
-        *,
-        account: Optional[Tuple[str, str]] = None,
-        refresh_token: Optional[str] = None,
-    ):
-        assert (account and refresh_token) is None
-        url = URL(PixivConstants.AUTH_HOST + "/auth/token")
+    async def login(cls, *, refresh_token: str):
+        url = URL(PixivConstants.AUTH_HOST).join("/auth/token")
         time = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
         headers = {
             **PixivConstants.DEFAULT_HEADERS,
@@ -49,23 +33,10 @@ class UserInfo(BaseModel):
             "get_secure_url": 1,
             "client_id": PixivConstants.CLIENT_ID,
             "client_secret": PixivConstants.CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
         }
-        if refresh_token:
-            data.update(
-                {
-                    "grant_type": "refresh_token",
-                    "refresh_token": refresh_token,
-                }
-            )
-        elif account:
-            username, password = account
-            data.update(
-                {
-                    "grant_type": "password",
-                    "username": username,
-                    "password": password,
-                }
-            )
+
         async with AsyncHTTPClient(
             proxies=PixivConstants.CONFIG["proxy"].get(Dict[str, str])  # type:ignore
         ) as client:
