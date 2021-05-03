@@ -71,14 +71,14 @@
 - [`mnixry/coolQPythonBot`](https://github.com/mnixry/coolQPythonBot)
 
   - **基于酷 Q+CQHTTP 的功能性 QQ 机器人**
-  - ~~因为应用实例不够多所以拿自己项目凑数是屑~~
+  - ~~因为应用实例不够多所以拿自己项目凑数的屑~~
 
 - 公开搭建实例
   | **站点名称** | **网址** | **状态** |
   | :-----------------: | :-----------------------------: | :-------------------: |
   | **官方 Demo** | <https://api.obfs.dev> | ![official][official] |
   | 轻零 API | <https://hibiapi.lite0.com> | ![lite0][lite0] |
-  | Kyomotoi の菜几服务 | <https://api.kyomotoi.moe/docs> | ![kyo][kyo] |
+  | Kyomotoi の菜几服务 | <https://api.kyomotoi.moe> | ![kyo][kyo] |
 
 [official]: https://img.shields.io/website?url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json
 [lite0]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json
