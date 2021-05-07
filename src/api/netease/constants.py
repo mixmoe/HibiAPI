@@ -1,4 +1,5 @@
 from http.cookies import SimpleCookie
+from ipaddress import IPv4Address
 from typing import Dict
 
 from src.utils.config import APIConfig
@@ -26,5 +27,6 @@ class NeteaseConstants:
     DEFAULT_HEADERS: Dict[str, str] = {
         "user-agent": _Config["net"]["user-agent"].as_str(),
         "referer": "http://music.163.com",
+        "x-real-ip": str(_Config["net"]["source"].get(IPv4Address)),
     }
     CONFIG: APIConfig = _Config
