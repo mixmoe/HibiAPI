@@ -694,7 +694,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ccbf2dcef52c1a7475be587fd032b82b8c4e8e455c1199e5b4374cdf6b332395"
+content-hash = "1964cd821ef14daac979a8638c50da40be1f2f55bf38aeeac03a48b76713379c"
 
 [metadata.files]
 aiocache = [
