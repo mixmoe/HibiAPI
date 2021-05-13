@@ -1,8 +1,9 @@
 import asyncio
 from typing import NoReturn
+from urllib.parse import ParseResult
 
 import sentry_sdk
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from sentry_sdk.integrations.logging import LoggingIntegration
 from src.utils.config import Config
@@ -81,21 +82,37 @@ Temporary redirection solution below for #12
 """
 
 
+def _redirect(request: Request, path: str, to: str) -> Response:
+    return Response(
+        status_code=301,
+        headers={
+            "Location": ParseResult(
+                scheme="",
+                netloc="",
+                path=path + to,
+                params="",
+                query=str(request.query_params),
+                fragment="",
+            )
+        },
+    )
+
+
 @app.get("/qrcode/{path:path}", include_in_schema=False)
-async def _qr_redirect(path: str):
-    return Response(status_code=301, headers={"Location": "/api/qrcode/" + path})
+async def _qr_redirect(path: str, request: Request):
+    return _redirect(request, path, "/api/qrcode/")
 
 
 @app.get("/pixiv/{path:path}", include_in_schema=False)
-async def _pixiv_redirect(path: str):
-    return Response(status_code=301, headers={"Location": "/api/pixiv/" + path})
+async def _pixiv_redirect(path: str, request: Request):
+    return _redirect(request, path, "/api/pixiv/")
 
 
 @app.get("/netease/{path:path}", include_in_schema=False)
-async def _netease_redirect(path: str):
-    return Response(status_code=301, headers={"Location": "/api/netease/" + path})
+async def _netease_redirect(path: str, request: Request):
+    return _redirect(request, path, "/api/netease/")
 
 
 @app.get("/bilibili/{path:path}", include_in_schema=False)
-async def _bilibili_redirect(path: str):
-    return Response(status_code=301, headers={"Location": "/api/bilibili/" + path})
+async def _bilibili_redirect(path: str, request: Request):
+    return _redirect(request, path, "/api/bilibili/")
