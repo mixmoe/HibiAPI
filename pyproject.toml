@@ -22,7 +22,7 @@ python-multipart = "^0.0.5"
 aiocache = {extras = ["redis"], version = "^0.11.1"}
 
 [tool.poetry.dev-dependencies]
-black = "^21.5b0"
+black = "^21.5b1"
 mypy = "^0.812"
 flake8 = "^3.9.2"
 pytest = "^6.2.4"
