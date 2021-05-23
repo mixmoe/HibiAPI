@@ -4,7 +4,6 @@ import pickle
 from datetime import datetime, timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
-from wsgiref.handlers import format_date_time
 
 from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
@@ -107,14 +106,14 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
             response_headers.get().setdefault("X-Cache-Hit", key)
             result, cache_date = await cache.get(key)
         else:
-            result, cache_date = await vf.execute(model), datetime.now().timestamp()
+            result, cache_date = await vf.execute(model), datetime.now()
             await cache.set(key, (result, cache_date))
 
-        response_headers.get().update(
-            {
-                "Cache-Control": "public",
-                "Expires": format_date_time(cache_date + cache.ttl),
-            }
+        cache_remain: float = (
+            cache_date + timedelta(seconds=cache.ttl) - datetime.now()
+        ).total_seconds()
+        response_headers.get().setdefault(
+            "Cache-Control", "public, max-age=%d" % cache_remain
         )
 
         return result
