@@ -5,9 +5,7 @@ on:
 
   push:
 
-  pull_request:
-    branches:
-      - master
+  pull_request_target:
 
 jobs:
   count:
@@ -34,7 +32,6 @@ jobs:
           echo "::set-output name=content::$content"
 
       - uses: peter-evans/commit-comment@v1
-        continue-on-error: true
         with:
           body: ${{ steps.cloc.outputs.content }}
 

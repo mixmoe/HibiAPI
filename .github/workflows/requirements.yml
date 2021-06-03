@@ -9,6 +9,8 @@ on:
       - pyproject.toml
       - requirements.txt
 
+  pull_request_target:
+
 jobs:
   generate:
     name: Generate Requirements

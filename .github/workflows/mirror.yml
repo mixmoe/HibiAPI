@@ -1,7 +1,8 @@
 name: Gitee Mirror
 
 on:
-  - push
+  push:
+    branches: [main, dev]
 
 jobs:
   git-mirror:

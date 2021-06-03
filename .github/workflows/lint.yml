@@ -9,9 +9,8 @@ on:
       - "**.py"
       - "**.pyi"
       - ".github/workflows/lint.yml"
-  pull_request:
-    branches:
-      - master
+
+  pull_request_target:
 
 jobs:
   lint:
