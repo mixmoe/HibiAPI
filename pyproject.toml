@@ -23,7 +23,7 @@ aiocache = {extras = ["redis"], version = "^0.11.1"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.5b0"
-mypy = "^0.812"
+mypy = "^0.901"
 flake8 = "^3.9.2"
 pytest = "^6.2.4"
 requests = "^2.25.1"
