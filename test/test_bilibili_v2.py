@@ -74,7 +74,9 @@ def test_search_suggest(client: TestClient):
 def test_search_hot(client: TestClient):
     from src.api.bilibili import SearchType
 
-    response = client.get("search", params={"limit": 10, "type": SearchType.hot.value})
+    response = client.get(
+        "search", params={"limit": "10", "type": SearchType.hot.value}
+    )
     assert response.status_code == 200
     assert response.json()["code"] == 0
 
