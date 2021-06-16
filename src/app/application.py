@@ -24,6 +24,9 @@ Project: [mixmoe/HibiAPI](https://github.com/mixmoe/HibiAPI)
 ![](https://img.shields.io/github/stars/mixmoe/HibiAPI?color=brightgreen&logo=github&style=for-the-badge)
 """
 
+if slogan := Config["content"]["slogan"].as_str().strip():
+    DESCRIPTION += "\n" + slogan
+
 
 if Config["log"]["sentry"]["enabled"].as_bool():
     sentry_sdk.init(
@@ -53,6 +56,12 @@ app.mount(
 @app.get("/", include_in_schema=False)
 async def redirect():
     return Response(status_code=302, headers={"Location": "/docs"})
+
+
+@app.get("/robots.txt", include_in_schema=False)
+async def robots():
+    content = Config["content"]["robots"].as_str().strip()
+    return Response(content, status_code=200)
 
 
 @app.on_event("startup")

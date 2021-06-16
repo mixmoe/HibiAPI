@@ -49,3 +49,9 @@ log:
     sample: 1
     dsn: ""
     pii: false
+
+content:
+  slogan: "" # 在文档附加的标语, 可以用于自定义内容
+  robots: | # 提供的robots.txt内容, 用于提供搜索引擎抓取
+    User-agent: *
+    Disallow: /api/
