@@ -104,7 +104,7 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
                 f"restoring from <e>{key=}</e> in cache data."
             )
             response_headers.get().setdefault("X-Cache-Hit", key)
-            result, cache_date = await cache.get(key)
+            result, cache_date = await cache.get(key)  # type:ignore
         else:
             result, cache_date = await vf.execute(model), datetime.now()
             await cache.set(key, (result, cache_date))
