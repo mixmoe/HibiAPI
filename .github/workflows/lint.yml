@@ -52,6 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     name: CodeQL Analyze
 
+    if: "!github.base_ref"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -70,7 +72,7 @@ jobs:
         env:
           POETRY_VIRTUALENVS_CREATE: "false"
         run: |
-          poetry install
+          poetry install -vvv
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
