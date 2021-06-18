@@ -49,6 +49,7 @@
         "fgcolor",
         "fnmatch",
         "getrgb",
+        "hibiapi",
         "httpx",
         "illusts",
         "iscoroutinefunction",
