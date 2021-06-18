@@ -1,8 +1,8 @@
 from typing import Callable, Coroutine
 
 from fastapi import Depends, Request
-from src.api.tieba import Config, EndpointsType, NetRequest, TiebaEndpoint
-from src.utils.routing import SlashRouter, exclude_params
+from hibiapi.api.tieba import Config, EndpointsType, NetRequest, TiebaEndpoint
+from hibiapi.utils.routing import SlashRouter, exclude_params
 
 __mount__, __config__ = "tieba", Config
 router = SlashRouter(tags=["Tieba"])

@@ -2,7 +2,7 @@ from http.cookies import SimpleCookie
 from ipaddress import IPv4Address
 from typing import Dict
 
-from src.utils.config import APIConfig
+from hibiapi.utils.config import APIConfig
 
 _Config = APIConfig("netease")
 

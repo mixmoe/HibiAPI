@@ -5,10 +5,10 @@ from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
-from src.utils.config import Config
-from src.utils.exceptions import UncaughtException
-from src.utils.log import logger
-from src.utils.routing import request_headers, response_headers
+from hibiapi.utils.config import Config
+from hibiapi.utils.exceptions import UncaughtException
+from hibiapi.utils.log import logger
+from hibiapi.utils.routing import request_headers, response_headers
 from starlette.datastructures import MutableHeaders
 
 from .application import app

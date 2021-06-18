@@ -6,7 +6,7 @@ from typing import List
 import pytest
 from fastapi.testclient import TestClient
 from requests.models import Response
-from src.app import app as APIAppRoot
+from hibiapi.app import app as APIAppRoot
 
 
 @pytest.fixture(scope="package")
@@ -29,7 +29,7 @@ def test_qrcode_generate(client: TestClient):
 
 
 def test_qrcode_all(client: TestClient):
-    from src.api.qrcode import QRCodeLevel, ReturnEncode
+    from hibiapi.api.qrcode import QRCodeLevel, ReturnEncode
 
     encodes = [i.value for i in ReturnEncode.__members__.values()]
     levels = [i.value for i in QRCodeLevel.__members__.values()]

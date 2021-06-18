@@ -6,9 +6,9 @@ from typing import Any, Dict, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
-from src.utils.cache import disable_cache
-from src.utils.net import catch_network_error
-from src.utils.routing import BaseEndpoint
+from hibiapi.utils.cache import disable_cache
+from hibiapi.utils.net import catch_network_error
+from hibiapi.utils.routing import BaseEndpoint
 
 from .constants import NeteaseConstants
 

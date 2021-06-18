@@ -4,9 +4,9 @@ from typing import Optional
 import click
 import uvicorn  # type:ignore
 
-from src.app import app as AppRoot  # noqa:F401
-from src.utils.config import DEBUG, VERSION, Config
-from src.utils.log import LOG_LEVEL, logger
+from hibiapi.app import app as AppRoot  # noqa:F401
+from hibiapi.utils.config import DEBUG, VERSION, Config
+from hibiapi.utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
   _    _ _ _     _          _____ _____  

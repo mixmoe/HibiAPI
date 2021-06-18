@@ -1,7 +1,7 @@
-from src.utils.config import APIConfig
-from src.utils.exceptions import ExceptionReturn
-from src.utils.log import logger
-from src.utils.routing import SlashRouter
+from hibiapi.utils.config import APIConfig
+from hibiapi.utils.exceptions import ExceptionReturn
+from hibiapi.utils.log import logger
+from hibiapi.utils.routing import SlashRouter
 
 from . import bilibili, netease, pixiv, qrcode, sauce, tieba
 

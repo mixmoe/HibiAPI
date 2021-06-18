@@ -2,7 +2,7 @@ import asyncio
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from fastapi import Depends, Request
-from src.api.pixiv import (
+from hibiapi.api.pixiv import (
     EndpointsType,
     IllustType,
     PixivAPI,
@@ -14,8 +14,8 @@ from src.api.pixiv import (
     SearchModeType,
     SearchSortType,
 )
-from src.utils.log import logger
-from src.utils.routing import SlashRouter, exclude_params
+from hibiapi.utils.log import logger
+from hibiapi.utils.routing import SlashRouter, exclude_params
 
 __mount__, __config__ = "pixiv", PixivConstants.CONFIG
 router = SlashRouter(tags=["Pixiv"])

@@ -3,10 +3,10 @@ from io import BytesIO
 from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError
-from src.utils.cache import disable_cache
-from src.utils.exceptions import ClientSideException
-from src.utils.net import catch_network_error
-from src.utils.routing import BaseEndpoint, BaseHostUrl
+from hibiapi.utils.cache import disable_cache
+from hibiapi.utils.exceptions import ClientSideException
+from hibiapi.utils.net import catch_network_error
+from hibiapi.utils.routing import BaseEndpoint, BaseHostUrl
 
 from .constants import SauceConstants
 

@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from src.app import app as APIAppRoot
+from hibiapi.app import app as APIAppRoot
 
 
 @pytest.fixture(scope="package")
@@ -62,7 +62,7 @@ def test_search(client: TestClient):
 
 
 def test_search_suggest(client: TestClient):
-    from src.api.bilibili import SearchType
+    from hibiapi.api.bilibili import SearchType
 
     response = client.get(
         "search", params={"keyword": "paperclip", "type": SearchType.suggest.value}
@@ -72,7 +72,7 @@ def test_search_suggest(client: TestClient):
 
 
 def test_search_hot(client: TestClient):
-    from src.api.bilibili import SearchType
+    from hibiapi.api.bilibili import SearchType
 
     response = client.get(
         "search", params={"limit": "10", "type": SearchType.hot.value}
@@ -82,7 +82,7 @@ def test_search_hot(client: TestClient):
 
 
 def test_rank(client: TestClient):
-    from src.api.bilibili import RankContentType
+    from hibiapi.api.bilibili import RankContentType
 
     for content in RankContentType.__members__.values():
         response = client.get("rank", params={"content": content.value})
@@ -91,7 +91,7 @@ def test_rank(client: TestClient):
 
 
 def test_rank_bangumi(client: TestClient):
-    from src.api.bilibili import RankBangumiType
+    from hibiapi.api.bilibili import RankBangumiType
 
     response = client.get("rank", params={"content": RankBangumiType.CN.value})
     assert response.status_code == 200
@@ -111,7 +111,7 @@ def test_recommend(client: TestClient):
 
 
 def test_timeline(client: TestClient):
-    from src.api.bilibili import TimelineType
+    from hibiapi.api.bilibili import TimelineType
 
     response = client.get("timeline", params={"type": TimelineType.CN.value})
     assert response.status_code == 200

@@ -1,4 +1,4 @@
-from src.utils.net import BaseNetClient
+from hibiapi.utils.net import BaseNetClient
 
 from .constants import SauceConstants
 

@@ -3,10 +3,10 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from src.utils.cache import cache_config, disable_cache
-from src.utils.config import DATA_PATH
-from src.utils.net import catch_network_error
-from src.utils.routing import BaseEndpoint
+from hibiapi.utils.cache import cache_config, disable_cache
+from hibiapi.utils.config import DATA_PATH
+from hibiapi.utils.net import catch_network_error
+from hibiapi.utils.routing import BaseEndpoint
 
 from .constants import PixivConstants
 from .net import NetRequest, UserInfo

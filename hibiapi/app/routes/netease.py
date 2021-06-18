@@ -1,7 +1,7 @@
 from typing import Callable, Coroutine
 
 from fastapi import Depends, Request
-from src.api.netease import (
+from hibiapi.api.netease import (
     BitRateType,
     EndpointsType,
     NeteaseConstants,
@@ -10,7 +10,7 @@ from src.api.netease import (
     RecordPeriodType,
     SearchType,
 )
-from src.utils.routing import SlashRouter, exclude_params
+from hibiapi.utils.routing import SlashRouter, exclude_params
 
 __mount__, __config__ = "netease", NeteaseConstants.CONFIG
 router = SlashRouter(tags=["Netease"])

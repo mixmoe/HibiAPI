@@ -1,7 +1,7 @@
 from http.cookies import SimpleCookie
 from typing import Any, Dict
 
-from src.utils.config import APIConfig
+from hibiapi.utils.config import APIConfig
 
 _CONFIG = APIConfig("bilibili")
 

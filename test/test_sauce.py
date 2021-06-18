@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from src.app import app as APIAppRoot
+from hibiapi.app import app as APIAppRoot
 from fastapi.testclient import TestClient
 
 REMOTE_SAUCE_URL = "https://i.loli.net/2021/02/08/ZF8GnifzDUAE1lc.jpg"

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import Depends, File, Form
-from src.api.sauce import (
+from hibiapi.api.sauce import (
     DeduplicateType,
     HostUrl,
     NetRequest,
@@ -9,7 +9,7 @@ from src.api.sauce import (
     SauceEndpoint,
     UploadFileIO,
 )
-from src.utils.routing import SlashRouter
+from hibiapi.utils.routing import SlashRouter
 
 __mount__, __config__ = "sauce", SauceConstants.CONFIG
 router = SlashRouter(tags=["SauceNAO"])

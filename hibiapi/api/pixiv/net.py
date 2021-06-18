@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
-from src.utils.net import AsyncHTTPClient, BaseNetClient
+from hibiapi.utils.net import AsyncHTTPClient, BaseNetClient
 
 from .constants import PixivConstants
 

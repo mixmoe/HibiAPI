@@ -1,7 +1,7 @@
 from typing import Callable, Coroutine, Optional, Union
 
 from fastapi import Depends, Request
-from src.api.bilibili import (
+from hibiapi.api.bilibili import (
     BilibiliEndpointV2,
     CommentSortType,
     NetRequest,
@@ -14,7 +14,7 @@ from src.api.bilibili import (
     VideoFormatType,
     VideoQualityType,
 )
-from src.utils.routing import SlashRouter, exclude_params
+from hibiapi.utils.routing import SlashRouter, exclude_params
 
 router = SlashRouter(tags=["Bilibili V2"])
 

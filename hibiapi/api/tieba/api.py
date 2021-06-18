@@ -4,10 +4,10 @@ from random import randint
 from typing import Any, Dict, Optional
 
 from httpx import URL
-from src.utils.cache import disable_cache
-from src.utils.config import APIConfig
-from src.utils.net import catch_network_error
-from src.utils.routing import BaseEndpoint
+from hibiapi.utils.cache import disable_cache
+from hibiapi.utils.config import APIConfig
+from hibiapi.utils.net import catch_network_error
+from hibiapi.utils.routing import BaseEndpoint
 
 Config = APIConfig("tieba")
 

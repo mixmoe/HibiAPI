@@ -1,7 +1,7 @@
 from enum import Enum
 
-from src.utils.net import AsyncHTTPClient
-from src.utils.routing import BaseEndpoint
+from hibiapi.utils.net import AsyncHTTPClient
+from hibiapi.utils.routing import BaseEndpoint
 
 from .base import (
     BaseBilibiliEndpoint,

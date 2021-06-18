@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 
 import pytest
-from src.app import app as APIAppRoot
+from hibiapi.app import app as APIAppRoot
 from fastapi.testclient import TestClient
 
 
