@@ -4,9 +4,8 @@ from typing import Optional
 import click
 import uvicorn  # type:ignore
 
-from hibiapi.app import app as AppRoot  # noqa:F401
-from hibiapi.utils.config import DEBUG, VERSION, Config
-from hibiapi.utils.log import LOG_LEVEL, logger
+from .utils.config import DEBUG, VERSION, Config
+from .utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
   _    _ _ _     _          _____ _____  
@@ -25,7 +24,7 @@ LOG_CONFIG = {
     "disable_existing_loggers": False,
     "handlers": {
         "default": {
-            "class": "src.utils.log.LoguruHandler",
+            "class": "hibiapi.utils.log.LoguruHandler",
         },
     },
     "loggers": {
@@ -73,14 +72,16 @@ except OSError:
     is_flag=True,
 )
 def main(host: str, port: int, workers: int, reload: bool):
-    logger.warning("\n".join(i.center(width) for i in COPYRIGHT.splitlines()))
-    logger.info("HibiAPI version: <g><b>%s</b></g>" % VERSION)
+    logger.warning(
+        "\n".join(i.center(width) for i in COPYRIGHT.splitlines()),
+    )
+    logger.info(f"HibiAPI version: <g><b>{VERSION}</b></g>")
     logger.info(
         "Server is running under <b>%s</b> mode!"
         % ("<r>debug</r>" if DEBUG else "<g>production</g>")
     )
     uvicorn.run(
-        "main:AppRoot",
+        "hibiapi.app:app",
         host=host,
         port=port,
         debug=DEBUG,
@@ -92,7 +93,3 @@ def main(host: str, port: int, workers: int, reload: bool):
             Optional[str]  # type:ignore
         ),
     )
-
-
-if __name__ == "__main__":
-    main()

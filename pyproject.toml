@@ -5,6 +5,9 @@ description = "An alternative implement of Imjad API"
 authors = ["mixmoe"]
 license = "Apache-2.0"
 
+[tool.poetry.scripts]
+hibiapi = 'hibiapi.__main__:main'
+
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.63.0"
