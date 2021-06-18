@@ -45,11 +45,7 @@ def test_season_comments(client: TestClient):
     if response.status_code == 200:
         assert response.json()["code"] == 0
     elif response.status_code == 400:
-        import warnings
-
-        warnings.warn(
-            "Your region does not support getting comments from bangumi at the moment"
-        )
+        pytest.skip("Your region does not support getting comments from bangumi")
     else:
         raise AssertionError(f"{response.status_code=} is not expected")
 
