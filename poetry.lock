@@ -615,7 +615,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "types-click"
-version = "7.1.1"
+version = "7.1.2"
 description = "Typing stubs for click"
 category = "dev"
 optional = false
@@ -716,7 +716,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "40f190ca7c92e84c98618640fd34cb91b1b0427c876b0b008b22aa59fd4883b0"
+content-hash = "ec5fe9f3a010d69bfbe6d8da2e3891e353dcac9bad817bb9b1e8935ebe51e66c"
 
 [metadata.files]
 aiocache = [
@@ -1204,7 +1204,8 @@ toml = [
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 types-click = [
-    {file = "types_click-7.1.1-py2.py3-none-any.whl", hash = "sha256:b1db0fb31a6d4a31c4282c231827cbdab628b0d504b016937822d943cd5e40a5"},
+    {file = "types-click-7.1.2.tar.gz", hash = "sha256:040897284e4f9466825c3865f708a985a8e7ba4d8e22cb9198ffb7b522160850"},
+    {file = "types_click-7.1.2-py2.py3-none-any.whl", hash = "sha256:4722746f1ec9fd3fc8b1d7fb8c840604dc22f9e32bcc7a31a36d6d85cc2bce24"},
 ]
 types-requests = [
     {file = "types-requests-0.1.12.tar.gz", hash = "sha256:08323ce2be816c4c107ef605e66369cb26dfda99d278dd502ee32bbf37f9a285"},

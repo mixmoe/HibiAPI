@@ -28,7 +28,7 @@ flake8 = "^3.9.2"
 pytest = "^6.2.4"
 requests = "^2.25.1"
 coverage = "^5.5"
-types-click = "^7.1.1"
+types-click = "^7.1.2"
 types-requests = "^0.1.12"
 
 [build-system]
