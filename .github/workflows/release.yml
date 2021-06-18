@@ -1,0 +1,51 @@
+name: Release to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - uses: Gr1N/setup-poetry@v4
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+
+      - name: Install Dependencies
+        env:
+          POETRY_VIRTUALENVS_CREATE: "false"
+        run: |
+          poetry install -vvv
+
+      - name: Wait for test succeed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-test
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Test
+          timeoutSeconds: 1200
+
+      - name: Interrupt process
+        if: steps.wait-for-test.outputs.conclusion != 'success'
+        run: |
+          echo ::error::failed to pass test workflow, status: ${{ steps.wait-for-test.outputs.conclusion }}
+          exit 1
+
+      - name: Release to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry publish --build
