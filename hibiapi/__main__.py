@@ -4,7 +4,8 @@ from typing import Optional
 import click
 import uvicorn  # type:ignore
 
-from .utils.config import DEBUG, VERSION, Config
+from . import __version__
+from .utils.config import DEBUG, Config
 from .utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
@@ -75,7 +76,7 @@ def main(host: str, port: int, workers: int, reload: bool):
     logger.warning(
         "\n".join(i.center(width) for i in COPYRIGHT.splitlines()),
     )
-    logger.info(f"HibiAPI version: <g><b>{VERSION}</b></g>")
+    logger.info(f"HibiAPI version: <g><b>{__version__}</b></g>")
     logger.info(
         "Server is running under <b>%s</b> mode!"
         % ("<r>debug</r>" if DEBUG else "<g>production</g>")
@@ -93,3 +94,7 @@ def main(host: str, port: int, workers: int, reload: bool):
             Optional[str]  # type:ignore
         ),
     )
+
+
+if __name__ == "__main__":
+    main()
