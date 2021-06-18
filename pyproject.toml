@@ -9,7 +9,7 @@ license = "Apache-2.0"
 python = "^3.8"
 fastapi = "^0.63.0"
 httpx = {extras = ["http2"], version = "~0.17.1"}
-uvicorn = {extras = ["standard"], version = "^0.14.0"}
+uvicorn = "^0.14.0"
 confuse = "^1.4.0"
 loguru = "^0.5.3"
 python-dotenv = "^0.17.0"
