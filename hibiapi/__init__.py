@@ -9,3 +9,7 @@ r"""
 An alternative implement of Imjad API
 Project: https://github.com/mixmoe/HibiAPI
 """  # noqa:W291,W293
+
+from importlib.metadata import version
+
+__version__ = version("hibiapi")

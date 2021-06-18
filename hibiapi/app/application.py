@@ -6,6 +6,8 @@ import sentry_sdk
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from sentry_sdk.integrations.logging import LoggingIntegration
+
+from hibiapi import __version__
 from hibiapi.utils.config import Config
 from hibiapi.utils.log import logger
 from hibiapi.utils.temp import TempFile
@@ -40,7 +42,7 @@ if Config["log"]["sentry"]["enabled"].as_bool():
 app = FastAPI(
     debug=Config["debug"].as_bool(),
     title="HibiAPI",
-    version=Config["version"].as_str(),
+    version=__version__,
     description=DESCRIPTION,
     docs_url="/docs/test",
     redoc_url="/docs",
