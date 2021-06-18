@@ -5,9 +5,11 @@ from typing import Any, Dict, Generic, Optional, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
+from hibiapi import __file__ as root_file
 from pydantic.generics import GenericModel
 
 CONFIG_DIR = Path(".") / "configs"
+DEFAULT_DIR = Path(root_file).parent / "configs"
 ENV_DIR = CONFIG_DIR / ".env"
 
 _T = TypeVar("_T")
@@ -15,15 +17,14 @@ _T = TypeVar("_T")
 
 def _generate_default() -> int:
     generated = 0
-    for file in os.listdir(CONFIG_DIR):
-        path = CONFIG_DIR / file
-        if not file.endswith(".default.yml"):
+    for file in os.listdir(DEFAULT_DIR):
+        default_path = DEFAULT_DIR / file
+        config_path = CONFIG_DIR / file
+        if config_path.is_file():
             continue
-        new_path = CONFIG_DIR / file.replace(".default", "")
-        if new_path.is_file():
-            continue
-        generated += new_path.write_text(
-            path.read_text(encoding="utf-8"), encoding="utf-8"
+        generated += config_path.write_text(
+            default_path.read_text(encoding="utf-8"),
+            encoding="utf-8",
         )
     return generated
 
@@ -70,16 +71,16 @@ class ConfigSubView(confuse.Subview):
 
 
 class AppConfig(confuse.Configuration):
-    def __init__(self, name: str, path: Path):
-        self._config_path, self._config_name = path, name
-        self._config = self._config_path / (name + ".yml")
-        self._default = self._generate_default_name(self._config)
+    def __init__(self, name: str):
+        self._config_name = name
+        self._config = CONFIG_DIR / (filename := name + ".yml")
+        self._default = DEFAULT_DIR / filename
         super().__init__(name)
         self._add_env_source()
 
     def config_dir(self) -> str:
-        Path(self._config_path).mkdir(exist_ok=True, parents=True)
-        return str(self._config_path)
+        CONFIG_DIR.mkdir(exist_ok=True, parents=True)
+        return str(CONFIG_DIR)
 
     @staticmethod
     def _generate_default_name(path: Path) -> Path:
@@ -122,8 +123,8 @@ class AppConfig(confuse.Configuration):
 
 
 class GeneralConfig(AppConfig):
-    def __init__(self, name: str, path: Optional[Path] = None):
-        super().__init__(name, path or CONFIG_DIR)
+    def __init__(self, name: str):
+        super().__init__(name)
 
 
 class APIConfig(GeneralConfig):
