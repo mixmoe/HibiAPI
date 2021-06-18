@@ -1,11 +1,12 @@
 import pytest
-from hibiapi.app import app as APIAppRoot
 from fastapi.testclient import TestClient
 
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/api/netease/") as client:
+    from hibiapi.app import app
+
+    with TestClient(app, base_url="http://testserver/api/netease/") as client:
         yield client
 
 

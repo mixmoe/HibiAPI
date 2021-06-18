@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-from hibiapi.app import app as APIAppRoot
 from fastapi.testclient import TestClient
 
 REMOTE_SAUCE_URL = "https://i.loli.net/2021/02/08/ZF8GnifzDUAE1lc.jpg"
@@ -10,7 +9,9 @@ LOCAL_SAUCE_PATH = Path(__file__).parent / "test_sauce.jpg"
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/api/") as client:
+    from hibiapi.app import app
+
+    with TestClient(app, base_url="http://testserver/api/") as client:
         yield client
 
 

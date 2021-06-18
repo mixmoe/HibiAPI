@@ -6,12 +6,13 @@ from typing import List
 import pytest
 from fastapi.testclient import TestClient
 from requests.models import Response
-from hibiapi.app import app as APIAppRoot
 
 
 @pytest.fixture(scope="package")
 def client():
-    with TestClient(APIAppRoot, base_url="http://testserver/api/") as client:
+    from hibiapi.app import app
+
+    with TestClient(app, base_url="http://testserver/api/") as client:
         yield client
 
 
