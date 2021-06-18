@@ -89,7 +89,8 @@ jobs:
 
       - name: Testing with pytest
         run: |
-          curl -L ${{ secrets.DOTENV_LINK }} > configs/.env
+          mkdir ./configs
+          curl -L ${{ secrets.DOTENV_LINK }} > ./configs/.env
           coverage run -m pytest test/
           coverage xml
 
