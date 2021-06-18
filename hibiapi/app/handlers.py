@@ -2,9 +2,10 @@ from fastapi import Request, Response
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError as FastAPIValidationError
 from pydantic.error_wrappers import ValidationError as PydanticValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
 from hibiapi.utils import exceptions
 from hibiapi.utils.log import logger
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .application import app
 

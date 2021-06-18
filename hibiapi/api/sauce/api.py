@@ -3,6 +3,7 @@ from io import BytesIO
 from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError
+
 from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.net import catch_network_error

@@ -4,6 +4,7 @@ from random import randint
 from typing import Any, Dict, Optional
 
 from httpx import URL
+
 from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.net import catch_network_error

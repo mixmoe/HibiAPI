@@ -1,6 +1,7 @@
 from typing import Callable, Coroutine
 
 from fastapi import Depends, Request
+
 from hibiapi.api.tieba import Config, EndpointsType, NetRequest, TiebaEndpoint
 from hibiapi.utils.routing import SlashRouter, exclude_params
 

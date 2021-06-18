@@ -7,15 +7,15 @@ from typing import List, Literal, Optional
 from PIL import Image  # type:ignore
 from pydantic import AnyHttpUrl, BaseModel, Field, conint, validate_arguments
 from pydantic.color import Color
+from qrcode import QRCode, constants  # type:ignore
+from qrcode.image.pil import PilImage  # type:ignore
+
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.decorators import ToAsync
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.net import BaseNetClient
 from hibiapi.utils.routing import BaseHostUrl
 from hibiapi.utils.temp import TempFile
-
-from qrcode import QRCode, constants  # type:ignore
-from qrcode.image.pil import PilImage  # type:ignore
 
 Config = APIConfig("qrcode")
 

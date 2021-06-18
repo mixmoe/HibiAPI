@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import Request, Response
 from pydantic.color import Color
+
 from hibiapi.api.qrcode import Config, HostUrl, QRCodeLevel, QRInfo, ReturnEncode
 from hibiapi.utils.routing import SlashRouter
 from hibiapi.utils.temp import TempFile

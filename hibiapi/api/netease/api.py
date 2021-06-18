@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
+
 from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint
