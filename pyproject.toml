@@ -33,7 +33,7 @@ pytest = "^6.2.4"
 requests = "^2.25.1"
 coverage = "^5.5"
 types-click = "^7.1.1"
-types-requests = "^0.1.12"
+types-requests = "^0.1.13"
 isort = "^5.8.0"
 
 [build-system]
