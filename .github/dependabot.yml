@@ -5,9 +5,10 @@
 
 version: 2
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
+  - package-ecosystem: pip # See documentation for possible values
+    versioning-strategy: lockfile-only
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
     commit-message:
-      prefix: ":arrow_up:"
+      prefix: ":arrow_up: "
