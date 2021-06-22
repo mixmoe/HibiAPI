@@ -193,10 +193,10 @@ class NeteaseEndpoint(BaseEndpoint):
 
     async def playlist(self, *, id: int):
         return await self.request(
-            "weapi/v3/playlist/detail",
+            "weapi/v6/playlist/detail",
             params={
                 "id": id,
-                "n": 1000,
+                "n": 10000,
             },
         )
 
