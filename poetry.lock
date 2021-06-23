@@ -629,7 +629,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-requests"
-version = "0.1.12"
+version = "0.1.13"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
@@ -1165,8 +1165,8 @@ types-click = [
     {file = "types_click-7.1.2-py2.py3-none-any.whl", hash = "sha256:4722746f1ec9fd3fc8b1d7fb8c840604dc22f9e32bcc7a31a36d6d85cc2bce24"},
 ]
 types-requests = [
-    {file = "types-requests-0.1.12.tar.gz", hash = "sha256:08323ce2be816c4c107ef605e66369cb26dfda99d278dd502ee32bbf37f9a285"},
-    {file = "types_requests-0.1.12-py2.py3-none-any.whl", hash = "sha256:59b218da05de6eb58e0ab9d096af5e258359365cdf52cf3a1206a8ea87244301"},
+    {file = "types-requests-0.1.13.tar.gz", hash = "sha256:917d6d0a8d8fe2d084ab6dc28d379ec4e6fa34738e905908680bbfa0ce2d8485"},
+    {file = "types_requests-0.1.13-py3-none-any.whl", hash = "sha256:f7e611082208358045fdeac6edb5d20422ce8cfc935d57dbbef6a6b3a59bfae2"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},
