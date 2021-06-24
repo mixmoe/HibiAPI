@@ -1,18 +1,12 @@
-name: Release to PyPI
+name: Release
 
 on:
-  workflow_run:
-    workflows:
-      - "Test"
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
   release:
     name: Create release
     runs-on: ubuntu-latest
-
-    if: startsWith( github.ref , 'refs/tags/' )
 
     steps:
       - uses: actions/checkout@v2
