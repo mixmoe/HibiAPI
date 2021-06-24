@@ -8,9 +8,10 @@ COPY . /hibi
 
 WORKDIR /hibi
 
-RUN mkdir ./configs && \
-    touch configs/.env && \
+RUN touch .env && \
     pip install . --prefer-binary
 
 CMD cd /hibi && \
-    python -m hibiapi --port $PORT
+    python -m hibiapi \
+        --port $PORT \
+        --workers $(nproc)
