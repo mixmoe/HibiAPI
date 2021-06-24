@@ -8,4 +8,4 @@ net:
     channel=netease; 
     __remember_me=true
   user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改
-  source: 118.88.88.88 # 伪造来源IP以绕过地区限制 #68
+  source: 118.88.64.0/18 # 伪造来源IP以绕过地区限制 #68
