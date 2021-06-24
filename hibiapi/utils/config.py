@@ -11,12 +11,12 @@ from hibiapi import __file__ as root_file
 
 CONFIG_DIR = Path(".") / "configs"
 DEFAULT_DIR = Path(root_file).parent / "configs"
-ENV_DIR = CONFIG_DIR / ".env"
 
 _T = TypeVar("_T")
 
 
 def _generate_default() -> int:
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     generated = 0
     for file in os.listdir(DEFAULT_DIR):
         default_path = DEFAULT_DIR / file
@@ -30,8 +30,8 @@ def _generate_default() -> int:
     return generated
 
 
-if ENV_DIR.is_file():
-    assert dotenv.load_dotenv(dotenv_path=ENV_DIR, verbose=True), "Failed to load .env"
+if dotenv.find_dotenv():
+    assert dotenv.load_dotenv(), "Failed to load .env"
 else:
     assert _generate_default() <= 0, "Please complete config file!"
 
@@ -80,13 +80,7 @@ class AppConfig(confuse.Configuration):
         self._add_env_source()
 
     def config_dir(self) -> str:
-        CONFIG_DIR.mkdir(exist_ok=True, parents=True)
         return str(CONFIG_DIR)
-
-    @staticmethod
-    def _generate_default_name(path: Path) -> Path:
-        filename, ext = path.name.rsplit(".", 1)
-        return path.with_name(filename + ".default." + ext)
 
     def user_config_path(self) -> str:
         return str(self._config)
