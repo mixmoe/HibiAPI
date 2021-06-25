@@ -2,7 +2,7 @@ FROM python:3.8-buster
 
 EXPOSE 8080
 
-ENV PORT 8080
+ENV PORT=8080 PROCS=1
 
 COPY . /hibi
 
@@ -13,5 +13,4 @@ RUN touch .env && \
 
 CMD cd /hibi && \
     python -m hibiapi \
-        --port $PORT \
-        --workers $(nproc)
+        --port $PORT --workers $PROCS
