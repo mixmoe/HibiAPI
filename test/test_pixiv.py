@@ -2,7 +2,6 @@ from datetime import date, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
-import pprint
 
 
 @pytest.fixture(scope="package")
@@ -97,7 +96,6 @@ def test_novel_series(client: TestClient):
 def test_novel_detail(client: TestClient):
     response = client.get("novel_detail", params={"id": 14617902})
     assert response.status_code == 200
-    body = response.json()
     assert response.json().get("novel")
 
 
