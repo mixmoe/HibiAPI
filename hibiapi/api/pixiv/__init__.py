@@ -8,6 +8,7 @@ from .api import (
     RankingType,
     SearchDurationType,
     SearchModeType,
+    SearchNovelModeType,
     SearchSortType,
 )
 from .constants import PixivConstants

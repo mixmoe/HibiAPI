@@ -79,3 +79,33 @@ def test_ugoira_metadata(client: TestClient):
     response = client.get("ugoira_metadata", params={"id": 85162550})
     assert response.status_code == 200
     assert response.json().get("ugoira_metadata")
+
+
+def test_member_novel(client: TestClient):
+    response = client.get("member_novel", params={"id": 14883165})
+    assert response.status_code == 200
+    assert response.json().get("novels")
+
+
+def test_novel_series(client: TestClient):
+    response = client.get("novel_series", params={"id": 1496457})
+    assert response.status_code == 200
+    assert response.json().get("novels")
+
+
+def test_novel_detail(client: TestClient):
+    response = client.get("novel_detail", params={"id": 14617902})
+    assert response.status_code == 200
+    assert response.json().get("novel")
+
+
+def test_novel_text(client: TestClient):
+    response = client.get("novel_text", params={"id": 14617902})
+    assert response.status_code == 200
+    assert response.json().get("novel_text")
+
+
+def test_search_novel(client: TestClient):
+    response = client.get("search_novel", params={"word": "碧蓝航线"})
+    assert response.status_code == 200
+    assert response.json().get("novels")

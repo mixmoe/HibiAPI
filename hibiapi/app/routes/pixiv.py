@@ -13,6 +13,7 @@ from hibiapi.api.pixiv import (
     RankingType,
     SearchDurationType,
     SearchModeType,
+    SearchNovelModeType,
     SearchSortType,
 )
 from hibiapi.utils.log import logger
@@ -350,3 +351,139 @@ async def ugoira_metadata(id: int, endpoint: PixivEndpoints = Depends(requestCli
 
     """
     return await endpoint.ugoira_metadata(id=id)
+
+
+@router.get(EndpointsType.member_novel)
+async def member_novel(
+    id: int,
+    page: int = 1,
+    size: int = 20,
+    endpoint: PixivEndpoints = Depends(requestClient),
+):
+    """
+    ## Name: `member_novel`
+
+    > 通过用户ID获取用户小说列表
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 用户ID
+
+    ---
+
+    ### Optional:
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `20`
+        - Description: 每页大小
+    """
+
+    return await endpoint.member_novels(id=id, page=page, size=size)
+
+
+@router.get(EndpointsType.novel_series)
+async def novel_series(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+    """
+    ## Name: `novel_series`
+
+    > 获取小说系列的信息
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 小说系列ID
+    """
+    return await endpoint.novel_series(id=id)
+
+
+@router.get(EndpointsType.novel_detail)
+async def novel_detail(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+    """
+    ## Name: `novel_detail`
+
+    > 获取小说信息
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 小说ID
+    """
+    return await endpoint.novel_detail(id=id)
+
+
+@router.get(EndpointsType.novel_text)
+async def novel_text(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+    """
+    ## Name: `novel_text`
+
+    > 获取小说正文
+
+    ---
+
+    ### Required:
+
+    - ***int*** **`id`**
+        - Description: 小说ID
+    """
+    return await endpoint.novel_text(id=id)
+
+
+@router.get(EndpointsType.search_novel)
+async def search_novel(
+    word: str,
+    mode: SearchNovelModeType = SearchNovelModeType.partial_match_for_tags,
+    sort: SearchSortType = SearchSortType.date_desc,
+    merge_plain_keyword_results: bool = True,
+    include_translated_tag_results: bool = True,
+    duration: Optional[SearchDurationType] = None,
+    page: int = 1,
+    size: int = 50,
+    endpoint: PixivEndpoints = Depends(requestClient),
+):
+    """
+    ## Name: `search_novel`
+
+    > 搜索小说
+
+    ---
+
+    ### Required:
+
+    - ***str*** **`word`**
+        - Description: 关键词
+
+    ---
+
+    ### Optional:
+    - ***SearchNovelModeType*** `mode` = `SearchNovelModeType.partial_match_for_tags`
+        - Description: 搜索匹配方法
+    - ***SearchSortType*** `sort` = `SearchSortType.date_desc`
+        - Description: 结果排序方式
+    - ***bool*** `merge_plain_keyword_results` = `True`
+        - Description: 是否包含合并提供的关键字的搜索结果
+    - ***bool*** `include_translated_tag_results` = `True`
+        - Description: 是否包含其他语言标签的搜索结果
+    - ***Optional[SearchDurationType]*** `duration` = `None`
+        - Description: 小说发表的时间段
+    - ***int*** `page` = `1`
+        - Description: 页数
+    - ***int*** `size` = `50`
+        - Description: 每页大小
+    """
+    return await endpoint.search_novel(
+        word=word,
+        mode=mode,
+        sort=sort,
+        merge_plain_keyword_results=merge_plain_keyword_results,
+        include_translated_tag_results=include_translated_tag_results,
+        duration=duration,
+        page=page,
+        size=size,
+    )
