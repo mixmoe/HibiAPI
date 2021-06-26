@@ -26,6 +26,11 @@ class EndpointsType(str, Enum):
     tags = "tags"
     related = "related"
     ugoira_metadata = "ugoira_metadata"
+    member_novel = "member_novel"
+    novel_series = "novel_series"
+    novel_detail = "novel_detail"
+    novel_text = "novel_text"
+    search_novel = "search_novel"
 
 
 class IllustType(str, Enum):
@@ -86,6 +91,24 @@ class SearchModeType(str, Enum):
     partial_match_for_tags = "partial_match_for_tags"
     exact_match_for_tags = "exact_match_for_tags"
     title_and_caption = "title_and_caption"
+
+
+class SearchNovelModeType(str, Enum):
+    """
+    搜索匹配类型
+
+    | **数值** | **含义** |
+    |---|---|
+    | partial_match_for_tags  | 标签部分一致 |
+    | exact_match_for_tags  | 标签完全一致 |
+    | text  | 正文 |
+    | keyword  | 关键词 |
+    """
+
+    partial_match_for_tags = "partial_match_for_tags"
+    exact_match_for_tags = "exact_match_for_tags"
+    text = "text"
+    keyword = "keywords"
 
 
 class SearchSortType(str, Enum):
@@ -290,5 +313,48 @@ class PixivEndpoints(BaseEndpoint):
             "v1/ugoira/metadata",
             params={
                 "illust_id": id,
+            },
+        )
+
+    async def member_novels(self, id: int, page: int = 1, size: int = 20):
+        return await self.request(
+            "/v1/user/novels",
+            params={
+                "user_id": id,
+                "offset": (page - 1) * size,
+            },
+        )
+
+    async def novel_series(self, id: int):
+        return await self.request("/v2/novel/series", params={"series_id": id})
+
+    async def novel_detail(self, id: int):
+        return await self.request("/v2/novel/detail", params={"novel_id": id})
+
+    async def novel_text(self, id: int):
+        return await self.request("/v1/novel/text", params={"novel_id": id})
+
+    async def search_novel(
+        self,
+        *,
+        word: str,
+        mode: SearchNovelModeType = SearchNovelModeType.partial_match_for_tags,
+        sort: SearchSortType = SearchSortType.date_desc,
+        merge_plain_keyword_results: bool = True,
+        include_translated_tag_results: bool = True,
+        duration: Optional[SearchDurationType] = None,
+        page: int = 1,
+        size: int = 50,
+    ):
+        return await self.request(
+            "/v1/search/novel",
+            params={
+                "word": word,
+                "search_target": mode,
+                "sort": sort,
+                "merge_plain_keyword_results": merge_plain_keyword_results,
+                "include_translated_tag_results": include_translated_tag_results,
+                "duration": duration,
+                "offset": (page - 1) * size,
             },
         )
