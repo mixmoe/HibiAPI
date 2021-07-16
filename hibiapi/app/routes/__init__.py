@@ -1,3 +1,5 @@
+from typing import List, Protocol, cast
+
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.exceptions import ExceptionReturn
 from hibiapi.utils.log import logger
@@ -14,17 +16,24 @@ router = SlashRouter(
     }
 )
 
-modules = [bilibili, netease, pixiv, qrcode, sauce, tieba]
+
+class RouteInterface(Protocol):
+    router: SlashRouter
+    __mount__: str
+    __config__: APIConfig
+
+
+modules = cast(List[RouteInterface], [bilibili, netease, pixiv, qrcode, sauce, tieba])
 
 for module in modules:
-    route: SlashRouter = getattr(module, "router")
-    mount: str = getattr(module, "__mount__")
-    config: APIConfig = getattr(module, "__config__")
-    mount = mount if mount.startswith("/") else ("/" + mount)
-    if not config["enabled"].as_bool():
+    mount = (
+        mountpoint
+        if (mountpoint := module.__mount__).startswith("/")
+        else ("/" + mountpoint)
+    )
+    if not module.__config__["enabled"].as_bool():
         logger.warning(
-            f"API Route <y><b>{mount}</b></y> <e>{route}</e> "
-            "has been <r><b>disabled</b></r> in config."
+            f"API Route <y><b>{mount}</b></y> has been <r><b>disabled</b></r> in config."
         )
         continue
-    router.include_router(route, prefix=mount)
+    router.include_router(module.router, prefix=mount)

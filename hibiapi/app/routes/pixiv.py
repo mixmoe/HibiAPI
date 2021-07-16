@@ -2,7 +2,6 @@ import asyncio
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from fastapi import Depends, Request
-
 from hibiapi.api.pixiv import (
     EndpointsType,
     IllustType,
@@ -18,6 +17,10 @@ from hibiapi.api.pixiv import (
 )
 from hibiapi.utils.log import logger
 from hibiapi.utils.routing import SlashRouter, exclude_params
+
+if not PixivConstants.CONFIG["account"]["token"].get():
+    logger.warning("Pixiv API token is not set, pixiv endpoint will be unavailable.")
+    PixivConstants.CONFIG["enabled"].set(False)
 
 __mount__, __config__ = "pixiv", PixivConstants.CONFIG
 router = SlashRouter(tags=["Pixiv"])

@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import Depends, File, Form
+from loguru import logger
 
 from hibiapi.api.sauce import (
     DeduplicateType,
@@ -11,6 +12,10 @@ from hibiapi.api.sauce import (
     UploadFileIO,
 )
 from hibiapi.utils.routing import SlashRouter
+
+if not SauceConstants.API_KEY.strip():
+    logger.warning("Sauce API key not set, SauceNAO endpoint will be unavailable")
+    SauceConstants.CONFIG["enabled"].set(False)
 
 __mount__, __config__ = "sauce", SauceConstants.CONFIG
 router = SlashRouter(tags=["SauceNAO"])
