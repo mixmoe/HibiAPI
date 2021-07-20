@@ -52,7 +52,7 @@ class LoguruHandler(logging.Handler):
             level = record.levelno  # type:ignore
 
         frame, depth, message = logging.currentframe(), 2, record.getMessage()
-        while frame.f_code.co_filename == logging.__file__:
+        while frame.f_code.co_filename == logging.__file__:  # type:ignore
             frame = frame.f_back  # type:ignore
             depth += 1
 

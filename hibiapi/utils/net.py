@@ -105,16 +105,16 @@ class BaseNetClient:
         )
 
 
-def catch_network_error(function: _AsyncCallable) -> _AsyncCallable:
-    function = TimeIt(function)
+def catch_network_error(function: Callable) -> Callable:
+    timed_func = TimeIt(function)
 
-    @wraps(function)
+    @wraps(timed_func)
     async def wrapper(*args, **kwargs):
         try:
-            return await function(*args, **kwargs)
+            return await timed_func(*args, **kwargs)
         except HTTPStatusError as e:
             raise UpstreamAPIException(detail=e.response.text) from e
         except HTTPError as e:
             raise UpstreamAPIException from e
 
-    return wrapper  # type:ignore
+    return wrapper
