@@ -1,8 +1,6 @@
 from typing import Optional
 
 from fastapi import Depends, File, Form
-from loguru import logger
-
 from hibiapi.api.sauce import (
     DeduplicateType,
     HostUrl,
@@ -12,6 +10,7 @@ from hibiapi.api.sauce import (
     UploadFileIO,
 )
 from hibiapi.utils.routing import SlashRouter
+from loguru import logger
 
 if not SauceConstants.API_KEY.strip():
     logger.warning("Sauce API key not set, SauceNAO endpoint will be unavailable")
@@ -23,7 +22,7 @@ router = SlashRouter(tags=["SauceNAO"])
 SauceAPIRoot = NetRequest()
 
 
-async def requestClient():
+async def request_client():
     async with SauceAPIRoot as client:
         yield SauceEndpoint(client)
 
@@ -36,7 +35,7 @@ async def sauce_url(
     database: Optional[int] = None,
     enabled_mask: Optional[int] = None,
     disabled_mask: Optional[int] = None,
-    endpoint: SauceEndpoint = Depends(requestClient),
+    endpoint: SauceEndpoint = Depends(request_client),
 ):
     """
     ## Name: `sauce_url`
@@ -82,7 +81,7 @@ async def sauce_form(
     database: Optional[int] = Form(None),
     enabled_mask: Optional[int] = Form(None),
     disabled_mask: Optional[int] = Form(None),
-    endpoint: SauceEndpoint = Depends(requestClient),
+    endpoint: SauceEndpoint = Depends(request_client),
 ):
     """
     ## Name: `sauce_form`

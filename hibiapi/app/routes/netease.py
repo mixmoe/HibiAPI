@@ -1,7 +1,6 @@
 from typing import Callable, Coroutine
 
 from fastapi import Depends, Request
-
 from hibiapi.api.netease import (
     BitRateType,
     EndpointsType,
@@ -19,16 +18,16 @@ router = SlashRouter(tags=["Netease"])
 NeteaseAPIRoot = NetRequest()
 
 
-async def requestClient():
+async def request_client():
     async with NeteaseAPIRoot as client:
         yield NeteaseEndpoint(client)
 
 
 @router.get("/", summary="网易云音乐 API 兼容实现")
-async def matchAll(
+async def _match_all(
     request: Request,
     type: EndpointsType = EndpointsType.song,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     func: Callable[..., Coroutine] = getattr(endpoint, type)
     return await func(**exclude_params(func, request.query_params))
@@ -40,7 +39,7 @@ async def search(
     search_type: SearchType = SearchType.SONG,
     limit: int = 20,
     offset: int = 0,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     """
     ## Name: `search`
@@ -76,7 +75,7 @@ async def search(
 
 
 @router.get(EndpointsType.artist)
-async def artist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def artist(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `artist`
 
@@ -94,7 +93,7 @@ async def artist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
 
 
 @router.get(EndpointsType.album)
-async def album(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def album(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `album`
 
@@ -112,7 +111,7 @@ async def album(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
 
 
 @router.get(EndpointsType.detail)
-async def detail(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def detail(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `detail`
 
@@ -133,7 +132,7 @@ async def detail(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
 async def song(
     id: int,
     br: BitRateType = BitRateType.STANDARD,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     """
     ## Name: `song`
@@ -158,7 +157,7 @@ async def song(
 
 
 @router.get(EndpointsType.playlist)
-async def playlist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def playlist(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `playlist`
 
@@ -176,7 +175,7 @@ async def playlist(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
 
 
 @router.get(EndpointsType.lyric)
-async def lyric(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def lyric(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `lyric`
 
@@ -194,7 +193,7 @@ async def lyric(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
 
 
 @router.get(EndpointsType.mv)
-async def mv(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def mv(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `mv`
 
@@ -216,7 +215,7 @@ async def comments(
     id: int,
     offset: int = 0,
     limit: int = 20,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     """
     ## Name: `comments`
@@ -250,7 +249,7 @@ async def comments(
 async def record(
     id: int,
     period: RecordPeriodType = RecordPeriodType.ALL,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     """
     ## Name: `record`
@@ -275,7 +274,7 @@ async def record(
 
 
 @router.get(EndpointsType.djradio)
-async def djradio(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def djradio(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `djradio`
 
@@ -298,7 +297,7 @@ async def dj(
     offset: int = 0,
     limit: int = 20,
     asc: bool = False,
-    endpoint: NeteaseEndpoint = Depends(requestClient),
+    endpoint: NeteaseEndpoint = Depends(request_client),
 ):
     """
     ## Name: `dj`
@@ -334,7 +333,7 @@ async def dj(
 
 
 @router.get(EndpointsType.detail_dj)
-async def detail_dj(id: int, endpoint: NeteaseEndpoint = Depends(requestClient)):
+async def detail_dj(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
     """
     ## Name: `detail_dj`
 

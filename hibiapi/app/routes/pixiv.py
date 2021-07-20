@@ -28,7 +28,7 @@ router = SlashRouter(tags=["Pixiv"])
 PixivAPIRoot = PixivAPI()
 
 
-async def requestClient():
+async def request_client():
     async with PixivAPIRoot.net as client:
         yield PixivEndpoints(client)
 
@@ -51,17 +51,17 @@ async def login():
 
 
 @router.get("/", summary="Pixiv API 兼容实现")
-async def matchAll(
+async def _match_all(
     request: Request,
     type: EndpointsType = EndpointsType.illust,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     func: Callable[..., Coroutine] = getattr(endpoint, type)
     return await func(**exclude_params(func, request.query_params))
 
 
 @router.get(EndpointsType.illust)
-async def illust(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def illust(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `illust`
 
@@ -79,7 +79,7 @@ async def illust(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
 
 
 @router.get(EndpointsType.member)
-async def member(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def member(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `member`
 
@@ -102,7 +102,7 @@ async def member_illust(
     illust_type: IllustType = IllustType.illust,
     page: int = 1,
     size: int = 20,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `member_illust`
@@ -137,7 +137,7 @@ async def favorite(
     id: int,
     tag: Optional[str] = None,
     max_bookmark_id: Optional[int] = None,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `favorite`
@@ -168,7 +168,7 @@ async def following(
     id: int,
     page: int = 1,
     size: int = 20,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `following`
@@ -199,7 +199,7 @@ async def follower(
     id: int,
     page: int = 1,
     size: int = 20,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `following`
@@ -231,7 +231,7 @@ async def rank(
     date: Optional[RankingDate] = None,
     page: int = 1,
     size: int = 50,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `rank`
@@ -262,7 +262,7 @@ async def search(
     duration: Optional[SearchDurationType] = None,
     page: int = 1,
     size: int = 50,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `search`
@@ -297,7 +297,7 @@ async def search(
 
 
 @router.get(EndpointsType.tags)
-async def tags(endpoint: PixivEndpoints = Depends(requestClient)):
+async def tags(endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `tags`
 
@@ -312,7 +312,7 @@ async def related(
     id: int,
     page: int = 1,
     size: int = 20,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `related`
@@ -339,7 +339,7 @@ async def related(
 
 
 @router.get(EndpointsType.ugoira_metadata)
-async def ugoira_metadata(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def ugoira_metadata(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `ugoira_metadata`
 
@@ -361,7 +361,7 @@ async def member_novel(
     id: int,
     page: int = 1,
     size: int = 20,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `member_novel`
@@ -388,7 +388,7 @@ async def member_novel(
 
 
 @router.get(EndpointsType.novel_series)
-async def novel_series(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def novel_series(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `novel_series`
 
@@ -405,7 +405,7 @@ async def novel_series(id: int, endpoint: PixivEndpoints = Depends(requestClient
 
 
 @router.get(EndpointsType.novel_detail)
-async def novel_detail(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def novel_detail(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `novel_detail`
 
@@ -422,7 +422,7 @@ async def novel_detail(id: int, endpoint: PixivEndpoints = Depends(requestClient
 
 
 @router.get(EndpointsType.novel_text)
-async def novel_text(id: int, endpoint: PixivEndpoints = Depends(requestClient)):
+async def novel_text(id: int, endpoint: PixivEndpoints = Depends(request_client)):
     """
     ## Name: `novel_text`
 
@@ -448,7 +448,7 @@ async def search_novel(
     duration: Optional[SearchDurationType] = None,
     page: int = 1,
     size: int = 50,
-    endpoint: PixivEndpoints = Depends(requestClient),
+    endpoint: PixivEndpoints = Depends(request_client),
 ):
     """
     ## Name: `search_novel`

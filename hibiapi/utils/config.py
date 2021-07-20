@@ -5,9 +5,8 @@ from typing import Any, Dict, Generic, Optional, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
-from pydantic.generics import GenericModel
-
 from hibiapi import __file__ as root_file
+from pydantic.generics import GenericModel
 
 CONFIG_DIR = Path(".") / "configs"
 DEFAULT_DIR = Path(root_file).parent / "configs"
@@ -95,7 +94,6 @@ class AppConfig(confuse.Configuration):
         # Convert `AAA_BBB_CCC=DDD` to `{'aaa':{'bbb':{'ccc':'ddd'}}}`
         source_tree: Dict[str, Any] = {}
         for key, value in env_configs.items():
-            
             _tmp = source_tree
             *nodes, name = key.split("_")
             for node in nodes:

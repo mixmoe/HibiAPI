@@ -1,7 +1,6 @@
 from typing import Callable, Coroutine
 
 from fastapi import Depends, Request
-
 from hibiapi.api.bilibili import (
     BilibiliEndpointV3,
     CommentSortType,
@@ -22,23 +21,23 @@ router = SlashRouter(tags=["Bilibili V3"])
 BilibiliAPIRoot = NetRequest()
 
 
-async def requestClient():
+async def request_client():
     async with BilibiliAPIRoot as client:
         yield BilibiliEndpointV3(client)
 
 
 @router.get("/", summary="整体实现")
-async def matchAll(
+async def _match_all(
     request: Request,
     get: V3EndpointsType = V3EndpointsType.video_info,
-    client: BilibiliEndpointV3 = Depends(requestClient),
+    client: BilibiliEndpointV3 = Depends(request_client),
 ):
     func: Callable[..., Coroutine] = getattr(client, get)
     return await func(**exclude_params(func, request.query_params))
 
 
 @router.get(V3EndpointsType.video_info)
-async def video_info(aid: int, endpoint: BilibiliEndpointV3 = Depends(requestClient)):
+async def video_info(aid: int, endpoint: BilibiliEndpointV3 = Depends(request_client)):
     return await endpoint.video_info(aid=aid)
 
 
@@ -48,18 +47,18 @@ async def video_address(
     cid: int,
     quality: VideoQualityType = VideoQualityType.VIDEO_480P,
     type: VideoFormatType = VideoFormatType.FLV,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.video_address(aid=aid, cid=cid, quality=quality, type=type)
 
 
 @router.get(V3EndpointsType.video_recommend)
-async def video_recommend(endpoint: BilibiliEndpointV3 = Depends(requestClient)):
+async def video_recommend(endpoint: BilibiliEndpointV3 = Depends(request_client)):
     return await endpoint.video_recommend()
 
 
 @router.get(V3EndpointsType.video_dynamic)
-async def video_dynamic(endpoint: BilibiliEndpointV3 = Depends(requestClient)):
+async def video_dynamic(endpoint: BilibiliEndpointV3 = Depends(request_client)):
     return await endpoint.video_dynamic()
 
 
@@ -67,7 +66,7 @@ async def video_dynamic(endpoint: BilibiliEndpointV3 = Depends(requestClient)):
 async def video_ranking(
     type: RankContentType = RankContentType.FULL_SITE,
     duration: RankDurationType = RankDurationType.THREE_DAY,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.video_ranking(type=type, duration=duration)
 
@@ -77,7 +76,7 @@ async def user_info(
     uid: int,
     page: int = 1,
     size: int = 10,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.user_info(uid=uid, page=page, size=size)
 
@@ -87,7 +86,7 @@ async def user_uploaded(
     uid: int,
     page: int = 1,
     size: int = 10,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.user_uploaded(uid=uid, page=page, size=size)
 
@@ -98,28 +97,28 @@ async def user_favorite(
     fid: int,
     page: int = 1,
     size: int = 10,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.user_favorite(fid=fid, uid=uid, page=page, size=size)
 
 
 @router.get(V3EndpointsType.season_info)
 async def season_info(
-    season_id: int, endpoint: BilibiliEndpointV3 = Depends(requestClient)
+    season_id: int, endpoint: BilibiliEndpointV3 = Depends(request_client)
 ):
     return await endpoint.season_info(season_id=season_id)
 
 
 @router.get(V3EndpointsType.season_recommend)
 async def season_recommend(
-    season_id: int, endpoint: BilibiliEndpointV3 = Depends(requestClient)
+    season_id: int, endpoint: BilibiliEndpointV3 = Depends(request_client)
 ):
     return await endpoint.season_recommend(season_id=season_id)
 
 
 @router.get(V3EndpointsType.season_episode)
 async def season_episode(
-    episode_id: int, endpoint: BilibiliEndpointV3 = Depends(requestClient)
+    episode_id: int, endpoint: BilibiliEndpointV3 = Depends(request_client)
 ):
     return await endpoint.season_episode(episode_id=episode_id)
 
@@ -127,7 +126,7 @@ async def season_episode(
 @router.get(V3EndpointsType.season_timeline)
 async def season_timeline(
     type: TimelineType = TimelineType.GLOBAL,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.season_timeline(type=type)
 
@@ -136,7 +135,7 @@ async def season_timeline(
 async def season_ranking(
     type: RankBangumiType = RankBangumiType.GLOBAL,
     duration: RankDurationType = RankDurationType.THREE_DAY,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.season_ranking(type=type, duration=duration)
 
@@ -146,21 +145,21 @@ async def search(
     keyword: str,
     page: int = 1,
     size: int = 20,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.search(keyword=keyword, page=page, size=size)
 
 
 @router.get(V3EndpointsType.search_recommend)
 async def search_recommend(
-    limit: int = 50, endpoint: BilibiliEndpointV3 = Depends(requestClient)
+    limit: int = 50, endpoint: BilibiliEndpointV3 = Depends(request_client)
 ):
     return await endpoint.search_recommend(limit=limit)
 
 
 @router.get(V3EndpointsType.search_suggestion)
 async def search_suggestion(
-    keyword: str, endpoint: BilibiliEndpointV3 = Depends(requestClient)
+    keyword: str, endpoint: BilibiliEndpointV3 = Depends(request_client)
 ):
     return await endpoint.search_suggestion(keyword=keyword)
 
@@ -172,6 +171,6 @@ async def comments(
     sort: CommentSortType = CommentSortType.TIME,
     page: int = 1,
     size: int = 20,
-    endpoint: BilibiliEndpointV3 = Depends(requestClient),
+    endpoint: BilibiliEndpointV3 = Depends(request_client),
 ):
     return await endpoint.comments(id=id, type=type, sort=sort, page=page, size=size)

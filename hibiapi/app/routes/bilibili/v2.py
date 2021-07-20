@@ -1,7 +1,6 @@
 from typing import Callable, Coroutine, Optional, Union
 
 from fastapi import Depends, Request
-
 from hibiapi.api.bilibili import (
     BilibiliEndpointV2,
     CommentSortType,
@@ -22,16 +21,16 @@ router = SlashRouter(tags=["Bilibili V2"])
 BilibiliAPIRoot = NetRequest()
 
 
-async def requestClient():
+async def request_client():
     async with BilibiliAPIRoot as client:
         yield BilibiliEndpointV2(client)
 
 
 @router.get("/", summary="Bilibili API 兼容实现")
-async def matchAll(
+async def _match_all(
     request: Request,
     get: V2EndpointsType = V2EndpointsType.playurl,
-    client: BilibiliEndpointV2 = Depends(requestClient),
+    client: BilibiliEndpointV2 = Depends(request_client),
 ):
     func: Callable[..., Coroutine] = getattr(client, get)
     return await func(**exclude_params(func, request.query_params))
@@ -43,21 +42,21 @@ async def play_url(
     page: Optional[int] = None,
     quality: VideoQualityType = VideoQualityType.VIDEO_480P,
     type: VideoFormatType = VideoFormatType.MP4,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.playurl(aid=aid, page=page, quality=quality, type=type)
 
 
 @router.get(V2EndpointsType.seasoninfo)
 async def seasoninfo(
-    season_id: int, endpoint: BilibiliEndpointV2 = Depends(requestClient)
+    season_id: int, endpoint: BilibiliEndpointV2 = Depends(request_client)
 ):
     return await endpoint.seasoninfo(season_id=season_id)
 
 
 @router.get(V2EndpointsType.seasonrecommend)
 async def seasonrecommend(
-    season_id: int, endpoint: BilibiliEndpointV2 = Depends(requestClient)
+    season_id: int, endpoint: BilibiliEndpointV2 = Depends(request_client)
 ):
     return await endpoint.seasonrecommend(season_id=season_id)
 
@@ -70,7 +69,7 @@ async def comments(
     sort: CommentSortType = CommentSortType.TIME,
     page: int = 1,
     pagesize: int = 20,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.comments(
         aid=aid,
@@ -89,7 +88,7 @@ async def search(
     page: int = 1,
     pagesize: int = 20,
     limit: int = 50,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.search(
         keyword=keyword, type=type, page=page, pagesize=pagesize, limit=limit
@@ -101,25 +100,25 @@ async def rank(
     content: Union[RankContentType, RankBangumiType] = RankContentType.FULL_SITE,
     duration: RankDurationType = RankDurationType.THREE_DAY,
     new: bool = True,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.rank(content=content, duration=duration, new=new)
 
 
 @router.get(V2EndpointsType.typedynamic)
-async def typedynamic(endpoint: BilibiliEndpointV2 = Depends(requestClient)):
+async def typedynamic(endpoint: BilibiliEndpointV2 = Depends(request_client)):
     return await endpoint.typedynamic()
 
 
 @router.get(V2EndpointsType.recommend)
-async def recommend(endpoint: BilibiliEndpointV2 = Depends(requestClient)):
+async def recommend(endpoint: BilibiliEndpointV2 = Depends(request_client)):
     return await endpoint.recommend()
 
 
 @router.get(V2EndpointsType.timeline)
 async def timeline(
     type: TimelineType = TimelineType.GLOBAL,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.timeline(type=type)
 
@@ -129,7 +128,7 @@ async def space(
     vmid: int,
     page: int = 1,
     pagesize: int = 10,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.space(vmid=vmid, page=page, pagesize=pagesize)
 
@@ -139,7 +138,7 @@ async def archive(
     vmid: int,
     page: int = 1,
     pagesize: int = 10,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.archive(vmid=vmid, page=page, pagesize=pagesize)
 
@@ -150,6 +149,6 @@ async def favlist(
     vmid: int,
     page: int = 1,
     pagesize: int = 20,
-    endpoint: BilibiliEndpointV2 = Depends(requestClient),
+    endpoint: BilibiliEndpointV2 = Depends(request_client),
 ):
     return await endpoint.favlist(fid=fid, vmid=vmid, page=page, pagesize=pagesize)
