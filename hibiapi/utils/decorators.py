@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 from asyncio import sleep as async_sleep
-from datetime import datetime
 from functools import partial, wraps
 from inspect import iscoroutinefunction
 from time import sleep as sync_sleep
@@ -21,36 +20,9 @@ from typing import (
 )
 
 from .log import logger
+from .timer import TimeIt
 
 _T = TypeVar("_T")
-
-
-def TimeIt(function: Callable) -> Callable:
-    @wraps(function)
-    async def async_wrapper(*args: Any, **kwargs: Any):
-        start = datetime.now()
-        try:
-            return await function(*args, **kwargs)
-        finally:
-            delta = datetime.now() - start
-            logger.trace(
-                f"<g>Async</g> function <y>{function.__qualname__}</y> "
-                f"cost <e>{delta.total_seconds() * 1000:.3f}ms</e>"
-            )
-
-    @wraps(function)
-    def sync_wrapper(*args: Any, **kwargs: Any):
-        start = datetime.now()
-        try:
-            return function(*args, **kwargs)
-        finally:
-            delta = datetime.now() - start
-            logger.trace(
-                f"<g>Sync</g> function <y>{function.__qualname__}</y> "
-                f"cost <e>{delta.total_seconds() * 1000:.3f}ms</e>"
-            )
-
-    return async_wrapper if iscoroutinefunction(function) else sync_wrapper
 
 
 class RetryT(Protocol):
