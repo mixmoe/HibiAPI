@@ -41,6 +41,7 @@
         "aclose",
         "aenter",
         "aexit",
+        "aiocache",
         "asyncio",
         "bangumi",
         "bgcolor",
