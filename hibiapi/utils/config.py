@@ -5,8 +5,9 @@ from typing import Any, Dict, Generic, Optional, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
-from hibiapi import __file__ as root_file
 from pydantic.generics import GenericModel
+
+from hibiapi import __file__ as root_file
 
 CONFIG_DIR = Path(".") / "configs"
 DEFAULT_DIR = Path(root_file).parent / "configs"

@@ -2,6 +2,7 @@ import asyncio
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from fastapi import Depends, Request
+
 from hibiapi.api.pixiv import (
     EndpointsType,
     IllustType,

@@ -1,6 +1,7 @@
 from typing import Callable, Coroutine, Optional, Union
 
 from fastapi import Depends, Request
+
 from hibiapi.api.bilibili import (
     BilibiliEndpointV2,
     CommentSortType,

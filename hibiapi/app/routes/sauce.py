@@ -1,6 +1,8 @@
 from typing import Optional
 
 from fastapi import Depends, File, Form
+from loguru import logger
+
 from hibiapi.api.sauce import (
     DeduplicateType,
     HostUrl,
@@ -10,7 +12,6 @@ from hibiapi.api.sauce import (
     UploadFileIO,
 )
 from hibiapi.utils.routing import SlashRouter
-from loguru import logger
 
 if not SauceConstants.API_KEY.strip():
     logger.warning("Sauce API key not set, SauceNAO endpoint will be unavailable")
