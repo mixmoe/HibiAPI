@@ -92,9 +92,10 @@ class AppConfig(confuse.Configuration):
             for k, v in os.environ.items()
             if k.lower().startswith(config_name)
         }
+        # Convert `AAA_BBB_CCC=DDD` to `{'aaa':{'bbb':{'ccc':'ddd'}}}`
         source_tree: Dict[str, Any] = {}
         for key, value in env_configs.items():
-            # Convert `AAA_BBB_CCC=DDD` to `{'aaa':{'bbb':{'ccc':'ddd'}}}`
+            
             _tmp = source_tree
             *nodes, name = key.split("_")
             for node in nodes:
@@ -105,6 +106,7 @@ class AppConfig(confuse.Configuration):
                 _tmp[name] = json.loads(value)
             except json.JSONDecodeError:
                 _tmp[name] = value
+
         self.sources.insert(0, confuse.ConfigSource.of(source_tree))
 
     def _add_default_source(self):

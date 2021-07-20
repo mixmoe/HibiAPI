@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import asyncio
-from asyncio import sleep as asyncSleep
+from asyncio import sleep as async_sleep
 from datetime import datetime
 from functools import partial, wraps
 from inspect import iscoroutinefunction
-from time import sleep as syncSleep
+from time import sleep as sync_sleep
 from typing import (
     Any,
     Callable,
@@ -27,7 +27,7 @@ _T = TypeVar("_T")
 
 def TimeIt(function: Callable) -> Callable:
     @wraps(function)
-    async def asyncWrapper(*args: Any, **kwargs: Any):
+    async def async_wrapper(*args: Any, **kwargs: Any):
         start = datetime.now()
         try:
             return await function(*args, **kwargs)
@@ -39,7 +39,7 @@ def TimeIt(function: Callable) -> Callable:
             )
 
     @wraps(function)
-    def syncWrapper(*args: Any, **kwargs: Any):
+    def sync_wrapper(*args: Any, **kwargs: Any):
         start = datetime.now()
         try:
             return function(*args, **kwargs)
@@ -50,7 +50,7 @@ def TimeIt(function: Callable) -> Callable:
                 f"cost <e>{delta.total_seconds() * 1000:.3f}ms</e>"
             )
 
-    return asyncWrapper if iscoroutinefunction(function) else syncWrapper
+    return async_wrapper if iscoroutinefunction(function) else sync_wrapper
 
 
 class RetryT(Protocol):
@@ -110,42 +110,42 @@ def Retry(
         )
 
     timed_func = TimeIt(function)
-    allowedExceptions: Tuple[Type[Exception], ...] = tuple(exceptions or [Exception])
+    allowed_exceptions: Tuple[Type[Exception], ...] = tuple(exceptions or [Exception])
     assert (retries >= 1) and (delay >= 0)
 
     @wraps(timed_func)
-    def syncWrapper(*args: Any, **kwargs: Any):
+    def sync_wrapper(*args: Any, **kwargs: Any):
         for retried in range(retries):
             try:
                 return timed_func(*args, **kwargs)
             except Exception as exception:
                 if (remain := retries - retried) <= 0 or (
-                    not isinstance(exception, allowedExceptions)
+                    not isinstance(exception, allowed_exceptions)
                 ):
                     raise
                 logger.opt().debug(
                     f"Retry of {timed_func=} trigged "
                     f"due to {exception=} raised ({remain=})"
                 )
-                syncSleep(delay)
+                sync_sleep(delay)
 
     @wraps(timed_func)
-    async def asyncWrapper(*args: Any, **kwargs: Any):
+    async def async_wrapper(*args: Any, **kwargs: Any):
         for retried in range(retries):
             try:
                 return await timed_func(*args, **kwargs)
             except Exception as exception:
                 if (remain := retries - retried) <= 0 or (
-                    not isinstance(exception, allowedExceptions)
+                    not isinstance(exception, allowed_exceptions)
                 ):
                     raise
                 logger.opt().debug(
                     f"Retry of {timed_func=} trigged "
                     f"due to {exception=} raised ({remain=})"
                 )
-                await asyncSleep(delay)
+                await async_sleep(delay)
 
-    return asyncWrapper if iscoroutinefunction(function) else syncWrapper
+    return async_wrapper if iscoroutinefunction(function) else sync_wrapper
 
 
 def ToAsync(function: Callable[..., _T]) -> Callable[..., Coroutine[Any, Any, _T]]:

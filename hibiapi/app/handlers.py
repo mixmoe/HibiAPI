@@ -1,17 +1,16 @@
 from fastapi import Request, Response
 from fastapi.exceptions import HTTPException as FastAPIHTTPException
 from fastapi.exceptions import RequestValidationError as FastAPIValidationError
-from pydantic.error_wrappers import ValidationError as PydanticValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
-
 from hibiapi.utils import exceptions
 from hibiapi.utils.log import logger
+from pydantic.error_wrappers import ValidationError as PydanticValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .application import app
 
 
 @app.exception_handler(exceptions.BaseServerException)
-async def exceptionHandler(
+async def exception_handler(
     request: Request,
     exc: exceptions.BaseServerException,
 ) -> Response:
@@ -33,11 +32,11 @@ async def exceptionHandler(
 
 
 @app.exception_handler(StarletteHTTPException)
-async def overrideHandler(
+async def override_handler(
     request: Request,
     exc: StarletteHTTPException,
 ):
-    return await exceptionHandler(
+    return await exception_handler(
         request,
         exceptions.BaseHTTPException(
             exc.detail,
@@ -48,8 +47,8 @@ async def overrideHandler(
 
 
 @app.exception_handler(AssertionError)
-async def assertionHandler(request: Request, exc: AssertionError):
-    return await exceptionHandler(
+async def assertion_handler(request: Request, exc: AssertionError):
+    return await exception_handler(
         request,
         exceptions.ClientSideException(detail=f"Assertion: {exc}"),
     )
@@ -57,8 +56,8 @@ async def assertionHandler(request: Request, exc: AssertionError):
 
 @app.exception_handler(FastAPIValidationError)
 @app.exception_handler(PydanticValidationError)
-async def validationHandler(request: Request, exc: PydanticValidationError):
-    return await exceptionHandler(
+async def validation_handler(request: Request, exc: PydanticValidationError):
+    return await exception_handler(
         request,
         exceptions.ValidationException(detail=str(exc), validation=exc.errors()),
     )

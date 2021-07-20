@@ -35,12 +35,12 @@ class ExceptionInfo(BaseModel):
 
     @classmethod
     def new(cls, traceback: Optional[TracebackType] = None):
-        traceID = token_hex(TRACE_ID_LENGTH).upper()
+        trace_id = token_hex(TRACE_ID_LENGTH).upper()
         time = datetime.now()
         return cls(
             time=time,
             stamp=time.timestamp(),
-            id=traceID,
+            id=trace_id,
             traceback=format_tb(traceback),
         )
 

@@ -1,7 +1,7 @@
 import logging
 import re
 import sys
-from asyncio.log import logger as _asyncioLogger
+from asyncio.log import logger as _asyncio_logger
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
@@ -65,9 +65,9 @@ class LoguruHandler(logging.Handler):
         return cls._tag_escape_re.sub(r"\\\g<0>", string)
 
 
-_asyncioLogger.handlers.clear()
-_asyncioLogger.addHandler(LoguruHandler())
+_asyncio_logger.handlers.clear()
+_asyncio_logger.addHandler(LoguruHandler())
 
-_aiocacheLogger = logging.getLogger("aiocache")
-_aiocacheLogger.handlers.clear()
-_aiocacheLogger.addHandler(LoguruHandler())
+_aiocache_logger = logging.getLogger("aiocache")
+_aiocache_logger.handlers.clear()
+_aiocache_logger.addHandler(LoguruHandler())
