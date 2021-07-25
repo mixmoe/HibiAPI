@@ -6,7 +6,7 @@ from functools import wraps
 from inspect import iscoroutinefunction
 from typing import Any, Callable, ClassVar, Dict, Optional
 
-from .log import logger
+from ..log import logger
 
 
 class TimerError(Exception):

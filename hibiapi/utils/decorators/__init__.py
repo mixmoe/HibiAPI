@@ -19,7 +19,7 @@ from typing import (
     overload,
 )
 
-from .log import logger
+from ..log import logger
 from .timer import TimeIt
 
 _T = TypeVar("_T")
@@ -87,35 +87,39 @@ def Retry(
 
     @wraps(timed_func)
     def sync_wrapper(*args: Any, **kwargs: Any):
+        error: Optional[Exception] = None
         for retried in range(retries):
             try:
                 return timed_func(*args, **kwargs)
             except Exception as exception:
-                if (remain := retries - retried) <= 0 or (
-                    not isinstance(exception, allowed_exceptions)
-                ):
+                error = exception
+                if not isinstance(exception, allowed_exceptions):
                     raise
                 logger.opt().debug(
                     f"Retry of {timed_func=} trigged "
-                    f"due to {exception=} raised ({remain=})"
+                    f"due to {exception=} raised ({retried=}/{retries=})"
                 )
                 sync_sleep(delay)
+        assert isinstance(error, Exception)
+        raise error
 
     @wraps(timed_func)
     async def async_wrapper(*args: Any, **kwargs: Any):
+        error: Optional[Exception] = None
         for retried in range(retries):
             try:
                 return await timed_func(*args, **kwargs)
             except Exception as exception:
-                if (remain := retries - retried) <= 0 or (
-                    not isinstance(exception, allowed_exceptions)
-                ):
+                error = exception
+                if not isinstance(exception, allowed_exceptions):
                     raise
                 logger.opt().debug(
                     f"Retry of {timed_func=} trigged "
-                    f"due to {exception=} raised ({remain=})"
+                    f"due to {exception=} raised ({retried=}/{retries})"
                 )
                 await async_sleep(delay)
+        assert isinstance(error, Exception)
+        raise error
 
     return async_wrapper if iscoroutinefunction(function) else sync_wrapper
 
