@@ -1,11 +1,13 @@
 from os import get_terminal_size
+from pathlib import Path
 from typing import Optional
 
 import click
 import uvicorn  # type:ignore
 
+from . import __file__ as root_file
 from . import __version__
-from .utils.config import DEBUG, Config
+from .utils.config import CONFIG_DIR, DEBUG, Config
 from .utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
@@ -19,6 +21,7 @@ COPYRIGHT = r"""<b><g>
 An alternative implement of Imjad API
 Project: https://github.com/mixmoe/HibiAPI
 </e></b>"""  # noqa:W291,W293
+
 
 LOG_CONFIG = {
     "version": 1,
@@ -90,6 +93,7 @@ def main(host: str, port: int, workers: int, reload: bool):
         log_config=LOG_CONFIG,
         workers=workers,
         reload=reload,
+        reload_dirs=[Path(root_file).parent, CONFIG_DIR],
         forwarded_allow_ips=Config["server"]["allowed-forward"].get(
             Optional[str]  # type:ignore
         ),
