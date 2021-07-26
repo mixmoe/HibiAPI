@@ -42,12 +42,12 @@ class TiebaEndpoint(BaseEndpoint):
         )
         params = {k: params[k] for k in sorted(params.keys())}
         url = self._join(self.base, endpoint, params)
-        sign = (
+        params["sign"] = (
             hashlib.md5(url.query.replace(b"&", b"") + b"tiebaclient!!!")
             .hexdigest()
             .upper()
         )
-        return URL(url, params={"sign": sign})
+        return URL(url, params=params)
 
     @disable_cache
     @catch_network_error

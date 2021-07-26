@@ -191,8 +191,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         )
         params = {k: params[k] for k in sorted(params.keys())}
         url = self._join(base=base, endpoint=endpoint, params=params)
-        sign = hashlib.md5(string=(url.query + BilibiliConstants.SECRET)).hexdigest()
-        return URL(url, params={"sign": sign})
+        params["sign"] = hashlib.md5(url.query + BilibiliConstants.SECRET).hexdigest()
+        return URL(url, params=params)
 
     @staticmethod
     def _parse_json(content: str) -> Dict[str, Any]:
