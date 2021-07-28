@@ -7,9 +7,9 @@
 
 # HibiAPI
 
-**_Imjad API 的开源替代._**
+**_一个实现了多种常用站点的易用化API的程序._**
 
-**_An alternative implement of Imjad API._**
+**_A program that implementis easy-to-use APIs for a variety of commonly used sites._**
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
@@ -31,7 +31,20 @@
 
 ## 前言
 
-- 由于 Imjad API<sup>[这是什么?](https://github.com/mixmoe/HibiAPI/wiki/FAQ#%E4%BB%80%E4%B9%88%E6%98%AFimjad-api)</sup>使用人数过多, 致使调用超出限制, 所以本人希望提供一个开源替代来供社区进行自由的部署和使用, 从而减轻一部分该 API 的使用压力
+- 在开发与第三方API对接的过程中, 你是否遇到了以下问题?
+  - 提供的API带有CORS跨域, 无法直接调用
+  - 调用公开数据但是需要登录凭证, 会导致登录凭证泄漏
+  - 第三方API加密实现复杂, 很难实现
+
+- 现在, 有了`HibiAPI`, 它提供多种网站公开内容的API集合, 它们包括:
+  - Pixiv的图片/小说相关信息获取和搜索
+  - Bilibili的视频/番剧等信息获取和搜索
+  - 网易云音乐的音乐/MV等信息获取和搜索
+  - 百度贴吧的帖子内容的获取
+  - and more...
+
+- 该项目的前身是 Imjad API<sup>[这是什么?](https://github.com/mixmoe/HibiAPI/wiki/FAQ#%E4%BB%80%E4%B9%88%E6%98%AFimjad-api)</sup>
+  - 由于它的使用人数过多, 致使调用超出限制, 所以本人希望提供一个开源替代来供社区进行自由的部署和使用, 从而减轻一部分该 API 的使用压力
 
 ## 优势
 
@@ -71,11 +84,6 @@
 
   - **又一个 Pixiv 阅览工具**
 
-- [`mnixry/coolQPythonBot`](https://github.com/mnixry/coolQPythonBot)
-
-  - **基于酷 Q+CQHTTP 的功能性 QQ 机器人**
-  - ~~因为应用实例不够多所以拿自己项目凑数的屑~~
-
 - 公开搭建实例
   |    **站点名称**     |            **网址**             |        **状态**         |
   | :-----------------: | :-----------------------------: | :---------------------: |
@@ -89,9 +97,9 @@
 [kyo]: https://img.shields.io/website?url=https%3A%2F%2Fapi.kyomotoi.moe%2Fopenapi.json
 [older-fox]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.aliserver.net%2Fopenapi.json
 
-## 鸣谢
+## 特别鸣谢
 
-_[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)_
+[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/), 是它带领我走上了编程之路
 
 ### 参考项目
 
@@ -111,7 +119,7 @@ _[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-感谢这些为这个项目作出贡献的各位大佬 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+感谢这些为这个项目作出贡献的各位大佬:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
