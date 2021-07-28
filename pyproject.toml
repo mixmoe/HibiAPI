@@ -4,6 +4,11 @@ version = "0.7.1"
 description = "An alternative implement of Imjad API"
 authors = ["mixmoe"]
 license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://api.obfs.dev"
+repository = "https://github.com/mixmoe/HibiAPI"
+documentation = "https://github.com/mixmoe/HibiAPI/wiki"
+
 
 [tool.poetry.scripts]
 hibiapi = 'hibiapi.__main__:main'
