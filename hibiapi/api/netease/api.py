@@ -196,7 +196,10 @@ class NeteaseEndpoint(BaseEndpoint):
             "weapi/v6/playlist/detail",
             params={
                 "id": id,
-                "n": 10000,
+                "total": True,
+                "offset": 0,
+                "limit": 1000,
+                "n": 1000,
             },
         )
 
