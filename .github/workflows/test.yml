@@ -80,9 +80,8 @@ jobs:
 
       - name: Install dependencies
         timeout-minutes: 5
-        env:
-          POETRY_VIRTUALENVS_CREATE: "false"
         run: |
+          poetry config virtualenvs.create false
           poetry install -vvv
 
       - name: Testing with pytest
