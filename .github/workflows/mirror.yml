@@ -3,8 +3,12 @@ name: Gitee Mirror
 on:
   push:
     branches: [main, dev]
+
   schedule:
     - cron: "0 0 * * *"
+
+  workflow_dispatch:
+
 jobs:
   git-mirror:
     name: Mirror
