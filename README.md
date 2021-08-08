@@ -9,7 +9,7 @@
 
 **_一个实现了多种常用站点的易用化API的程序._**
 
-**_A program that implementis easy-to-use APIs for a variety of commonly used sites._**
+**_A program that implements easy-to-use APIs for a variety of commonly used sites._**
 
 [![Demo Version](https://img.shields.io/badge/dynamic/json?label=demo%20status&query=%24.info.version&url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json&style=for-the-badge&color=lightblue)](https://api.obfs.dev)
 
