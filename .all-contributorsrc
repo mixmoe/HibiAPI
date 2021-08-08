@@ -50,6 +50,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cleoold",
+      "name": "midori",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13920903?v=4",
+      "profile": "https://github.com/cleoold",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -57,5 +66,6 @@
   "projectOwner": "mixmoe",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "none"
 }
