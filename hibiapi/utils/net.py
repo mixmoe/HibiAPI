@@ -20,7 +20,7 @@ from .decorators import Retry, TimeIt
 from .exceptions import UpstreamAPIException
 from .log import logger
 
-_AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
+AsyncCallable_T = TypeVar("AsyncCallable_T", bound=Callable[..., Coroutine])
 
 
 class AsyncHTTPClient(AsyncClient):
@@ -105,7 +105,7 @@ class BaseNetClient:
         )
 
 
-def catch_network_error(function: Callable) -> Callable:
+def catch_network_error(function: AsyncCallable_T) -> AsyncCallable_T:
     timed_func = TimeIt(function)
 
     @wraps(timed_func)
@@ -117,4 +117,4 @@ def catch_network_error(function: Callable) -> Callable:
         except HTTPError as e:
             raise UpstreamAPIException from e
 
-    return wrapper
+    return wrapper  # type:ignore

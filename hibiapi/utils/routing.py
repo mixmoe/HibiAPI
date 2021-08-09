@@ -11,8 +11,7 @@ from pydantic import AnyHttpUrl
 from pydantic.errors import UrlHostError
 from starlette.datastructures import Headers, MutableHeaders
 
-from .cache import disable_cache, endpoint_cache
-from .config import Config
+from .cache import endpoint_cache
 from .net import AsyncHTTPClient
 
 
@@ -32,7 +31,6 @@ class EndpointMeta(type):
         for name, func in namespace.items():
             if name.startswith("_") or not inspect.iscoroutinefunction(func):
                 continue
-            func = func if Config["cache"]["enabled"].as_bool() else disable_cache(func)
             namespace[name] = endpoint_cache(func)
         return super().__new__(cls, name, bases, namespace)
 

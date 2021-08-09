@@ -19,10 +19,15 @@ from typing import (
     overload,
 )
 
+from typing_extensions import ParamSpec
+
 from ..log import logger
 from .timer import TimeIt
 
 _T = TypeVar("_T")
+
+Argument_T = ParamSpec("Argument_T")
+Return_T = TypeVar("Return_T")
 
 
 class RetryT(Protocol):
@@ -86,7 +91,7 @@ def Retry(
     assert (retries >= 1) and (delay >= 0)
 
     @wraps(timed_func)
-    def sync_wrapper(*args: Any, **kwargs: Any):
+    def sync_wrapper(*args, **kwargs):
         error: Optional[Exception] = None
         for retried in range(retries):
             try:
@@ -104,7 +109,7 @@ def Retry(
         raise error
 
     @wraps(timed_func)
-    async def async_wrapper(*args: Any, **kwargs: Any):
+    async def async_wrapper(*args, **kwargs):
         error: Optional[Exception] = None
         for retried in range(retries):
             try:
@@ -124,7 +129,9 @@ def Retry(
     return async_wrapper if iscoroutinefunction(function) else sync_wrapper
 
 
-def ToAsync(function: Callable[..., _T]) -> Callable[..., Coroutine[Any, Any, _T]]:
+def ToAsync(
+    function: Callable[Argument_T, Return_T]  # type:ignore
+) -> Callable[Argument_T, Coroutine[Any, Any, Return_T]]:  # type:ignore
     @TimeIt
     @wraps(function)
     async def wrapper(*args, **kwargs):
