@@ -18,8 +18,8 @@ COPYRIGHT = r"""<b><g>
  | |  | | | |_) | |/ ____ \| |    _| |_  
  |_|  |_|_|_.__/|_/_/    \_\_|   |_____| 
 </g><e>
-An alternative implement of Imjad API
-Project: https://github.com/mixmoe/HibiAPI
+A program that implements easy-to-use APIs for a variety of commonly used sites
+Repository: https://github.com/mixmoe/HibiAPI
 </e></b>"""  # noqa:W291,W293
 
 

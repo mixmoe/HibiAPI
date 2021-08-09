@@ -5,17 +5,16 @@ from urllib.parse import ParseResult
 import sentry_sdk
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
-from sentry_sdk.integrations.logging import LoggingIntegration
-
 from hibiapi import __version__
 from hibiapi.utils.config import Config
 from hibiapi.utils.log import logger
 from hibiapi.utils.temp import TempFile
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 from .routes import router as ImplRouter
 
 DESCRIPTION = """
-**An alternative implement of Imjad API**
+**A program that implements easy-to-use APIs for a variety of commonly used sites**
 
 - *Documents*:
     - [Redoc](/docs) (Easier to read and more beautiful)
