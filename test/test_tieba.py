@@ -16,6 +16,13 @@ def test_post_list(client: TestClient):
     assert response.json()["error_code"] == "0"
 
 
+def test_post_list_chinese(client: TestClient):
+    # NOTE: reference https://github.com/mixmoe/HibiAPI/issues/117
+    response = client.get("post_list", params={"name": "图拉丁"})
+    assert response.status_code == 200
+    assert response.json()["error_code"] == "0"
+
+
 def test_post_detail(client: TestClient):
     response = client.get("post_detail", params={"tid": 1766018024})
     assert response.status_code == 200
