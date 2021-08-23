@@ -3,8 +3,6 @@ from enum import Enum
 from random import randint
 from typing import Any, Dict, Optional
 
-from httpx import URL
-
 from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.net import catch_network_error
@@ -21,16 +19,36 @@ class EndpointsType(str, Enum):
     user_subscribed = "user_subscribed"
 
 
-class TiebaEndpoint(BaseEndpoint):
-    base = "http://c.tieba.baidu.com"
+class TiebaSignUtils:
+    salt = b"tiebaclient!!!"
 
-    def _sign(self, endpoint: str, params: Dict[str, Any]) -> URL:
-        def random_digit(length: int) -> str:
-            return "".join(map(str, [randint(0, 9) for _ in range(length)]))
+    @staticmethod
+    def random_digit(length: int) -> str:
+        return "".join(map(str, [randint(0, 9) for _ in range(length)]))
 
+    @staticmethod
+    def construct_content(params: Dict[str, Any]) -> bytes:
+        # NOTE: this function used to construct form content WITHOUT urlencode
+        # Don't ask me why this is necessary, ask Tieba's programmers instead
+        return b"&".join(
+            map(
+                lambda k, v: (
+                    k.encode()
+                    + b"="
+                    + str(v.value if isinstance(v, Enum) else v).encode()
+                ),
+                params.keys(),
+                params.values(),
+            )
+        )
+
+    @classmethod
+    def sign(cls, params: Dict[str, Any]) -> bytes:
         params.update(
             {
-                "_client_id": "wappc_" + random_digit(13) + "_" + random_digit(3),
+                "_client_id": (
+                    "wappc_" + cls.random_digit(13) + "_" + cls.random_digit(3)
+                ),
                 "_client_type": 2,
                 "_client_version": "9.9.8.32",
                 **{
@@ -41,13 +59,16 @@ class TiebaEndpoint(BaseEndpoint):
             }
         )
         params = {k: params[k] for k in sorted(params.keys())}
-        url = self._join(self.base, endpoint, params)
         params["sign"] = (
-            hashlib.md5(url.query.replace(b"&", b"") + b"tiebaclient!!!")
+            hashlib.md5(cls.construct_content(params).replace(b"&", b"") + cls.salt)
             .hexdigest()
             .upper()
         )
-        return URL(url, params=params)
+        return cls.construct_content(params)
+
+
+class TiebaEndpoint(BaseEndpoint):
+    base = "http://c.tieba.baidu.com"
 
     @disable_cache
     @catch_network_error
@@ -55,8 +76,8 @@ class TiebaEndpoint(BaseEndpoint):
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         response = await self.client.post(
-            (url := self._sign(endpoint, params or {})),
-            content=url.query,
+            url=self._join(self.base, endpoint, {}),
+            content=TiebaSignUtils.sign(params or {}),
         )
         response.raise_for_status()
         return response.json()
