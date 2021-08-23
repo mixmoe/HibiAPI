@@ -75,21 +75,24 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: ${{ steps.cache-poetry.outputs.dir }}
+          path: |
+            ${{ steps.cache-poetry.outputs.dir }}
+            ./.venv
           key: ${{ runner.os }}-poetry-py${{ matrix.python }}-${{ hashFiles('poetry.lock') }}
           restore-keys: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies
         timeout-minutes: 5
         run: |
-          poetry config virtualenvs.create false
+          poetry config virtualenvs.in-project true
+          poetry config virtualenvs.path .venv
           poetry install -vvv
 
       - name: Testing with pytest
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > .env
-          coverage run -m pytest test/
-          coverage xml
+          poetry run coverage run -m pytest test/
+          poetry run coverage xml
 
       - uses: codecov/codecov-action@v1
         with:
