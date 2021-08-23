@@ -4,11 +4,10 @@ from enum import Enum, IntEnum
 from time import time
 from typing import Any, Dict, Optional, overload
 
-from httpx import URL
-
 from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint
+from httpx import URL
 
 from ..constants import BilibiliConstants
 
@@ -200,6 +199,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         try:
             return json.loads(content)
         except json.JSONDecodeError:
+            # NOTE: this is used to parse jsonp response
             right, left = content.find("("), content.rfind(")")
             return json.loads(content[right + 1 : left].strip())
 
@@ -234,11 +234,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         sign: bool = True,
         params: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        host = (
-            BilibiliConstants.APP_HOST
-            if source is None
-            else BilibiliConstants.SERVER_HOST[source]
-        )
+        host = BilibiliConstants.SERVER_HOST[source or "app"]
         url = (
             self._join(base=host, endpoint=endpoint, params=params or {})
             if not sign
