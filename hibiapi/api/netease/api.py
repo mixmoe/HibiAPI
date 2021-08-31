@@ -8,6 +8,7 @@ from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
 
 from hibiapi.utils.cache import disable_cache
+from hibiapi.utils.exceptions import UpstreamAPIException
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint
 
@@ -135,6 +136,10 @@ class NeteaseEndpoint(BaseEndpoint):
             data=_EncryptUtil.encrypt(params),
         )
         response.raise_for_status()
+        if not response.text.strip():
+            raise UpstreamAPIException(
+                f"Upstream API {endpoint=} returns blank content"
+            )
         return response.json()
 
     async def search(
