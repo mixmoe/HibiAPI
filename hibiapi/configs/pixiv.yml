@@ -2,9 +2,7 @@ enabled: true
 
 # HTTP代理地址
 # 示例格式
-# proxy:
-#   http_proxy: http://127.0.0.1:1081
-#   https_proxy: https://127.0.0.1:1081
+# proxy: { "all://": "http://127.0.0.1:1081" }
 proxy: {}
 
 account:
