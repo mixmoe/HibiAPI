@@ -1,6 +1,5 @@
 from http.cookies import SimpleCookie
-from ipaddress import IPv4Address, IPv4Network
-from random import randint
+from ipaddress import IPv4Network
 from typing import Dict
 
 from hibiapi.utils.config import APIConfig
@@ -30,14 +29,6 @@ class NeteaseConstants:
     DEFAULT_HEADERS: Dict[str, str] = {
         "user-agent": _Config["net"]["user-agent"].as_str(),
         "referer": "http://music.163.com",
-        "x-real-ip": str(  # random a ip address from a specificed network segment
-            IPv4Address(
-                randint(
-                    int(SOURCE_IP_SEGMENT.network_address),
-                    int(SOURCE_IP_SEGMENT.broadcast_address),
-                )
-            )
-        ),
     }
 
     CONFIG: APIConfig = _Config

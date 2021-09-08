@@ -1,6 +1,8 @@
 import base64
 import json
 from enum import Enum, IntEnum
+from ipaddress import IPv4Address
+from random import randint
 from secrets import token_urlsafe
 from typing import Any, Dict, Optional
 
@@ -127,12 +129,24 @@ class NeteaseEndpoint(BaseEndpoint):
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         params = {**(params or {}), "csrf_token": ""}
+        headers = {
+            "x-real-ip": str(  # random a ip address from a specificed network segment
+                IPv4Address(
+                    randint(
+                        int(NeteaseConstants.SOURCE_IP_SEGMENT.network_address),
+                        int(NeteaseConstants.SOURCE_IP_SEGMENT.broadcast_address),
+                    )
+                )
+            ),
+            **NeteaseConstants.DEFAULT_HEADERS,
+        }
         response = await self.client.post(
             self._join(
                 NeteaseConstants.HOST,
                 endpoint=endpoint,
                 params=params,
             ),
+            headers=headers,
             data=_EncryptUtil.encrypt(params),
         )
         response.raise_for_status()
