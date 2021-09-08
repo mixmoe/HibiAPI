@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from pytest_httpserver import HTTPServer  # type: ignore
 
-REMOTE_SAUCE_URL = "https://i.loli.net/2021/02/08/ZF8GnifzDUAE1lc.jpg"
 LOCAL_SAUCE_PATH = Path(__file__).parent / "test_sauce.jpg"
 
 
@@ -15,12 +15,13 @@ def client():
         yield client
 
 
-def test_sauce_url(client: TestClient):
-    response = client.get("sauce/", params={"url": REMOTE_SAUCE_URL})
+def test_sauce_url(client: TestClient, httpserver: HTTPServer):
+    httpserver.expect_request("/sauce").respond_with_data(LOCAL_SAUCE_PATH.read_bytes())
+    response = client.get("sauce/", params={"url": httpserver.url_for("/sauce")})
     assert response.status_code == 200
     if (data := response.json())["header"]["status"] == -2:
         pytest.skip(data["header"]["message"])
-    assert data["header"]["status"] == 0, response.json()
+    assert data["header"]["status"] == 0, data["header"]["message"]
 
 
 def test_sauce_file(client: TestClient):
@@ -29,4 +30,4 @@ def test_sauce_file(client: TestClient):
     assert response.status_code == 200
     if (data := response.json())["header"]["status"] == -2:
         pytest.skip(data["header"]["message"])
-    assert data["header"]["status"] == 0, response.json()
+    assert data["header"]["status"] == 0, data["header"]["message"]
