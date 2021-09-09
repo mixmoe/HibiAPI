@@ -54,3 +54,9 @@ content:
   robots: | # 提供的robots.txt内容, 用于提供搜索引擎抓取
     User-agent: *
     Disallow: /api/
+
+authorization:
+  enabled: false # 是否开启验证
+  allowed:
+    - username: admin # 用户名
+      password: admin # 密码

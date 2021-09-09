@@ -1,16 +1,20 @@
 import asyncio
-from typing import NoReturn
+from typing import NoReturn, List
 from urllib.parse import ParseResult
 
 import sentry_sdk
-from fastapi import FastAPI, Request, Response
+from secrets import compare_digest
+from fastapi import FastAPI, Request, Response, Depends
 from fastapi.staticfiles import StaticFiles
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sentry_sdk.integrations.logging import LoggingIntegration
+from pydantic import BaseModel
 
 from hibiapi import __version__
 from hibiapi.utils.config import Config
 from hibiapi.utils.log import logger
 from hibiapi.utils.temp import TempFile
+from hibiapi.utils.exceptions import ClientSideException
 
 from .routes import router as ImplRouter
 
@@ -39,6 +43,34 @@ if Config["log"]["sentry"]["enabled"].as_bool():
     )
 
 
+class AuthorizationModel(BaseModel):
+    username: str
+    password: str
+
+
+AUTHORIZATION_ENABLED = Config["authorization"]["enabled"].as_bool()
+AUTHORIZATION_ALLOWED = {
+    user.username: user.password
+    for user in Config["authorization"]["allowed"].get(List[AuthorizationModel])
+}
+
+security = HTTPBasic()
+
+
+def basic_authorization_depend(credentials: HTTPBasicCredentials = Depends(security)):
+    # NOTE: We use `compare_digest` to avoid timing attacks.
+    # Ref: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
+    if (credentials.username in AUTHORIZATION_ALLOWED) and compare_digest(
+        credentials.password, AUTHORIZATION_ALLOWED[credentials.username]
+    ):
+        return credentials.username, credentials.password
+    raise ClientSideException(
+        f"Invalid credentials for user {credentials.username!r}",
+        status_code=401,
+        headers={"WWW-Authenticate": "Basic"},
+    )
+
+
 app = FastAPI(
     debug=Config["debug"].as_bool(),
     title="HibiAPI",
@@ -47,7 +79,13 @@ app = FastAPI(
     docs_url="/docs/test",
     redoc_url="/docs",
 )
-app.include_router(ImplRouter, prefix="/api")
+app.include_router(
+    ImplRouter,
+    prefix="/api",
+    dependencies=(
+        [Depends(basic_authorization_depend)] if AUTHORIZATION_ENABLED else []
+    ),
+)
 app.mount(
     "/temp",
     StaticFiles(directory=str(TempFile.path), check_dir=False),
