@@ -1,7 +1,9 @@
 import base64
+import gzip
 import hashlib
 import pickle
-from datetime import datetime, timedelta
+import time
+from datetime import timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
 from wsgiref.handlers import format_date_time
@@ -21,12 +23,20 @@ CACHE_URI = Config["cache"]["uri"].as_str()
 _AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
 
 
-class Base85Serializer(BaseSerializer):
+class GZippedBase85Serializer(BaseSerializer):
     def dumps(self, value: Any) -> str:
-        return base64.b85encode(pickle.dumps(value)).decode()
+        return base64.b85encode(
+            gzip.compress(pickle.dumps(value)),
+        ).decode()
 
     def loads(self, value: Optional[str]) -> Any:
-        return pickle.loads(base64.b85decode(value)) if value else None
+        return (
+            pickle.loads(
+                gzip.decompress(base64.b85decode(value)),
+            )
+            if value
+            else None
+        )
 
 
 class CacheConfig(BaseModel):
@@ -78,7 +88,7 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
     config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
-    cache.serializer = Base85Serializer(encoding="utf-8")
+    cache.serializer = GZippedBase85Serializer(encoding="utf-8")
 
     if not CACHE_ENABLED:
         config.enabled = False
@@ -107,12 +117,12 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
             response_headers.get().setdefault("X-Cache-Hit", key)
             result, cache_date = await cache.get(key)  # type:ignore
         else:
-            result, cache_date = await vf.execute(model), datetime.now()
+            result, cache_date = await vf.execute(model), time.time()
             await cache.set(key, (result, cache_date))
 
         response_headers.get().setdefault("Cache-Control", "public")
         response_headers.get().setdefault(
-            "Expires", format_date_time(cache_date.timestamp() + cache.ttl)
+            "Expires", format_date_time(cache_date + cache.ttl)
         )
 
         return result
