@@ -18,6 +18,7 @@ from .config import Config
 from .log import logger
 
 CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
+CACHE_DELTA = timedelta(seconds=Config["cache"]["ttl"].as_number())
 CACHE_URI = Config["cache"]["uri"].as_str()
 
 _AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
@@ -43,7 +44,7 @@ class CacheConfig(BaseModel):
     endpoint: Callable[..., Coroutine]
     namespace: str
     enabled: bool = True
-    ttl: timedelta = timedelta(seconds=Config["cache"]["ttl"].as_number())
+    ttl: timedelta = CACHE_DELTA
 
     @staticmethod
     def new(function: Callable[..., Coroutine]):
@@ -52,7 +53,7 @@ class CacheConfig(BaseModel):
 
 def cache_config(
     enabled: bool = True,
-    ttl: timedelta = timedelta(hours=1),
+    ttl: timedelta = CACHE_DELTA,
     namespace: Optional[str] = None,
 ):
     def decorator(endpoint: _AsyncCallable) -> _AsyncCallable:
