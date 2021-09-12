@@ -80,7 +80,8 @@ class SauceEndpoint(BaseEndpoint):
         response = await self.client.post(
             url=self._join(self.base, "search.php", params), files={"file": file}
         )
-        response.raise_for_status()
+        if response.status_code >= 500:
+            response.raise_for_status()
         return response.json()
 
     @overload
