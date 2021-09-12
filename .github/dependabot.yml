@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: pip # See documentation for possible values
-    versioning-strategy: lockfile-only
+    versioning-strategy: auto
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
