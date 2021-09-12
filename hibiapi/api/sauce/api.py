@@ -1,7 +1,7 @@
+import random
 from enum import IntEnum
 from io import BytesIO
 from typing import Any, Dict, Optional, overload
-import random
 
 from httpx import HTTPError
 

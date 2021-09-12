@@ -1,20 +1,20 @@
 import asyncio
-from typing import NoReturn, List
+from secrets import compare_digest
+from typing import List, NoReturn
 from urllib.parse import ParseResult
 
 import sentry_sdk
-from secrets import compare_digest
-from fastapi import FastAPI, Request, Response, Depends
-from fastapi.staticfiles import StaticFiles
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from sentry_sdk.integrations.logging import LoggingIntegration
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 from hibiapi import __version__
 from hibiapi.utils.config import Config
+from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.log import logger
 from hibiapi.utils.temp import TempFile
-from hibiapi.utils.exceptions import ClientSideException
 
 from .routes import router as ImplRouter
 
