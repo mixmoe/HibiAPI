@@ -520,6 +520,17 @@ dev = ["flake8", "wheel", "pytest", "pytest-cov", "coverage", "ipdb", "requests"
 test = ["pytest", "pytest-cov", "coverage", "requests"]
 
 [[package]]
+name = "pytest-rerunfailures"
+version = "10.1"
+description = "pytest plugin to re-run tests to eliminate flaky failures"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+pytest = ">=5.3"
+
+[[package]]
 name = "python-dotenv"
 version = "0.18.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -794,7 +805,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "890b82c442eae757d62d932e07235f9bd59919bb1a40b9fd02e354852c181636"
+content-hash = "21a599d314975b106acc0c45992338bd59412d607310b4e6038be56b1e6be2b0"
 
 [metadata.files]
 aiocache = [
@@ -1155,6 +1166,10 @@ pytest = [
 pytest-httpserver = [
     {file = "pytest_httpserver-1.0.1-py3-none-any.whl", hash = "sha256:3b2663b539849a2e5bd7d7f380a99b19c4650e154581af699ad6431b5424cacc"},
     {file = "pytest_httpserver-1.0.1.tar.gz", hash = "sha256:e359c5722ce2bd3bb68f4606f57d5c846e52bf7c748a70de4a3097bb91006089"},
+]
+pytest-rerunfailures = [
+    {file = "pytest-rerunfailures-10.1.tar.gz", hash = "sha256:7617c06de13ee6dd2df9add7e275bfb2bcebbaaf3e450f5937cd0200df824273"},
+    {file = "pytest_rerunfailures-10.1-py3-none-any.whl", hash = "sha256:53db94acf7499c75c5257c79d8a1dc22c3db4bc8d32ec3a713ea91eda3f98359"},
 ]
 python-dotenv = [
     {file = "python-dotenv-0.18.0.tar.gz", hash = "sha256:effaac3c1e58d89b3ccb4d04a40dc7ad6e0275fda25fd75ae9d323e2465e202d"},
