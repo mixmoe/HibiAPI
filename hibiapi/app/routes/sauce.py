@@ -13,7 +13,7 @@ from hibiapi.api.sauce import (
 )
 from hibiapi.utils.routing import SlashRouter
 
-if not SauceConstants.API_KEY.strip():
+if (not SauceConstants.API_KEY) or (not all(map(str.strip, SauceConstants.API_KEY))):
     logger.warning("Sauce API key not set, SauceNAO endpoint will be unavailable")
     SauceConstants.CONFIG["enabled"].set(False)
 

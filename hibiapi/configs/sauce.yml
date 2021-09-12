@@ -8,7 +8,14 @@ enabled: true
 proxy: {}
 
 net:
-  api-key: "" # SauceNAO 的API KEY
+  # SauceNAO 的API KEY, 支持多个以进行负载均衡, 每个KEY以换行分隔
+  # api-key: |
+  #   aaaaaaa
+  #   bbbbbbb
+  api-key: ""
+
+  keys: # SauceNAO 的API KEY, 支持多个以进行负载均衡
+    - ""
   user-agent: &ua "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改
 
 image:

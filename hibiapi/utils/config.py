@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Generic, Optional, Type, TypeVar, overload
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
@@ -54,6 +54,9 @@ class ConfigSubView(confuse.Subview):
 
     def as_str(self) -> str:
         return self.get(str)
+
+    def as_str_seq(self, split: str = "\n") -> List[str]:
+        return self.as_str().strip().split(split)
 
     def as_number(self) -> int:
         return self.get(int)

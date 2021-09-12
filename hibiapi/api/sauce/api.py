@@ -1,6 +1,7 @@
 from enum import IntEnum
 from io import BytesIO
 from typing import Any, Dict, Optional, overload
+import random
 
 from httpx import HTTPError
 
@@ -76,9 +77,17 @@ class SauceEndpoint(BaseEndpoint):
     async def request(
         self, *, file: UploadFileIO, params: Dict[str, Any]
     ) -> Dict[str, Any]:
-        params.update({"api_key": SauceConstants.API_KEY, "output_type": 2})
         response = await self.client.post(
-            url=self._join(self.base, "search.php", params), files={"file": file}
+            url=self._join(
+                self.base,
+                "search.php",
+                params={
+                    **params,
+                    "api_key": random.choice(SauceConstants.API_KEY),
+                    "output_type": 2,
+                },
+            ),
+            files={"file": file},
         )
         if response.status_code >= 500:
             response.raise_for_status()

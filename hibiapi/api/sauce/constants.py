@@ -7,7 +7,7 @@ _Config = APIConfig("sauce")
 
 class SauceConstants:
     CONFIG: APIConfig = _Config
-    API_KEY: str = _Config["net"]["api-key"].as_str()
+    API_KEY: List[str] = _Config["net"]["api-key"].as_str_seq()
     USER_AGENT: str = _Config["net"]["user-agent"].as_str()
     PROXIES: Dict[str, str] = _Config["proxy"].as_dict()
     IMAGE_HEADERS: Dict[str, Any] = _Config["image"]["headers"].as_dict()
