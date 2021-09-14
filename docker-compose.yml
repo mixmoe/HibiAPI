@@ -1,0 +1,41 @@
+version: "3.9"
+
+volumes:
+  hibi_redis: {}
+
+networks:
+  hibi_net: {}
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: hibi_redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hibi_net
+    volumes:
+      - hibi_redis:/data
+    expose: [6379]
+
+  api:
+    container_name: hibiapi
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: on-failure
+    networks:
+      - hibi_net
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      FORWARDED_ALLOW_IPS: "*"
+      GENERAL_CACHE_URI: "redis://redis:6379"
+      GENERAL_SERVER_HOST: "0.0.0.0"
