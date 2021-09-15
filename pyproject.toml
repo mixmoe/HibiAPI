@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "HibiAPI"
-version = "0.7.3"
+version = "0.7.4"
 description = "A program that implements easy-to-use APIs for a variety of commonly used sites"
 authors = ["mixmoe"]
 license = "Apache-2.0"
