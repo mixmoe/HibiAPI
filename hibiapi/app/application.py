@@ -18,7 +18,8 @@ from hibiapi.utils.temp import TempFile
 
 from .routes import router as ImplRouter
 
-DESCRIPTION = """
+DESCRIPTION = (
+    """
 **A program that implements easy-to-use APIs for a variety of commonly used sites**
 
 - *Documents*:
@@ -27,11 +28,9 @@ DESCRIPTION = """
 
 Project: [mixmoe/HibiAPI](https://github.com/mixmoe/HibiAPI)
 
-![](https://img.shields.io/github/stars/mixmoe/HibiAPI?color=brightgreen&logo=github&style=for-the-badge)
 """
-
-if slogan := Config["content"]["slogan"].as_str().strip():
-    DESCRIPTION += "\n" + slogan
+    + Config["content"]["slogan"].as_str().strip()
+).strip()
 
 
 if Config["log"]["sentry"]["enabled"].as_bool():
