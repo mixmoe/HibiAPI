@@ -16,14 +16,10 @@ async def exception_handler(
     exc: exceptions.BaseServerException,
 ) -> Response:
     if isinstance(exc, exceptions.UncaughtException):
-        exc.data.trace = (
-            exceptions.ExceptionInfo.new(exc.exc.__traceback__).persist().id
-        )
+        cause = exc.exc
+        exc.data.trace = exceptions.ExceptionInfo.new(cause.__traceback__).persist().id
+        logger.opt(exception=exc).exception(f"Uncaught exception raised {exc.data=}:")
     exc.data.url = str(request.url)  # type:ignore
-    if exc.data.code >= 500:
-        logger.opt(exception=exc).exception(
-            f"Error occurred during parsing {exc.data}:"
-        )
     return Response(
         content=exc.data.json(),
         status_code=exc.data.code,
