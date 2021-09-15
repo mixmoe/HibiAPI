@@ -9,6 +9,7 @@ def client():
     from hibiapi.app import app
 
     with TestClient(app, base_url="http://testserver/api/pixiv/") as client:
+        client.headers["Cache-Control"] = "no-cache"
         yield client
 
 
