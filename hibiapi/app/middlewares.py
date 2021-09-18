@@ -5,6 +5,7 @@ from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
+from sentry_sdk.integrations.httpx import HttpxIntegration
 from starlette.datastructures import MutableHeaders
 
 from hibiapi.utils.config import Config
@@ -14,6 +15,8 @@ from hibiapi.utils.routing import request_headers, response_headers
 
 from .application import app
 from .handlers import exception_handler
+
+HttpxIntegration.setup_once()
 
 if Config["server"]["gzip"].as_bool():
     app.add_middleware(GZipMiddleware)
