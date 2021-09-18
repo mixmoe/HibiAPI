@@ -7,14 +7,13 @@ import sentry_sdk
 from fastapi import Depends, FastAPI, Request, Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-from sentry_sdk.integrations.logging import LoggingIntegration
-
 from hibiapi import __version__
 from hibiapi.utils.config import Config
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.log import logger
 from hibiapi.utils.temp import TempFile
+from pydantic import BaseModel
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 from .routes import router as ImplRouter
 
@@ -48,10 +47,8 @@ class AuthorizationModel(BaseModel):
 
 
 AUTHORIZATION_ENABLED = Config["authorization"]["enabled"].as_bool()
-AUTHORIZATION_ALLOWED = {
-    user.username: user.password
-    for user in Config["authorization"]["allowed"].get(List[AuthorizationModel])
-}
+AUTHORIZATION_ALLOWED = Config["authorization"]["allowed"].get(List[AuthorizationModel])
+
 
 security = HTTPBasic()
 
@@ -59,10 +56,11 @@ security = HTTPBasic()
 def basic_authorization_depend(credentials: HTTPBasicCredentials = Depends(security)):
     # NOTE: We use `compare_digest` to avoid timing attacks.
     # Ref: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
-    if (credentials.username in AUTHORIZATION_ALLOWED) and compare_digest(
-        credentials.password, AUTHORIZATION_ALLOWED[credentials.username]
-    ):
-        return credentials.username, credentials.password
+    for allowed in AUTHORIZATION_ALLOWED:
+        if compare_digest(credentials.username, allowed.username) and compare_digest(
+            credentials.password, allowed.password
+        ):
+            return credentials.username, credentials.password
     raise ClientSideException(
         f"Invalid credentials for user {credentials.username!r}",
         status_code=401,
