@@ -521,11 +521,11 @@ test = ["pytest", "pytest-cov", "coverage", "requests"]
 
 [[package]]
 name = "pytest-rerunfailures"
-version = "10.1"
+version = "10.2"
 description = "pytest plugin to re-run tests to eliminate flaky failures"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">= 3.6"
 
 [package.dependencies]
 pytest = ">=5.3"
@@ -805,7 +805,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c9e071552657324b9b7bbb2e7c4ca2717eb4486a41d33b2df7f92e72872bd632"
+content-hash = "397cff0ae7c5dc8c972796231d00eb574a8f1918e4a0f67e14face28ea09a20f"
 
 [metadata.files]
 aiocache = [
@@ -1168,8 +1168,8 @@ pytest-httpserver = [
     {file = "pytest_httpserver-1.0.1.tar.gz", hash = "sha256:e359c5722ce2bd3bb68f4606f57d5c846e52bf7c748a70de4a3097bb91006089"},
 ]
 pytest-rerunfailures = [
-    {file = "pytest-rerunfailures-10.1.tar.gz", hash = "sha256:7617c06de13ee6dd2df9add7e275bfb2bcebbaaf3e450f5937cd0200df824273"},
-    {file = "pytest_rerunfailures-10.1-py3-none-any.whl", hash = "sha256:53db94acf7499c75c5257c79d8a1dc22c3db4bc8d32ec3a713ea91eda3f98359"},
+    {file = "pytest-rerunfailures-10.2.tar.gz", hash = "sha256:9e1e1bad51e07642c5bbab809fc1d4ec8eebcb7de86f90f1a26e6ef9de446697"},
+    {file = "pytest_rerunfailures-10.2-py3-none-any.whl", hash = "sha256:d31d8e828dfd39363ad99cd390187bf506c7a433a89f15c3126c7d16ab723fe2"},
 ]
 python-dotenv = [
     {file = "python-dotenv-0.18.0.tar.gz", hash = "sha256:effaac3c1e58d89b3ccb4d04a40dc7ad6e0275fda25fd75ae9d323e2465e202d"},
