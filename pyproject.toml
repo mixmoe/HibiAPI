@@ -20,7 +20,7 @@ uvicorn = {extras = ["standard"], version = "^0.14.0"}
 confuse = "^1.4.0"
 loguru = "^0.5.3"
 python-dotenv = ">=0.17,<0.19"
-qrcode = {extras = ["pil"], version = "^6.1"}
+qrcode = {extras = ["pil"], version = ">=6.1,<8.0"}
 aiofiles = "^0.7.0"
 pycryptodomex = "^3.10.1"
 sentry-sdk = "^1.1.0"
