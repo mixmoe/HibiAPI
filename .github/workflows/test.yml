@@ -92,7 +92,7 @@ jobs:
       - name: Testing with pytest
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > .env
-          poetry run coverage run -m pytest --reruns 3 --reruns-delay 5 ./test
+          poetry run coverage run -m pytest --reruns 5 --reruns-delay 7 ./test
           poetry run coverage xml
 
       - uses: codecov/codecov-action@v1
