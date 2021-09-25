@@ -35,12 +35,7 @@
 
 ## 前言
 
-- 在开发与第三方API对接的过程中, 你是否遇到了以下问题?
-  - 提供的API带有CORS跨域, 无法直接调用
-  - 调用公开数据但是需要登录凭证, 会导致登录凭证泄漏
-  - 第三方API加密实现复杂, 很难实现
-
-- 现在, 有了`HibiAPI`, 它提供多种网站公开内容的API集合, 它们包括:
+- `HibiAPI`提供多种网站公开内容的API集合, 它们包括:
   - Pixiv的图片/小说相关信息获取和搜索
   - Bilibili的视频/番剧等信息获取和搜索
   - 网易云音乐的音乐/MV等信息获取和搜索
@@ -55,8 +50,6 @@
 ### 开源
 
 - 本项目以[Apache-2.0](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)许可开源, 这意味着你可以在**注明版权信息**的情况下进行任意使用
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmixmoe%2FHibiAPI?ref=badge_large)
 
 ### 高效
 
