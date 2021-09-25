@@ -446,7 +446,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pycryptodomex"
-version = "3.10.1"
+version = "3.10.4"
 description = "Cryptographic library for Python"
 category = "main"
 optional = false
@@ -562,22 +562,22 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [[package]]
 name = "qrcode"
-version = "6.1"
+version = "7.3"
 description = "QR Code image generator"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 pillow = {version = "*", optional = true, markers = "extra == \"pil\""}
-six = "*"
 
 [package.extras]
-dev = ["tox", "pytest", "mock"]
+all = ["zest.releaser", "tox", "pytest", "pytest", "pytest-cov", "pillow"]
+dev = ["tox", "pytest"]
 maintainer = ["zest.releaser"]
 pil = ["pillow"]
-test = ["pytest", "pytest-cov", "mock"]
+test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "regex"
@@ -621,7 +621,7 @@ idna2008 = ["idna"]
 
 [[package]]
 name = "sentry-sdk"
-version = "1.3.1"
+version = "1.4.1"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -805,7 +805,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9fc91a599d1d4eb1a15b56e21bfd1cafd011d4e957f852919fc32a795079c292"
+content-hash = "d95deda1b5e2074ee076ae7ca5ce3326aa058a1a4676f8dc3454128531cf0a1c"
 
 [metadata.files]
 aiocache = [
@@ -1096,36 +1096,33 @@ pycodestyle = [
     {file = "pycodestyle-2.7.0.tar.gz", hash = "sha256:c389c1d06bf7904078ca03399a4816f974a1d590090fecea0c63ec26ebaf1cef"},
 ]
 pycryptodomex = [
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:4344ab16faf6c2d9df2b6772995623698fb2d5f114dace4ab2ff335550cf71d5"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:f933ecf4cb736c7af60a6a533db2bf569717f2318b265f92907acff1db43bc34"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:0bd35af6a18b724c689e56f2dbbdd8e409288be71952d271ba3d9614b31d188c"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:ec9901d19cadb80d9235ee41cc58983f18660314a0eb3fc7b11b0522ac3b6c4a"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:c2b680987f418858e89dbb4f09c8c919ece62811780a27051ace72b2f69fb1be"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-manylinux2014_aarch64.whl", hash = "sha256:a6584ae58001d17bb4dc0faa8a426919c2c028ef4d90ceb4191802ca6edb8204"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-win32.whl", hash = "sha256:4195604f75cdc1db9bccdb9e44d783add3c817319c30aaff011670c9ed167690"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27m-win_amd64.whl", hash = "sha256:9f713ffb4e27b5575bd917c70bbc3f7b348241a351015dbbc514c01b7061ff7e"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:418f51c61eab52d9920f4ef468d22c89dab1be5ac796f71cf3802f6a6e667df0"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:8a98e02cbf8f624add45deff444539bf26345b479fc04fa0937b23cd84078d91"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:dbd2c361db939a4252589baa94da4404d45e3fc70da1a31e541644cdf354336e"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:564063e3782474c92cbb333effd06e6eb718471783c6e67f28c63f0fc3ac7b23"},
-    {file = "pycryptodomex-3.10.1-cp27-cp27mu-manylinux2014_aarch64.whl", hash = "sha256:e4a1245e7b846e88ba63e7543483bda61b9acbaee61eadbead5a1ce479d94740"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:3b8eb85b3cc7f083d87978c264d10ff9de3b4bfc46f1c6fdc2792e7d7ebc87bb"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-manylinux1_i686.whl", hash = "sha256:f3bb267df679f70a9f40f17d62d22fe12e8b75e490f41807e7560de4d3e6bf9f"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-manylinux1_x86_64.whl", hash = "sha256:04265a7a84ae002001249bd1de2823bcf46832bd4b58f6965567cb8a07cf4f00"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-manylinux2010_i686.whl", hash = "sha256:72f44b5be46faef2a1bf2a85902511b31f4dd7b01ce0c3978e92edb2cc812a82"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-manylinux2010_x86_64.whl", hash = "sha256:e090a8609e2095aa86978559b140cf8968af99ee54b8791b29ff804838f29f10"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-manylinux2014_aarch64.whl", hash = "sha256:20c45a30f3389148f94edb77f3b216c677a277942f62a2b81a1cc0b6b2dde7fc"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-win32.whl", hash = "sha256:fc9c55dc1ed57db76595f2d19a479fc1c3a1be2c9da8de798a93d286c5f65f38"},
-    {file = "pycryptodomex-3.10.1-cp35-abi3-win_amd64.whl", hash = "sha256:3dfce70c4e425607ae87b8eae67c9c7dbba59a33b62d70f79417aef0bc5c735b"},
-    {file = "pycryptodomex-3.10.1-pp27-pypy_73-macosx_10_9_x86_64.whl", hash = "sha256:940db96449d7b2ebb2c7bf190be1514f3d67914bd37e54e8d30a182bd375a1a9"},
-    {file = "pycryptodomex-3.10.1-pp27-pypy_73-manylinux1_x86_64.whl", hash = "sha256:d8fae5ba3d34c868ae43614e0bd6fb61114b2687ac3255798791ce075d95aece"},
-    {file = "pycryptodomex-3.10.1-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:f2abeb4c4ce7584912f4d637b2c57f23720d35dd2892bfeb1b2c84b6fb7a8c88"},
-    {file = "pycryptodomex-3.10.1-pp27-pypy_73-win32.whl", hash = "sha256:36dab7f506948056ceba2d57c1ade74e898401960de697cefc02f3519bd26c1b"},
-    {file = "pycryptodomex-3.10.1-pp36-pypy36_pp73-macosx_10_9_x86_64.whl", hash = "sha256:37ec1b407ec032c7a0c1fdd2da12813f560bad38ae61ad9c7ce3c0573b3e5e30"},
-    {file = "pycryptodomex-3.10.1-pp36-pypy36_pp73-manylinux1_x86_64.whl", hash = "sha256:00a584ee52bf5e27d540129ca9bf7c4a7e7447f24ff4a220faa1304ad0c09bcd"},
-    {file = "pycryptodomex-3.10.1-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:961333e7ee896651f02d4692242aa36b787b8e8e0baa2256717b2b9d55ae0a3c"},
-    {file = "pycryptodomex-3.10.1-pp36-pypy36_pp73-win32.whl", hash = "sha256:2959304d1ce31ab303d9fb5db2b294814278b35154d9b30bf7facc52d6088d0a"},
-    {file = "pycryptodomex-3.10.1.tar.gz", hash = "sha256:541cd3e3e252fb19a7b48f420b798b53483302b7fe4d9954c947605d0a263d62"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:c1888507549eccedd0fff20dfa70c95b3848bf5b4fe2da1c971ee3ee646675d9"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:5f88c0808b356ffeef1243e97a042b2c767f076325d50472da696f359a6afa29"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:04299f783efa97f540e1fe72e6ee332614778c72ccabc2e84452435a5768748e"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:a75f9ba6d01e9b21b0f40079646c10b0a7fc1404dcf756731afd137b1f9b109a"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:ac33233c2a1c6dc7279b4b1db7c534bdf4b9c2252290a3c4a86d21443712c2c7"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-win32.whl", hash = "sha256:911722bce054221f6411f1e5a790962a0e2beb6eb9647f83fd3b4ca06de6d5b6"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27m-win_amd64.whl", hash = "sha256:fb72db4db594398c8b59caacfe9aa8c269c5cc41b4cdd20b471b6490ba60256d"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:1339bc64209135b004916978e5d56bf14166fda78e68338a72427e0d3b92ea98"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:08095bbbb536a817247411e28deaf67fc29a00ca0a099464ba2cfaa34f5999dd"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:9a3926b38f0ae61b72472acda1aac00f7b54875ecc1cb6bdd07da6cc02006416"},
+    {file = "pycryptodomex-3.10.4-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:7a32f4d69ee69d72c54d9d5f7b3810212d5dca76aa97a850884bd8b0636411fa"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:99f925b9a1c6a62f03385e0c14f8fd55d2366bb47fd8c3ccd82764c4f39aa5b5"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-manylinux1_i686.whl", hash = "sha256:ea3e634623ff41a9471517a9a3735821d91cfc97b8b803522e9fd96c1a094568"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-manylinux1_x86_64.whl", hash = "sha256:22838f744833bd5befb6b9b55c50e255b39fa3cb2c7d28c2d9e903f222f8cc4c"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-manylinux2010_i686.whl", hash = "sha256:c07f8cad7b2597357291f144a07c0120399bc0a1ee5ca0c6b2af52691ad2a22a"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-manylinux2010_x86_64.whl", hash = "sha256:9e628383788eac3f661798c01121029a60722a0922b3e903ea88be3065231256"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-win32.whl", hash = "sha256:784b39e5c4d6331f559036b0efc8593d3336a6e6a0db86997fe2679bc84a3a82"},
+    {file = "pycryptodomex-3.10.4-cp35-abi3-win_amd64.whl", hash = "sha256:041cbde579b3e044ea1b24ff16e4a2d84eacdfd925a96bca21707df0953d1f94"},
+    {file = "pycryptodomex-3.10.4-pp27-pypy_73-macosx_10_9_x86_64.whl", hash = "sha256:e767c7a84d7eff2294ea488dfd1b9583b886f95cd521c59495f0266c7d967e1f"},
+    {file = "pycryptodomex-3.10.4-pp27-pypy_73-manylinux1_x86_64.whl", hash = "sha256:cb585c23505bc6a6c51d91830ea15bb28369ecab6301ab3e8f0474b5c651c064"},
+    {file = "pycryptodomex-3.10.4-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:9dae6c26803e04cac1aa4144d0f3ec4f9984c10449208eed430c98c63776d0d0"},
+    {file = "pycryptodomex-3.10.4-pp27-pypy_73-win32.whl", hash = "sha256:0e1b6dfe40e98a4f0368fa4df4c6f61ef8ed1d505efc8c1d5936e0091a127da6"},
+    {file = "pycryptodomex-3.10.4-pp36-pypy36_pp73-macosx_10_9_x86_64.whl", hash = "sha256:82ee08933c2b682cf55a229851c7d69767d307f33f05b1f05a09f207cbb25308"},
+    {file = "pycryptodomex-3.10.4-pp36-pypy36_pp73-manylinux1_x86_64.whl", hash = "sha256:c905625a65f2b05c9d1c4be8c182f34ee274d704441c3cc57f440097ccc63dc3"},
+    {file = "pycryptodomex-3.10.4-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:1ad37bae59782e864317725da11cd9f9bc4e6def1e68f673054e0e855ceef9ac"},
+    {file = "pycryptodomex-3.10.4-pp36-pypy36_pp73-win32.whl", hash = "sha256:6cd44aca92f997c049050a6d2048a3009068dfe34830f76964019679c727fe40"},
+    {file = "pycryptodomex-3.10.4.tar.gz", hash = "sha256:acd3498a8ccf8ad20ce7daa5f7f5e6521465eeceb026f28a6adb0228dd9fcc6e"},
 ]
 pydantic = [
     {file = "pydantic-1.8.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:05ddfd37c1720c392f4e0d43c484217b7521558302e7069ce8d318438d297739"},
@@ -1210,8 +1207,7 @@ pyyaml = [
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
 ]
 qrcode = [
-    {file = "qrcode-6.1-py2.py3-none-any.whl", hash = "sha256:3996ee560fc39532910603704c82980ff6d4d5d629f9c3f25f34174ce8606cf5"},
-    {file = "qrcode-6.1.tar.gz", hash = "sha256:505253854f607f2abf4d16092c61d4e9d511a3b4392e60bff957a68592b04369"},
+    {file = "qrcode-7.3.tar.gz", hash = "sha256:d72861b65e26b611609f0547f0febe58aed8ae229d6bf4e675834f40742915b3"},
 ]
 regex = [
     {file = "regex-2021.8.28-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:9d05ad5367c90814099000442b2125535e9d77581855b9bee8780f1b41f2b1a2"},
@@ -1265,8 +1261,8 @@ rfc3986 = [
     {file = "rfc3986-1.5.0.tar.gz", hash = "sha256:270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.3.1.tar.gz", hash = "sha256:ebe99144fa9618d4b0e7617e7929b75acd905d258c3c779edcd34c0adfffe26c"},
-    {file = "sentry_sdk-1.3.1-py2.py3-none-any.whl", hash = "sha256:f33d34c886d0ba24c75ea8885a8b3a172358853c7cbde05979fc99c29ef7bc52"},
+    {file = "sentry-sdk-1.4.1.tar.gz", hash = "sha256:4297555ddc37c7136740e6b547b7d68f5bca0b4832f94ac097e5d531a4c77528"},
+    {file = "sentry_sdk-1.4.1-py2.py3-none-any.whl", hash = "sha256:ea04bc3be6eb082f34ff3f8f6380ea9c691766592298f3f975a435dafac6bf6a"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
