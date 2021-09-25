@@ -17,13 +17,17 @@
 ![Test](https://github.com/mixmoe/HibiAPI/workflows/Test/badge.svg)
 [![Coverage](https://codecov.io/gh/mixmoe/HibiAPI/branch/main/graph/badge.svg)](https://codecov.io/gh/mixmoe/HibiAPI)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
 [![PyPI](https://img.shields.io/pypi/v/hibiapi)](https://pypi.org/project/hibiapi/)
-[![GitHub license](https://img.shields.io/github/license/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/blob/main/LICENSE)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/hibiapi)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hibiapi)
+![PyPI - License](https://img.shields.io/pypi/l/hibiapi)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/mixmoe/HibiAPI)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mixmoe/hibiapi)
+![Lines of code](https://img.shields.io/tokei/lines/github/mixmoe/hibiapi)
 [![GitHub stars](https://img.shields.io/github/stars/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/network)
 [![GitHub issues](https://img.shields.io/github/issues/mixmoe/HibiAPI)](https://github.com/mixmoe/HibiAPI/issues)
-![Python version](https://img.shields.io/badge/python-3.8%2B-yellowgreen)
 
 </div>
 
