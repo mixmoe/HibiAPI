@@ -110,3 +110,9 @@ def test_search_novel(client: TestClient):
     response = client.get("search_novel", params={"word": "碧蓝航线"})
     assert response.status_code == 200
     assert response.json().get("novels")
+
+
+def test_novel_new(client: TestClient):
+    response = client.get("novel_new", params={"max_novel_id": "16002726"})
+    assert response.status_code == 200
+    assert response.json().get("next_url")
