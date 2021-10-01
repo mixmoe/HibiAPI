@@ -2,6 +2,7 @@ import asyncio
 from typing import Callable, Coroutine, NoReturn, Optional
 
 from fastapi import Depends, Request
+
 from hibiapi.api.pixiv import (
     EndpointsType,
     IllustType,
@@ -505,7 +506,7 @@ async def novel_new(
     ---
 
     ### Optional:
-    - ***MaxNovelId*** `max_novel_id` = `None`
+    - ***Optional[int]*** `max_novel_id` = `None`
         - Description: 从该id开始获取最新小说
     """
     return await endpoint.novel_new(max_novel_id=max_novel_id)

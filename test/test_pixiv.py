@@ -113,6 +113,6 @@ def test_search_novel(client: TestClient):
 
 
 def test_novel_new(client: TestClient):
-    response = client.get("novel_new", params={"max_novel_id": "16002726"})
+    response = client.get("novel_new", params={"max_novel_id": 16002726})
     assert response.status_code == 200
     assert response.json().get("next_url")
