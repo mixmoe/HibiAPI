@@ -31,6 +31,7 @@ class EndpointsType(str, Enum):
     novel_detail = "novel_detail"
     novel_text = "novel_text"
     search_novel = "search_novel"
+    novel_new = "novel_new"
 
 
 class IllustType(str, Enum):
@@ -357,4 +358,9 @@ class PixivEndpoints(BaseEndpoint):
                 "duration": duration,
                 "offset": (page - 1) * size,
             },
+        )
+
+    async def novel_new(self, max_novel_id: Optional[int] = None):
+        return await self.request(
+            "/v1/novel/new", params={"max_novel_id": max_novel_id}
         )

@@ -491,3 +491,22 @@ async def search_novel(
         page=page,
         size=size,
     )
+
+
+@router.get(EndpointsType.novel_new)
+async def novel_new(
+    max_novel_id: Optional[int] = None,
+    endpoint: PixivEndpoints = Depends(request_client),
+):
+    """
+    ## Name: `novel_new`
+
+    > 获取最新小说
+
+    ---
+
+    ### Optional:
+    - ***Optional[int]*** `max_novel_id` = `None`
+        - Description: 从该id开始获取最新小说
+    """
+    return await endpoint.novel_new(max_novel_id=max_novel_id)
