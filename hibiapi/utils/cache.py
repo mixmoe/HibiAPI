@@ -6,7 +6,6 @@ import time
 from datetime import timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
-from wsgiref.handlers import format_date_time
 
 from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
@@ -82,7 +81,7 @@ class CachedValidatedFunction(ValidatedFunction):
 
 
 def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
-    from .routing import request_headers, response_headers  # noqa:F401
+    from .routing import request_headers, response_headers
 
     vf = CachedValidatedFunction(function, config={})
     cache: BaseCache = AioCache.from_url(CACHE_URI)  # type:ignore
@@ -110,21 +109,21 @@ def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
         if cache_policy.casefold() == "no-cache":
             await cache.delete(key)
 
+        resp_header = response_headers.get()
+
         if await cache.exists(key):
             logger.debug(
                 f"Request to endpoint <g>{function.__qualname__}</g> "
                 f"restoring from <e>{key=}</e> in cache data."
             )
-            response_headers.get().setdefault("X-Cache-Hit", key)
+            resp_header.setdefault("X-Cache-Hit", key)
             result, cache_date = await cache.get(key)  # type:ignore
         else:
             result, cache_date = await vf.execute(model), time.time()
             await cache.set(key, (result, cache_date))
 
-        response_headers.get().setdefault("Cache-Control", "public")
-        response_headers.get().setdefault(
-            "Expires", format_date_time(cache_date + cache.ttl)
-        )
+        if (cache_remain := int(cache_date + cache.ttl - time.time())) > 0:
+            resp_header.setdefault("Cache-Control", f"max-age={cache_remain}")
 
         return result
 
