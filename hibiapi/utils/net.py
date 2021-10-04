@@ -1,5 +1,5 @@
 import asyncio
-from functools import wraps
+import functools
 from threading import current_thread
 from types import TracebackType
 from typing import Any, Callable, Coroutine, Dict, Optional, Type, TypeVar, Union
@@ -69,13 +69,13 @@ class BaseNetClient:
     async def __aenter__(self) -> AsyncHTTPClient:
         tid = current_thread().ident or 1
         if tid not in self.clients:
-            self.clients[tid] = self.client_class(
+            self.clients[tid] = await self.client_class(
                 headers=self.headers,
                 proxies=self.proxies,  # type:ignore
                 cookies=self.cookies,
                 http2=True,
-            )
-        return await self.clients[tid].__aenter__()
+            ).__aenter__()
+        return self.clients[tid]
 
     async def __aexit__(
         self,
@@ -108,7 +108,7 @@ class BaseNetClient:
 def catch_network_error(function: AsyncCallable_T) -> AsyncCallable_T:
     timed_func = TimeIt(function)
 
-    @wraps(timed_func)
+    @functools.wraps(timed_func)
     async def wrapper(*args, **kwargs):
         try:
             return await timed_func(*args, **kwargs)
