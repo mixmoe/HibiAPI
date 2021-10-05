@@ -67,7 +67,9 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - uses: Gr1N/setup-poetry@v4
+      - name: Install poetry
+        run: |
+          pip install poetry
 
       - name: Get poetry cache directory
         id: cache-poetry
