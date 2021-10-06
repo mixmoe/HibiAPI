@@ -53,7 +53,9 @@ AUTHORIZATION_ALLOWED = Config["authorization"]["allowed"].get(List[Authorizatio
 security = HTTPBasic()
 
 
-def basic_authorization_depend(credentials: HTTPBasicCredentials = Depends(security)):
+async def basic_authorization_depend(
+    credentials: HTTPBasicCredentials = Depends(security),
+):
     # NOTE: We use `compare_digest` to avoid timing attacks.
     # Ref: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
     for allowed in AUTHORIZATION_ALLOWED:
