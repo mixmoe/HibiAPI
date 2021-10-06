@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Callable, Coroutine, List
+from typing import Any, Callable, Coroutine, List, Optional, Set
 
 from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,7 +9,11 @@ from sentry_sdk.integrations.httpx import HttpxIntegration
 from starlette.datastructures import MutableHeaders
 
 from hibiapi.utils.config import Config
-from hibiapi.utils.exceptions import UncaughtException
+from hibiapi.utils.exceptions import (
+    BaseServerException,
+    ClientSideException,
+    UncaughtException,
+)
 from hibiapi.utils.log import logger
 from hibiapi.utils.routing import request_headers, response_headers
 
@@ -29,8 +33,18 @@ app.add_middleware(
 )
 app.add_middleware(SentryAsgiMiddleware)
 
-
 RequestHandler = Callable[[Request], Coroutine[Any, Any, Response]]
+
+ALLOWED_DOMAINS = Config["server"]["domains"].get(Optional[Set[str]])  # type: ignore
+
+
+@app.middleware("http")
+async def domain_limiter(request: Request, call_next: RequestHandler) -> Response:
+    if (ALLOWED_DOMAINS is not None) and (
+        (domain := request.url.netloc) not in ALLOWED_DOMAINS
+    ):
+        raise ClientSideException(f"{domain=} is not allowed.", code=403)
+    return await call_next(request)
 
 
 @app.middleware("http")
@@ -79,6 +93,11 @@ async def uncaught_exception_handler(
         response = await call_next(request)
     except Exception as error:
         response = await exception_handler(
-            request, exc=UncaughtException.with_exception(error)
+            request,
+            exc=(
+                error
+                if isinstance(error, BaseServerException)
+                else UncaughtException.with_exception(error)
+            ),
         )
     return response

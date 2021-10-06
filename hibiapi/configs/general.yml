@@ -18,6 +18,8 @@ server:
   port: 8080 # 端口
   gzip: true
 
+  domains: null # 限定来源域名, 设置为null为不限制
+
   cors:
     origins:
       - "http://localhost.tiangolo.com"
