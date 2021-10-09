@@ -51,7 +51,7 @@ async def login():
     asyncio.ensure_future(_refreshIdentity())
 
 
-@router.get("/", summary="Pixiv API 兼容实现")
+@router.get("/", summary="Pixiv API 兼容实现", deprecated=True)
 async def _match_all(
     request: Request,
     type: EndpointsType = EndpointsType.illust,

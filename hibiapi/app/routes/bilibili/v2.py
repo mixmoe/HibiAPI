@@ -27,7 +27,7 @@ async def request_client():
         yield BilibiliEndpointV2(client)
 
 
-@router.get("/", summary="Bilibili API 兼容实现")
+@router.get("/", summary="Bilibili API 兼容实现", deprecated=True)
 async def _match_all(
     request: Request,
     get: V2EndpointsType = V2EndpointsType.playurl,

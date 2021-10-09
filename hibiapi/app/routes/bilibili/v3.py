@@ -27,7 +27,7 @@ async def request_client():
         yield BilibiliEndpointV3(client)
 
 
-@router.get("/", summary="整体实现")
+@router.get("/", summary="整体实现", deprecated=True)
 async def _match_all(
     request: Request,
     get: V3EndpointsType = V3EndpointsType.video_info,

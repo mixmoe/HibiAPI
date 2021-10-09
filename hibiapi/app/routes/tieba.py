@@ -16,7 +16,7 @@ async def request_client():
         yield TiebaEndpoint(client)
 
 
-@router.get("/")
+@router.get("/", deprecated=True)
 async def _match_all(
     request: Request,
     type: EndpointsType = EndpointsType.post_detail,

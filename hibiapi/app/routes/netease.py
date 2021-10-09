@@ -24,7 +24,7 @@ async def request_client():
         yield NeteaseEndpoint(client)
 
 
-@router.get("/", summary="网易云音乐 API 兼容实现")
+@router.get("/", summary="网易云音乐 API 兼容实现", deprecated=True)
 async def _match_all(
     request: Request,
     type: EndpointsType = EndpointsType.song,
