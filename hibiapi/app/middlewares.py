@@ -14,7 +14,7 @@ from hibiapi.utils.exceptions import (
     ClientSideException,
     UncaughtException,
 )
-from hibiapi.utils.log import logger
+from hibiapi.utils.log import LoguruHandler, logger
 from hibiapi.utils.routing import request_headers, response_headers
 
 from .application import app
@@ -54,24 +54,26 @@ async def request_logger(request: Request, call_next: RequestHandler) -> Respons
     response = await call_next(request)
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     response_headers.get().setdefault("X-Process-Time", f"{process_time:.3f}")
-    color = (
-        "green"
+    bg, fg = (
+        ("green", "red")
         if response.status_code < 400
-        else "yellow"
+        else ("yellow", "blue")
         if response.status_code < 500
-        else "red"
+        else ("red", "green")
+    )
+    status_code, method = response.status_code, request.method.upper()
+    user_agent = (
+        LoguruHandler.escape_tag(request.headers["user-agent"])
+        if "user-agent" in request.headers
+        else "<d>Unknown</d>"
     )
     logger.info(
-        " | ".join(
-            [
-                f"<m><b>{host}</b>:{port}</m>",
-                f"<{color.upper()}><b>{request.method.upper()}</b></{color.upper()}>",
-                f"<n><b>{str(request.url)!r}</b></n>",
-                f"<c>{process_time:.3f}ms</c>",
-                f"<e>{request.headers.get('user-agent','<d>Unknown</d>')}</e>",
-                f"<b><{color}>{response.status_code}</{color}></b>",
-            ]
-        )
+        f"<m><b>{host}</b>:{port}</m>"
+        f" | <{bg.upper()}><b><{fg}>{method}</{fg}></b></{bg.upper()}>"
+        f" | <n><b>{str(request.url)!r}</b></n>"
+        f" | <c>{process_time:.3f}ms</c>"
+        f" | <e>{user_agent}</e>"
+        f" | <b><{bg}>{status_code}</{bg}></b>"
     )
     return response
 

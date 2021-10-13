@@ -3,6 +3,7 @@ import re
 import sys
 from asyncio.log import logger as _asyncio_logger
 from datetime import timedelta
+from functools import lru_cache
 from typing import TYPE_CHECKING
 
 import sentry_sdk.integrations.logging as sentry
@@ -57,11 +58,12 @@ class LoguruHandler(logging.Handler):
             depth += 1
 
         logger.opt(depth=depth, exception=record.exc_info, colors=True).log(
-            level, ("<e>" + self._escape_tag(message) + "</e>")
+            level, ("<e>" + self.escape_tag(message) + "</e>")
         )
 
     @classmethod
-    def _escape_tag(cls, string: str) -> str:
+    @lru_cache(maxsize=16)
+    def escape_tag(cls, string: str) -> str:
         return cls._tag_escape_re.sub(r"\\\g<0>", string)
 
 
