@@ -73,4 +73,5 @@
         "vmid",
         "weapi"
     ],
+    "gitmoji.outputType": "code",
 }
