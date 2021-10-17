@@ -12,4 +12,4 @@ from .api import (
     SearchSortType,
 )
 from .constants import PixivConstants
-from .net import NetRequest, UserInfo
+from .net import NetRequest, PixivAuthData

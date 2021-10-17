@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
@@ -9,9 +9,7 @@ from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint
 
 from .constants import PixivConstants
-from .net import NetRequest, UserInfo
-
-USER_TEMP_DATA = DATA_PATH / "pixiv_account.json"
+from .net import NetRequest, PixivAuthData
 
 
 class EndpointsType(str, Enum):
@@ -157,30 +155,33 @@ class RankingDate(date):
 
 
 class PixivAPI:
-    def __init__(self):
-        pass
+    auth_data_path = DATA_PATH / "pixiv_account.json"
 
     async def login(self):
-        if USER_TEMP_DATA.exists():
-            user = await UserInfo.parse_obj(
-                json.loads(USER_TEMP_DATA.read_text(encoding="utf-8"))
-            ).renew()
+        if self.auth_data_path.exists():
+            user = PixivAuthData.parse_obj(
+                json.loads(self.auth_data_path.read_text(encoding="utf-8"))
+            )
+            if datetime.now() >= (user.time + timedelta(seconds=user.expires_in)):
+                user = await user.renew()
         else:
             if (
                 refresh_token := PixivConstants.CONFIG["account"]["token"]
                 .as_str()
                 .strip()
             ):
-                user = await UserInfo.login(refresh_token=refresh_token)
+                user = await PixivAuthData.login(refresh_token=refresh_token)
             else:
                 raise ValueError("Pixiv account refresh_token is not configured.")
         self.user = user
         self.net = NetRequest(user)
 
-        USER_TEMP_DATA.write_text(
+        self.auth_data_path.write_text(
             user.json(sort_keys=True, indent=4, ensure_ascii=False),
             encoding="utf-8",
         )
+
+        return user
 
 
 class PixivEndpoints(BaseEndpoint):

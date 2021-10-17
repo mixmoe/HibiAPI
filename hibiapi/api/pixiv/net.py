@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from typing import Any, Dict
+from typing import Dict
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
@@ -10,14 +10,25 @@ from hibiapi.utils.net import AsyncHTTPClient, BaseNetClient
 from .constants import PixivConstants
 
 
-class UserInfo(BaseModel):
-    time: datetime = Field(default_factory=datetime.now)
-    access_token: str
-    refresh_token: str
-    user: Dict[str, Any]
-
+class AccountDataModel(BaseModel):
     class Config:
         extra = Extra.allow
+
+
+class PixivUserData(AccountDataModel):
+    account: str
+    id: int
+    is_premium: bool
+    mail_address: str
+    name: str
+
+
+class PixivAuthData(AccountDataModel):
+    time: datetime = Field(default_factory=datetime.now)
+    expires_in: int
+    access_token: str
+    refresh_token: str
+    user: PixivUserData
 
     @classmethod
     async def login(cls, *, refresh_token: str):
@@ -45,12 +56,12 @@ class UserInfo(BaseModel):
             response.raise_for_status()
         return cls.parse_obj(response.json())
 
-    async def renew(self) -> "UserInfo":
+    async def renew(self) -> "PixivAuthData":
         return await self.login(refresh_token=self.refresh_token)
 
 
 class NetRequest(BaseNetClient):
-    def __init__(self, user: UserInfo):
+    def __init__(self, user: PixivAuthData):
         super().__init__(
             headers=PixivConstants.DEFAULT_HEADERS.copy(),
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
