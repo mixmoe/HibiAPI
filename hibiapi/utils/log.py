@@ -37,7 +37,12 @@ logger.add(
     format=LOG_FORMAT,
     filter=lambda record: record["level"].no < 30,
 )
-logger.add(sys.stderr, level="WARNING", format=LOG_FORMAT)
+logger.add(
+    sys.stderr,
+    level=LOG_LEVEL,
+    filter=lambda record: record["level"].no >= 30,
+    format=LOG_FORMAT,
+)
 logger.add(sentry.BreadcrumbHandler(), level=LOG_LEVEL)
 logger.add(sentry.EventHandler(), level="ERROR")
 logger.level(LOG_LEVEL)
