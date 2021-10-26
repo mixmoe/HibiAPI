@@ -88,11 +88,13 @@
   |      轻零 API       |   <https://hibiapi.lite0.com>   |     ![lite0][lite0]     |
   | Kyomotoi の菜几服务 |   <https://api.kyomotoi.moe>    |       ![kyo][kyo]       |
   |     老狐狸 API      | <https://hibiapi.aliserver.net> | ![older-fox][older-fox] |
+  |     [MyCard](https://mycard.moe)      | <https://hibi.moecube.com> | ![mycard][mycard] |
 
 [official]: https://img.shields.io/website?url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json
 [lite0]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json
 [kyo]: https://img.shields.io/website?url=https%3A%2F%2Fapi.kyomotoi.moe%2Fopenapi.json
 [older-fox]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.aliserver.net%2Fopenapi.json
+[mycard]: https://img.shields.io/website?url=https%3A%2F%2Fhibi.moecube.com%2Fopenapi.json
 
 ## 特别鸣谢
 
