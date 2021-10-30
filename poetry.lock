@@ -507,17 +507,17 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xm
 
 [[package]]
 name = "pytest-httpserver"
-version = "1.0.1"
+version = "1.0.2"
 description = "pytest-httpserver is a httpserver for pytest"
 category = "dev"
 optional = false
-python-versions = ">=3.4"
+python-versions = ">=3.6"
 
 [package.dependencies]
 werkzeug = "*"
 
 [package.extras]
-dev = ["flake8", "wheel", "pytest", "pytest-cov", "coverage", "ipdb", "requests", "sphinx", "sphinx-rtd-theme", "reno", "autopep8"]
+dev = ["flake8", "wheel", "pytest", "pytest-cov", "coverage", "ipdb", "requests", "sphinx", "sphinx-rtd-theme", "reno", "autopep8", "mypy"]
 test = ["pytest", "pytest-cov", "coverage", "requests"]
 
 [[package]]
@@ -806,7 +806,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9868915e73f074e5b40e16dd4ec2858c0d4fae84ff178d3edf412b3c69186852"
+content-hash = "dc793e7b54ee2a2636a73a69925052900ca612ec2bc9529720086337fc804b1f"
 
 [metadata.files]
 aiocache = [
@@ -1146,8 +1146,8 @@ pytest = [
     {file = "pytest-6.2.5.tar.gz", hash = "sha256:131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89"},
 ]
 pytest-httpserver = [
-    {file = "pytest_httpserver-1.0.1-py3-none-any.whl", hash = "sha256:3b2663b539849a2e5bd7d7f380a99b19c4650e154581af699ad6431b5424cacc"},
-    {file = "pytest_httpserver-1.0.1.tar.gz", hash = "sha256:e359c5722ce2bd3bb68f4606f57d5c846e52bf7c748a70de4a3097bb91006089"},
+    {file = "pytest_httpserver-1.0.2-py3-none-any.whl", hash = "sha256:6d2be45b784125d5e1788689bc2239426b59ff9896cad7fa826d2c3912416f4b"},
+    {file = "pytest_httpserver-1.0.2.tar.gz", hash = "sha256:2701fd1d9814d58551f9d1044db335c6ba9873169366c58349523a58cf74ed40"},
 ]
 pytest-rerunfailures = [
     {file = "pytest-rerunfailures-10.2.tar.gz", hash = "sha256:9e1e1bad51e07642c5bbab809fc1d4ec8eebcb7de86f90f1a26e6ef9de446697"},
