@@ -39,7 +39,7 @@ coverage = "^6.0"
 types-click = "^7.1.7"
 types-requests = "^2.25.10"
 isort = "^5.9.1"
-pytest-httpserver = "^1.0.1"
+pytest-httpserver = "^1.0.2"
 pytest-rerunfailures = "^10.2"
 
 [tool.isort]
