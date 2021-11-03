@@ -38,7 +38,7 @@ requests = "^2.25.1"
 coverage = "^6.0"
 types-click = "^7.1.7"
 types-requests = "^2.25.11"
-isort = "^5.9.1"
+isort = "^5.10.0"
 pytest-httpserver = "^1.0.2"
 pytest-rerunfailures = "^10.2"
 
