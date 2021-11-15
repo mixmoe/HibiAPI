@@ -59,6 +59,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Pretty9",
+      "name": "Pretty9",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41198038?v=4",
+      "profile": "https://www.2yo.cc",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
