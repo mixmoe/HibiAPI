@@ -118,10 +118,12 @@ class SearchSortType(str, Enum):
     |---|---|
     | date_desc  | 按日期倒序 |
     | date_asc  | 按日期正序 |
+    | popular_desc  | 受欢迎降序(Premium功能) |
     """
 
     date_desc = "date_desc"
     date_asc = "date_asc"
+    popular_desc = "popular_desc"
 
 
 class SearchDurationType(str, Enum):
