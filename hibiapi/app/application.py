@@ -165,3 +165,8 @@ async def _netease_redirect(path: str, request: Request):
 @app.get("/bilibili/{path:path}", include_in_schema=False)
 async def _bilibili_redirect(path: str, request: Request):
     return _redirect(request, path, "/api/bilibili/")
+
+
+@app.get("/wallpaper/{path:path}", include_in_schema=False)
+async def _wallpaper_redirect(path: str, request: Request):
+    return _redirect(request, path, "/api/wallpaper/")
