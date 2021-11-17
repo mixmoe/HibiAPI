@@ -15,7 +15,7 @@ class EndpointsType(str, Enum):
     vertical = "vertical"
 
 
-class Category(str, Enum):
+class WallpaperCategoryType(str, Enum):
     """
     壁纸分类
 
@@ -43,16 +43,16 @@ class Category(str, Enum):
     text = "text"
 
 
-CATEGORY: Dict[Category, str] = {
-    Category.girl: "4e4d610cdf714d2966000000",
-    Category.animal: "4e4d610cdf714d2966000001",
-    Category.landscape: "4e4d610cdf714d2966000002",
-    Category.anime: "4e4d610cdf714d2966000003",
-    Category.drawn: "4e4d610cdf714d2966000004",
-    Category.mechanics: "4e4d610cdf714d2966000005",
-    Category.boy: "4e4d610cdf714d2966000006",
-    Category.game: "4e4d610cdf714d2966000007",
-    Category.text: "5109e04e48d5b9364ae9ac45",
+CATEGORY: Dict[WallpaperCategoryType, str] = {
+    WallpaperCategoryType.girl: "4e4d610cdf714d2966000000",
+    WallpaperCategoryType.animal: "4e4d610cdf714d2966000001",
+    WallpaperCategoryType.landscape: "4e4d610cdf714d2966000002",
+    WallpaperCategoryType.anime: "4e4d610cdf714d2966000003",
+    WallpaperCategoryType.drawn: "4e4d610cdf714d2966000004",
+    WallpaperCategoryType.mechanics: "4e4d610cdf714d2966000005",
+    WallpaperCategoryType.boy: "4e4d610cdf714d2966000006",
+    WallpaperCategoryType.game: "4e4d610cdf714d2966000007",
+    WallpaperCategoryType.text: "5109e04e48d5b9364ae9ac45",
 }
 
 
@@ -84,7 +84,7 @@ class WallpaperEndpoint(BaseEndpoint):
     async def wallpaper(
         self,
         *,
-        category: Category,
+        category: WallpaperCategoryType,
         limit: int = 20,
         skip: int = 0,
         adult: bool = True,
@@ -92,13 +92,14 @@ class WallpaperEndpoint(BaseEndpoint):
     ):
 
         return await self.request(
-            f"v1/wallpaper/category/{CATEGORY[category]}/wallpaper",
+            "v1/wallpaper/category/{category}/wallpaper",
             params={
                 "limit": limit,
                 "skip": skip,
                 "adult": adult,
                 "order": order,
                 "first": 0,
+                "category": CATEGORY[category],
             },
         )
 
@@ -107,7 +108,7 @@ class WallpaperEndpoint(BaseEndpoint):
     async def vertical(
         self,
         *,
-        category: Category,
+        category: WallpaperCategoryType,
         limit: int = 20,
         skip: int = 0,
         adult: bool = True,
@@ -115,12 +116,13 @@ class WallpaperEndpoint(BaseEndpoint):
     ):
 
         return await self.request(
-            f"v1/vertical/category/{CATEGORY[category]}/vertical",
+            "v1/vertical/category/{category}/vertical",
             params={
                 "limit": limit,
                 "skip": skip,
                 "adult": adult,
                 "order": order,
                 "first": 0,
+                "category": CATEGORY[category],
             },
         )

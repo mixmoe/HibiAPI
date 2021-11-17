@@ -3,11 +3,11 @@ from typing import Callable, Coroutine
 from fastapi import Depends, Request
 
 from hibiapi.api.wallpaper import (
-    Category,
     Config,
     EndpointsType,
     NetRequest,
     OrderType,
+    WallpaperCategoryType,
     WallpaperEndpoint,
 )
 from hibiapi.utils.routing import SlashRouter, exclude_params
@@ -35,7 +35,7 @@ async def _match_all(
 
 @router.get(EndpointsType.wallpaper)
 async def wallpaper(
-    category: Category,
+    category: WallpaperCategoryType,
     limit: int = 20,
     skip: int = 0,
     adult: bool = True,
@@ -51,7 +51,7 @@ async def wallpaper(
 
     ### Required:
 
-    - ***Category*** **`category` = `Category.girl`**
+    - ***WallpaperCategoryType*** **`category` = `WallpaperCategoryType.girl`**
         - Description: 分类
 
     ---
@@ -78,7 +78,7 @@ async def wallpaper(
 
 @router.get(EndpointsType.vertical)
 async def vertical(
-    category: Category,
+    category: WallpaperCategoryType,
     limit: int = 20,
     skip: int = 0,
     adult: bool = True,
@@ -94,7 +94,7 @@ async def vertical(
 
     ### Required:
 
-    - ***Category*** **`category` = `Category.girl`**
+    - ***WallpaperCategoryType*** **`category` = `WallpaperCategoryType.girl`**
         - Description: 分类
 
     ---

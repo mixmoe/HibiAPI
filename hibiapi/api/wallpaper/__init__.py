@@ -1,3 +1,9 @@
 # flake8:noqa:F401
-from .api import Category, Config, EndpointsType, OrderType, WallpaperEndpoint
+from .api import (
+    Config,
+    EndpointsType,
+    OrderType,
+    WallpaperCategoryType,
+    WallpaperEndpoint,
+)
 from .net import NetRequest
