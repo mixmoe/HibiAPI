@@ -1,0 +1,4 @@
+enabled: true
+
+net:
+  user-agent: "Mozilla/5.0 (mixmoe@GitHub.com/HibiAPI) Chrome/114.514.1919810" # UA头, 一般没必要改

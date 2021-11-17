@@ -5,7 +5,7 @@ from hibiapi.utils.exceptions import ExceptionReturn
 from hibiapi.utils.log import logger
 from hibiapi.utils.routing import SlashRouter
 
-from . import bilibili, netease, pixiv, qrcode, sauce, tieba
+from . import bilibili, netease, pixiv, qrcode, sauce, tieba, wallpaper
 
 router = SlashRouter(
     responses={
@@ -23,7 +23,9 @@ class RouteInterface(Protocol):
     __config__: APIConfig
 
 
-modules = cast(List[RouteInterface], [bilibili, netease, pixiv, qrcode, sauce, tieba])
+modules = cast(
+    List[RouteInterface], [bilibili, netease, pixiv, qrcode, sauce, tieba, wallpaper]
+)
 
 for module in modules:
     mount = (

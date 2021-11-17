@@ -21,7 +21,7 @@
         "**/node_modules/**": true,
         "**/.hg/store/**": true,
         "**/.venv/**": true,
-        "**/.mypy_cache/**": true,
+        "**/.mypy_cache/**": true
     },
     "files.encoding": "utf8",
     "git.autofetch": true,
@@ -73,5 +73,5 @@
         "vmid",
         "weapi"
     ],
-    "gitmoji.outputType": "code",
+    "gitmoji.outputType": "code"
 }
