@@ -6,9 +6,9 @@ from hibiapi.api.wallpaper import (
     Config,
     EndpointsType,
     NetRequest,
-    OrderType,
     WallpaperCategoryType,
     WallpaperEndpoint,
+    WallpaperOrderType,
 )
 from hibiapi.utils.routing import SlashRouter, exclude_params
 
@@ -39,7 +39,7 @@ async def wallpaper(
     limit: int = 20,
     skip: int = 0,
     adult: bool = True,
-    order: OrderType = OrderType.hot,
+    order: WallpaperOrderType = WallpaperOrderType.hot,
     endpoint: WallpaperEndpoint = Depends(request_client),
 ):
     """
@@ -51,8 +51,8 @@ async def wallpaper(
 
     ### Required:
 
-    - ***WallpaperCategoryType*** **`category` = `WallpaperCategoryType.girl`**
-        - Description: 分类
+    - ***WallpaperCategoryType*** **`category`
+        - Description: 壁纸分类
 
     ---
 
@@ -72,7 +72,11 @@ async def wallpaper(
     """
 
     return await endpoint.wallpaper(
-        category=category, limit=limit, skip=skip, adult=adult, order=order
+        category=category,
+        limit=limit,
+        skip=skip,
+        adult=adult,
+        order=order,
     )
 
 
@@ -82,7 +86,7 @@ async def vertical(
     limit: int = 20,
     skip: int = 0,
     adult: bool = True,
-    order: OrderType = OrderType.hot,
+    order: WallpaperOrderType = WallpaperOrderType.hot,
     endpoint: WallpaperEndpoint = Depends(request_client),
 ):
     """
@@ -94,8 +98,8 @@ async def vertical(
 
     ### Required:
 
-    - ***WallpaperCategoryType*** **`category` = `WallpaperCategoryType.girl`**
-        - Description: 分类
+    - ***WallpaperCategoryType*** **`category`
+        - Description: 壁纸分类
 
     ---
 
@@ -115,5 +119,9 @@ async def vertical(
     """
 
     return await endpoint.vertical(
-        category=category, limit=limit, skip=skip, adult=adult, order=order
+        category=category,
+        limit=limit,
+        skip=skip,
+        adult=adult,
+        order=order,
     )

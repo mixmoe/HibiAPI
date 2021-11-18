@@ -56,7 +56,7 @@ CATEGORY: Dict[WallpaperCategoryType, str] = {
 }
 
 
-class OrderType(str, Enum):
+class WallpaperOrderType(str, Enum):
     hot = "hot"
     new = "new"
 
@@ -88,7 +88,7 @@ class WallpaperEndpoint(BaseEndpoint):
         limit: int = 20,
         skip: int = 0,
         adult: bool = True,
-        order: OrderType = OrderType.hot,
+        order: WallpaperOrderType = WallpaperOrderType.hot,
     ):
 
         return await self.request(
@@ -112,7 +112,7 @@ class WallpaperEndpoint(BaseEndpoint):
         limit: int = 20,
         skip: int = 0,
         adult: bool = True,
-        order: OrderType = OrderType.hot,
+        order: WallpaperOrderType = WallpaperOrderType.hot,
     ):
 
         return await self.request(

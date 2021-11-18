@@ -2,8 +2,8 @@
 from .api import (
     Config,
     EndpointsType,
-    OrderType,
     WallpaperCategoryType,
     WallpaperEndpoint,
+    WallpaperOrderType,
 )
 from .net import NetRequest
