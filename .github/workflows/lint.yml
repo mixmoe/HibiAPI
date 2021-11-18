@@ -11,8 +11,6 @@ on:
       - "**.pyi"
       - ".github/workflows/*.yml"
 
-  pull_request_target:
-
 jobs:
   lint:
     runs-on: ubuntu-latest
