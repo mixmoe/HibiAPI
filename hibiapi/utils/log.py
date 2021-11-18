@@ -3,7 +3,6 @@ import re
 import sys
 from asyncio.log import logger as _asyncio_logger
 from datetime import timedelta
-from functools import lru_cache
 from typing import TYPE_CHECKING
 
 import sentry_sdk.integrations.logging as sentry
@@ -67,7 +66,6 @@ class LoguruHandler(logging.Handler):
         )
 
     @classmethod
-    @lru_cache(maxsize=16)
     def escape_tag(cls, string: str) -> str:
         return cls._tag_escape_re.sub(r"\\\g<0>", string)
 
