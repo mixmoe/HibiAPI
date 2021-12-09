@@ -9,49 +9,9 @@ on:
   pull_request_target:
 
 jobs:
-  count:
-    runs-on: ubuntu-latest
-    name: Count Code
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install CLoC
-        run: |
-          sudo apt-get install -y cloc
-
-      - name: Count lines of code
-        id: cloc
-        run: |
-          cloc --vcs=git --md . | tee report.md
-          content="$(cat report.md)"
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          echo "::set-output name=content::$content"
-
-      - uses: peter-evans/commit-comment@v1
-        if: "github.event_name == 'push'"
-        with:
-          body: ${{ steps.cloc.outputs.content }}
-
-  docker:
-    runs-on: ubuntu-latest
-    name: Docker Build
-    needs: [count]
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-
-      - name: Test Docker build
-        run: |
-          docker build .
-
   test:
     runs-on: ${{ matrix.os }}
     name: Testing
-    needs: [count]
 
     strategy:
       matrix:
