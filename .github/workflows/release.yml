@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: 3.8
 
-      - uses: Gr1N/setup-poetry@v4
+      - uses: Gr1N/setup-poetry@v7
 
       - uses: actions/cache@v2
         with:
