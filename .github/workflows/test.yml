@@ -17,6 +17,9 @@ jobs:
       matrix:
         python: ["3.8", "3.9", "3.10"]
         os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - python: pypy-3.8
+            os: ubuntu-latest
       fail-fast: true
       max-parallel: 3
 
@@ -41,7 +44,7 @@ jobs:
           path: |
             ${{ steps.cache-poetry.outputs.dir }}
             ./.venv
-          key: ${{ runner.os }}-poetry-py${{ matrix.python }}-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ matrix.python }}-${{ hashFiles('poetry.lock') }}
           restore-keys: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
 
       - name: Install dependencies
