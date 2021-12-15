@@ -6,6 +6,6 @@
         "njpwerner.autodocstring",
         "streetsidesoftware.code-spell-checker",
         "redhat.vscode-yaml",
-        "vtrois.gitmoji-vscode"
+        "seatonjiang.gitmoji-vscode"
     ]
 }
