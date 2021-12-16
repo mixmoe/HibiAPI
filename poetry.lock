@@ -524,18 +524,19 @@ testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtuale
 
 [[package]]
 name = "pytest-httpserver"
-version = "1.0.2"
+version = "1.0.3"
 description = "pytest-httpserver is a httpserver for pytest"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
-werkzeug = "*"
+Werkzeug = ">=2.0.0"
 
 [package.extras]
-dev = ["flake8", "wheel", "pytest", "pytest-cov", "coverage", "ipdb", "requests", "sphinx", "sphinx-rtd-theme", "reno", "autopep8", "mypy"]
-test = ["pytest", "pytest-cov", "coverage", "requests"]
+dev = ["autopep8", "coverage", "flake8", "ipdb", "mypy", "pytest-cov", "pytest", "reno", "requests", "sphinx", "sphinx-rtd-theme", "types-requests"]
+test = ["coverage", "flake8", "mypy", "pytest-cov", "pytest", "requests", "types-requests"]
+doc = ["reno", "sphinx", "sphinx-rtd-theme"]
 
 [[package]]
 name = "pytest-rerunfailures"
@@ -815,7 +816,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "bf53fec32dfef2f830774d650b5a9bf0d0eaf973836d283388555965f5fea3b4"
+content-hash = "ff5e77a20f7fc87af589f18a098328937b5529d4d601fd77ef24e4455b274716"
 
 [metadata.files]
 aiocache = [
@@ -1170,8 +1171,8 @@ pytest-cov = [
     {file = "pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
 ]
 pytest-httpserver = [
-    {file = "pytest_httpserver-1.0.2-py3-none-any.whl", hash = "sha256:6d2be45b784125d5e1788689bc2239426b59ff9896cad7fa826d2c3912416f4b"},
-    {file = "pytest_httpserver-1.0.2.tar.gz", hash = "sha256:2701fd1d9814d58551f9d1044db335c6ba9873169366c58349523a58cf74ed40"},
+    {file = "pytest_httpserver-1.0.3-py3-none-any.whl", hash = "sha256:f613b4dbb18cb2b2d78a8f6a66f22c4fea92167684d9ae355e33776759794827"},
+    {file = "pytest_httpserver-1.0.3.tar.gz", hash = "sha256:87561c4fa6a7bc306d76d1979a3eb9d54eb26bfb2f3f51f1643bf3c090ce629d"},
 ]
 pytest-rerunfailures = [
     {file = "pytest-rerunfailures-10.2.tar.gz", hash = "sha256:9e1e1bad51e07642c5bbab809fc1d4ec8eebcb7de86f90f1a26e6ef9de446697"},
