@@ -4,7 +4,7 @@ from enum import Enum, IntEnum
 from ipaddress import IPv4Address
 from random import randint
 from secrets import token_urlsafe
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
@@ -191,21 +191,21 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def detail(self, *, id: int):
+    async def detail(self, *, id: List[int]):
         return await self.request(
             "weapi/v3/song/detail",
             params={
                 "c": json.dumps(
-                    [{"id": str(id)}],
+                    [{"id": str(i)} for i in id],
                 ),
             },
         )
 
-    async def song(self, *, id: int, br: BitRateType = BitRateType.STANDARD):
+    async def song(self, *, id: List[int], br: BitRateType = BitRateType.STANDARD):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={
-                "ids": [id],
+                "ids": id,
                 "br": br,
             },
         )

@@ -1,6 +1,6 @@
-from typing import Callable, Coroutine
+from typing import Callable, Coroutine, List
 
-from fastapi import Depends, Request
+from fastapi import Depends, Query, Request
 
 from hibiapi.api.netease import (
     BitRateType,
@@ -112,7 +112,9 @@ async def album(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
 
 
 @router.get(EndpointsType.detail)
-async def detail(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
+async def detail(
+    id: List[int] = Query(...), endpoint: NeteaseEndpoint = Depends(request_client)
+):
     """
     ## Name: `detail`
 
@@ -131,7 +133,7 @@ async def detail(id: int, endpoint: NeteaseEndpoint = Depends(request_client)):
 
 @router.get(EndpointsType.song)
 async def song(
-    id: int,
+    id: List[int] = Query(...),
     br: BitRateType = BitRateType.STANDARD,
     endpoint: NeteaseEndpoint = Depends(request_client),
 ):
