@@ -5,7 +5,7 @@ from hibiapi.utils.exceptions import ExceptionReturn
 from hibiapi.utils.log import logger
 from hibiapi.utils.routing import SlashRouter
 
-from . import bilibili, netease, pixiv, qrcode, sauce, tieba, wallpaper
+from . import apple_mask, bilibili, netease, pixiv, qrcode, sauce, tieba, wallpaper
 
 router = SlashRouter(
     responses={
@@ -39,3 +39,5 @@ for module in modules:
         )
         continue
     router.include_router(module.router, prefix=mount)
+
+router.include_router(apple_mask.router, prefix="/apple_mask")
