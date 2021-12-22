@@ -31,7 +31,7 @@ click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
-mypy = "^0.920"
+mypy = "^0.921"
 flake8 = "^4.0.1"
 pytest = "^6.2.4"
 requests = "^2.25.1"
