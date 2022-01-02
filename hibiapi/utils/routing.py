@@ -64,9 +64,7 @@ class BaseHostUrl(AnyHttpUrl):
     allowed_hosts: List[str] = []
 
     @classmethod
-    def validate_host(
-        cls, parts: Dict[str, str]
-    ) -> Tuple[str, Optional[str], str, bool]:
+    def validate_host(cls, parts) -> Tuple[str, Optional[str], str, bool]:
         host, tld, host_type, rebuild = super().validate_host(parts)
         if not cls._check_domain(host):
             raise UrlHostError(allowed=cls.allowed_hosts)
