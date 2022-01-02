@@ -737,7 +737,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-requests"
-version = "2.26.1"
+version = "2.26.3"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
@@ -841,7 +841,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "160cf376b50f0a5b337b7fe7a1c2d93fb14f41711ea0c0117b62d4bce42e94b7"
+content-hash = "fdbabd3d487c507cbf2cefbdc63b324459b0d0a8c89cc132190b74782d7fb4c6"
 
 [metadata.files]
 aiocache = [
@@ -1301,8 +1301,8 @@ types-click = [
     {file = "types_click-7.1.8-py3-none-any.whl", hash = "sha256:8cb030a669e2e927461be9827375f83c16b8178c365852c060a34e24871e7e81"},
 ]
 types-requests = [
-    {file = "types-requests-2.26.1.tar.gz", hash = "sha256:0893e112e1510bbb67f537941c92192de7472e51bf7f236e0e583866f0ed933e"},
-    {file = "types_requests-2.26.1-py3-none-any.whl", hash = "sha256:853571b3accc188976c0f4feffcaebf6cdfc170082b5e43f3358aa78de61f531"},
+    {file = "types-requests-2.26.3.tar.gz", hash = "sha256:d63fa617846dcefff5aa2d59e47ab4ffd806e4bb0567115f7adbb5e438302fe4"},
+    {file = "types_requests-2.26.3-py3-none-any.whl", hash = "sha256:ad18284931c5ddbf050ccdd138f200d18fd56f88aa3567019d8da9b2d4fe0344"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
