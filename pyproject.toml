@@ -15,7 +15,7 @@ hibiapi = 'hibiapi.__main__:main'
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.65.2"
-httpx = { extras = ["http2"], version = ">=0.18,<0.20" }
+httpx = { extras = ["http2"], version = ">=0.18,<0.22" }
 uvicorn = { extras = ["standard"], version = ">=0.14,<0.17" }
 confuse = "^1.4.0"
 loguru = "^0.5.3"
