@@ -74,6 +74,7 @@ class BaseNetClient:
                 proxies=self.proxies,  # type:ignore
                 cookies=self.cookies,
                 http2=True,
+                follow_redirects=True,
             ).__aenter__()
         return self.clients[tid]
 
