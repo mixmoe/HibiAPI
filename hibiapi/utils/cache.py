@@ -1,8 +1,9 @@
 import base64
-import gzip
 import hashlib
 import pickle
+import pickletools
 import time
+import zlib
 from datetime import timedelta
 from functools import wraps
 from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
@@ -20,19 +21,24 @@ CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
 CACHE_DELTA = timedelta(seconds=Config["cache"]["ttl"].as_number())
 CACHE_URI = Config["cache"]["uri"].as_str()
 
-_AsyncCallable = TypeVar("_AsyncCallable", bound=Callable[..., Coroutine])
+T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Coroutine])
 
 
 class GZippedBase85Serializer(BaseSerializer):
     def dumps(self, value: Any) -> str:
         return base64.b85encode(
-            gzip.compress(pickle.dumps(value)),
+            zlib.compress(
+                pickletools.optimize(
+                    pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL)
+                ),
+                level=zlib.Z_BEST_COMPRESSION,
+            ),
         ).decode()
 
     def loads(self, value: Optional[str]) -> Any:
         return (
             pickle.loads(
-                gzip.decompress(base64.b85decode(value)),
+                zlib.decompress(base64.b85decode(value)),
             )
             if value
             else None
@@ -55,7 +61,7 @@ def cache_config(
     ttl: timedelta = CACHE_DELTA,
     namespace: Optional[str] = None,
 ):
-    def decorator(endpoint: _AsyncCallable) -> _AsyncCallable:
+    def decorator(endpoint: T_AsyncFunc) -> T_AsyncFunc:
         setattr(
             endpoint,
             "cache_config",
@@ -80,7 +86,7 @@ class CachedValidatedFunction(ValidatedFunction):
         return self.model(**values)  # type:ignore
 
 
-def endpoint_cache(function: _AsyncCallable) -> _AsyncCallable:
+def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
     from .routing import request_headers, response_headers
 
     vf = CachedValidatedFunction(function, config={})
