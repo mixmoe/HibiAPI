@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from pytest_benchmark.fixture import BenchmarkFixture
+from pytest_benchmark.fixture import BenchmarkFixture  # type:ignore
 
 
 @pytest.fixture(scope="package")
