@@ -107,3 +107,15 @@ def test_detail_dj(client: TestClient):
     response = client.get("detail_dj", params={"id": 1370045285})
     assert response.status_code == 200
     assert response.json()["code"] == 200
+
+
+def test_user(client: TestClient):
+    response = client.get("user", params={"id": 1887530069})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
+
+
+def test_user_playlist(client: TestClient):
+    response = client.get("user_playlist", params={"id": 1887530069})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
