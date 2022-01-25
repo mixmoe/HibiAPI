@@ -31,6 +31,8 @@ class EndpointsType(str, Enum):
     djradio = "djradio"
     dj = "dj"
     detail_dj = "detail_dj"
+    user = "user"
+    user_playlist = "user_playlist"
 
 
 class SearchType(IntEnum):
@@ -287,5 +289,21 @@ class NeteaseEndpoint(BaseEndpoint):
             "api/dj/program/detail",
             params={
                 "id": id,
+            },
+        )
+
+    async def user(self, *, id: int):
+        return await self.request(
+            "weapi/v1/user/detail/{id}",
+            params={"id": id},
+        )
+
+    async def user_playlist(self, *, id: int, limit: int = 50, offset: int = 0):
+        return await self.request(
+            "weapi/user/playlist",
+            params={
+                "uid": id,
+                "limit": limit,
+                "offset": offset,
             },
         )
