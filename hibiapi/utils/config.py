@@ -1,11 +1,11 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, overload
+from typing import Any, Dict, List, Type, TypeVar, overload
 
 import confuse  # type:ignore
 import dotenv
-from pydantic.generics import GenericModel
+from pydantic import parse_obj_as
 
 from hibiapi import __file__ as root_file
 
@@ -36,10 +36,6 @@ else:
     assert _generate_default() <= 0, "Please complete config file!"
 
 
-class _TypeChecker(GenericModel, Generic[_T]):
-    value: _T
-
-
 class ConfigSubView(confuse.Subview):
     @overload
     def get(self) -> Any:
@@ -49,8 +45,8 @@ class ConfigSubView(confuse.Subview):
     def get(self, template: Type[_T]) -> _T:
         ...
 
-    def get(self, template: Optional[Type[_T]] = None) -> _T:
-        return _TypeChecker[template or Any](value=super().get()).value  # type:ignore
+    def get(self, template: Type[_T] = Any) -> _T:  # type: ignore
+        return parse_obj_as(template, super().get())
 
     def as_str(self) -> str:
         return self.get(str)
