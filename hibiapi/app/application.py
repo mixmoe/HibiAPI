@@ -40,6 +40,8 @@ if Config["log"]["sentry"]["enabled"].as_bool():
         integrations=[LoggingIntegration(level=None, event_level=None)],
         traces_sample_rate=Config["log"]["sentry"]["sample"].get(float),
     )
+else:
+    sentry_sdk.init()
 
 
 class AuthorizationModel(BaseModel):
