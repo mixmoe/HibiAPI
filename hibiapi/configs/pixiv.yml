@@ -9,5 +9,6 @@ account:
   # 通过用户名和密码进行登录的选项已经被Pixiv官方弃用
   # 请参考 https://github.com/mixmoe/HibiAPI/issues/53 以获得更多信息
   token: "" # Pixiv 登录凭证刷新令牌 (Refresh Token)
+  refresh-interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
 
 language: zh-cn # 返回语言, 会影响标签的翻译
