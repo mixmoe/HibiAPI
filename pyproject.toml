@@ -22,10 +22,10 @@ loguru = ">=0.5.3,<0.7.0"
 python-dotenv = ">=0.17,<0.20"
 qrcode = { extras = ["pil"], version = ">=6.1,<8.0" }
 pycryptodomex = "^3.10.1"
-sentry-sdk = "1.5.4"
+sentry-sdk = "^1.5.0"
 pydantic = "^1.9.0"
 python-multipart = "^0.0.5"
-aiocache = { extras = ["redis"], version = "^0.11.1" }
+aiocache = "^0.11.1"
 click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
