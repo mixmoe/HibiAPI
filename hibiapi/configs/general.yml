@@ -45,6 +45,9 @@ log:
     [{time:YYYY/MM/DD} {time:HH:mm:ss.SSS} <d>{module}:{name}:{line}</d>]</level>
     {message}
 
+  # file: logs/{time.log}
+  file: null # 日志输出文件位置, 相对于data目录, 为空则不保存
+
   sentry:
     enabled: false
     sample: 1
