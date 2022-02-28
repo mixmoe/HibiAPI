@@ -1,4 +1,4 @@
-FROM python:3.8-buster
+FROM python:bullseye
 
 EXPOSE 8080
 
@@ -11,7 +11,8 @@ COPY . /hibi
 WORKDIR /hibi
 
 RUN touch .env && \
-    pip install . --prefer-binary
+    pip install . && \
+    pip install "aioredis<2.0.0"
 
 CMD python -m hibiapi \
     --port $PORT --workers $PROCS
