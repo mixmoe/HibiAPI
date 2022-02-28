@@ -94,6 +94,7 @@ def main(host: str, port: int, workers: int, reload: bool):
         workers=workers,
         reload=reload,
         reload_dirs=[Path(root_file).parent, CONFIG_DIR],
+        reload_includes=["*.py", "*.yml"],
         forwarded_allow_ips=Config["server"]["allowed-forward"].get(
             Optional[str]  # type:ignore
         ),
