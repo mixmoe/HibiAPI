@@ -18,7 +18,9 @@ server:
   port: 8080 # 端口
   gzip: true
 
-  domains: null # 限定来源域名, 设置为null为不限制
+  # 限定来源域名, 支持通配符, 参考:
+  # https://fastapi.tiangolo.com/advanced/middleware/#trustedhostmiddleware
+  allowed: ["*"]
 
   cors:
     origins:

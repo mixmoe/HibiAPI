@@ -1,26 +1,24 @@
 from datetime import datetime
-from typing import Any, Callable, Coroutine, List, Optional, Set
+from typing import Awaitable, Callable, List
 
 from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.httpx import HttpxIntegration
 from starlette.datastructures import MutableHeaders
 
 from hibiapi.utils.config import Config
-from hibiapi.utils.exceptions import (
-    BaseServerException,
-    ClientSideException,
-    UncaughtException,
-)
+from hibiapi.utils.exceptions import BaseServerException, UncaughtException
 from hibiapi.utils.log import LoguruHandler, logger
 from hibiapi.utils.routing import request_headers, response_headers
 
 from .application import app
 from .handlers import exception_handler
 
-HttpxIntegration.setup_once()
+RequestHandler = Callable[[Request], Awaitable[Response]]
+
 
 if Config["server"]["gzip"].as_bool():
     app.add_middleware(GZipMiddleware)
@@ -31,20 +29,13 @@ app.add_middleware(
     allow_methods=Config["server"]["cors"]["methods"].get(List[str]),
     allow_headers=Config["server"]["cors"]["headers"].get(List[str]),
 )
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=Config["server"]["allowed"].get(List[str]),
+)
 app.add_middleware(SentryAsgiMiddleware)
 
-RequestHandler = Callable[[Request], Coroutine[Any, Any, Response]]
-
-ALLOWED_DOMAINS = Config["server"]["domains"].get(Optional[Set[str]])  # type: ignore
-
-
-@app.middleware("http")
-async def domain_limiter(request: Request, call_next: RequestHandler) -> Response:
-    if (ALLOWED_DOMAINS is not None) and (
-        (domain := request.url.netloc) not in ALLOWED_DOMAINS
-    ):
-        raise ClientSideException(f"{domain=} is not allowed.", code=403)
-    return await call_next(request)
+HttpxIntegration.setup_once()
 
 
 @app.middleware("http")
