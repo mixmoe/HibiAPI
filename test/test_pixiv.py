@@ -10,6 +10,7 @@ def client():
 
     with TestClient(app, base_url="http://testserver/api/pixiv/") as client:
         client.headers["Cache-Control"] = "no-cache"
+        client.headers["Accept-Language"] = "en-US,en;q=0.9"
         yield client
 
 
