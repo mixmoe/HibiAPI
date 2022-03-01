@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 
 from hibiapi.utils.cache import cache_config, disable_cache
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint
+from hibiapi.utils.routing import BaseEndpoint, request_headers
 
 from .constants import PixivConstants
 
@@ -154,17 +154,28 @@ class RankingDate(date):
 
 
 class PixivEndpoints(BaseEndpoint):
+    @staticmethod
+    def _parse_accept_language(accept_language: str) -> str:
+        first_language, *_ = accept_language.partition(",")
+        language_code, *_ = first_language.partition(";")
+        return language_code.lower().strip()
+
     @disable_cache
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
+        headers = self.client.headers.copy()
+        if language := request_headers.get().get("Accept-Language"):
+            language = self._parse_accept_language(language)
+            headers["Accept-Language"] = language
         response = await self.client.get(
             self._join(
                 base=PixivConstants.APP_HOST,
                 endpoint=endpoint,
                 params=params or {},
-            )
+            ),
+            headers=headers,
         )
         return response.json()
 

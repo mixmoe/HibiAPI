@@ -1,7 +1,7 @@
 import asyncio
 from typing import Callable, Coroutine, Optional
 
-from fastapi import Depends, Request
+from fastapi import Depends, Header, Request
 
 from hibiapi.api.pixiv import (
     EndpointsType,
@@ -23,8 +23,18 @@ if not PixivConstants.CONFIG["account"]["token"].get():
     logger.warning("Pixiv API token is not set, pixiv endpoint will be unavailable.")
     PixivConstants.CONFIG["enabled"].set(False)
 
+
+async def accept_language(
+    accept_language: Optional[str] = Header(
+        None,
+        description="Accepted tag translation language",
+    )
+):
+    return accept_language
+
+
 __mount__, __config__ = "pixiv", PixivConstants.CONFIG
-router = SlashRouter(tags=["Pixiv"])
+router = SlashRouter(tags=["Pixiv"], dependencies=[Depends(accept_language)])
 
 PixivAPIRoot = NetRequest()
 
