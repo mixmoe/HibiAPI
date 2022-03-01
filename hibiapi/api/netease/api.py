@@ -125,30 +125,31 @@ class _EncryptUtil:
 
 
 class NeteaseEndpoint(BaseEndpoint):
+    def _construct_headers(self):
+        headers = self.client.headers.copy()
+        headers["X-Real-IP"] = str(
+            IPv4Address(
+                randint(
+                    int(NeteaseConstants.SOURCE_IP_SEGMENT.network_address),
+                    int(NeteaseConstants.SOURCE_IP_SEGMENT.broadcast_address),
+                )
+            )
+        )
+        return headers
+
     @disable_cache
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         params = {**(params or {}), "csrf_token": ""}
-        headers = {
-            "x-real-ip": str(  # random a ip address from a specificed network segment
-                IPv4Address(
-                    randint(
-                        int(NeteaseConstants.SOURCE_IP_SEGMENT.network_address),
-                        int(NeteaseConstants.SOURCE_IP_SEGMENT.broadcast_address),
-                    )
-                )
-            ),
-            **NeteaseConstants.DEFAULT_HEADERS,
-        }
         response = await self.client.post(
             self._join(
                 NeteaseConstants.HOST,
                 endpoint=endpoint,
                 params=params,
             ),
-            headers=headers,
+            headers=self._construct_headers(),
             data=_EncryptUtil.encrypt(params),
         )
         response.raise_for_status()
