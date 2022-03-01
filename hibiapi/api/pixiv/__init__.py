@@ -2,7 +2,6 @@
 from .api import (
     EndpointsType,
     IllustType,
-    PixivAPI,
     PixivEndpoints,
     RankingDate,
     RankingType,

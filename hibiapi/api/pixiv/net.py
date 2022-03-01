@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
@@ -61,11 +61,30 @@ class PixivAuthData(AccountDataModel):
 
 
 class NetRequest(BaseNetClient):
-    def __init__(self, user: PixivAuthData):
+    _user: PixivAuthData
+
+    def __init__(self, user: Optional[PixivAuthData] = None):
         super().__init__(
             headers=PixivConstants.DEFAULT_HEADERS.copy(),
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
         )
-        self.user = user
+        if user is not None:
+            self.user = user
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
+
+    @property
+    def user(self):
+        return self._user.copy()
+
+    @user.setter
+    def user(self, user: PixivAuthData):
+        self._user = user
         self.headers["authorization"] = f"Bearer {self.user.access_token}"
+
+    async def login(self):
+        if refresh_token := PixivConstants.CONFIG["account"]["token"].as_str().strip():
+            self.user = await PixivAuthData.login(refresh_token=refresh_token)
+        else:
+            raise ValueError("Pixiv account refresh_token is not configured.")
+
+        return self.user

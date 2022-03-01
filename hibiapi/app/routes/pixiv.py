@@ -6,7 +6,7 @@ from fastapi import Depends, Request
 from hibiapi.api.pixiv import (
     EndpointsType,
     IllustType,
-    PixivAPI,
+    NetRequest,
     PixivConstants,
     PixivEndpoints,
     RankingDate,
@@ -26,11 +26,11 @@ if not PixivConstants.CONFIG["account"]["token"].get():
 __mount__, __config__ = "pixiv", PixivConstants.CONFIG
 router = SlashRouter(tags=["Pixiv"])
 
-PixivAPIRoot = PixivAPI()
+PixivAPIRoot = NetRequest()
 
 
 async def request_client():
-    async with PixivAPIRoot.net as client:
+    async with PixivAPIRoot as client:
         yield PixivEndpoints(client)
 
 
