@@ -1,11 +1,11 @@
 import hashlib
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
 
-from hibiapi.utils.net import AsyncHTTPClient, BaseNetClient
+from hibiapi.utils.net import BaseNetClient
 
 from .constants import PixivConstants
 
@@ -30,38 +30,9 @@ class PixivAuthData(AccountDataModel):
     refresh_token: str
     user: PixivUserData
 
-    @classmethod
-    async def login(cls, *, refresh_token: str):
-        url = URL(PixivConstants.AUTH_HOST).join("/auth/token")
-        time = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
-        headers = {
-            **PixivConstants.DEFAULT_HEADERS,
-            "X-Client-Time": time,
-            "X-Client-Hash": hashlib.md5(
-                time.encode() + PixivConstants.HASH_SECRET
-            ).hexdigest(),
-        }
-        data = {
-            "get_secure_url": 1,
-            "client_id": PixivConstants.CLIENT_ID,
-            "client_secret": PixivConstants.CLIENT_SECRET,
-            "grant_type": "refresh_token",
-            "refresh_token": refresh_token,
-        }
-
-        async with AsyncHTTPClient(
-            proxies=PixivConstants.CONFIG["proxy"].get(Dict[str, str])  # type:ignore
-        ) as client:
-            response = await client.post(url, data=data, headers=headers)
-            response.raise_for_status()
-        return cls.parse_obj(response.json())
-
-    async def renew(self) -> "PixivAuthData":
-        return await self.login(refresh_token=self.refresh_token)
-
 
 class NetRequest(BaseNetClient):
-    _user: PixivAuthData
+    _user: Optional[PixivAuthData] = None
 
     def __init__(self, user: Optional[PixivAuthData] = None):
         super().__init__(
@@ -74,17 +45,43 @@ class NetRequest(BaseNetClient):
 
     @property
     def user(self):
-        return self._user.copy()
+        return self._user.copy() if self._user else None
 
     @user.setter
     def user(self, user: PixivAuthData):
         self._user = user
-        self.headers["authorization"] = f"Bearer {self.user.access_token}"
+        self.headers["authorization"] = f"Bearer {user.access_token}"
 
     async def login(self):
-        if refresh_token := PixivConstants.CONFIG["account"]["token"].as_str().strip():
-            self.user = await PixivAuthData.login(refresh_token=refresh_token)
+        if self.user is not None:
+            self.user = await self.auth(self.user.refresh_token)
+        elif token := PixivConstants.CONFIG["account"]["token"].as_str().strip():
+            self.user = await self.auth(token)
         else:
             raise ValueError("Pixiv account refresh_token is not configured.")
-
+        await self.client.aclose()
         return self.user
+
+    async def auth(self, refresh_token: str):
+        url = URL(PixivConstants.AUTH_HOST).join("/auth/token")
+        time = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        headers = {
+            **self.headers,
+            "X-Client-Time": time,
+            "X-Client-Hash": hashlib.md5(
+                time.encode() + PixivConstants.HASH_SECRET
+            ).hexdigest(),
+        }
+        payload = {
+            "get_secure_url": 1,
+            "client_id": PixivConstants.CLIENT_ID,
+            "client_secret": PixivConstants.CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+        }
+
+        async with self as client:
+            response = await client.post(url, data=payload, headers=headers)
+            response.raise_for_status()
+
+        return PixivAuthData.parse_obj(response.json())
