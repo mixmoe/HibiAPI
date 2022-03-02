@@ -1,8 +1,15 @@
-import asyncio
 import functools
-from threading import current_thread
 from types import TracebackType
-from typing import Any, Callable, Coroutine, Dict, Optional, Type, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Dict,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from httpx import (
     URL,
@@ -53,30 +60,35 @@ class AsyncHTTPClient(AsyncClient):
 
 
 class BaseNetClient:
+    client: AsyncHTTPClient
+
     def __init__(
         self,
         headers: Optional[Dict[str, Any]] = None,
         cookies: Optional[Cookies] = None,
         proxies: Optional[Dict[str, str]] = None,
-        client_class: Optional[Type[AsyncHTTPClient]] = None,
+        client_class: Type[AsyncHTTPClient] = AsyncHTTPClient,
     ):
+        self.cookies, self.client_class = cookies or Cookies(), client_class
         self.headers: Dict[str, Any] = headers or {}
-        self.cookies: Cookies = cookies or Cookies()
-        self.proxies: Dict[str, str] = proxies or {}
-        self.clients: Dict[int, AsyncHTTPClient] = {}
-        self.client_class: Type[AsyncHTTPClient] = client_class or AsyncHTTPClient
+        self.proxies: Any = proxies or {}  # Bypass type checker
+
+        self.create_client()
+
+    def create_client(self):
+        self.client = self.client_class(
+            headers=self.headers,
+            proxies=self.proxies,
+            cookies=self.cookies,
+            http2=True,
+            follow_redirects=True,
+        )
+        return self.client
 
     async def __aenter__(self) -> AsyncHTTPClient:
-        tid = current_thread().ident or 1
-        if tid not in self.clients:
-            self.clients[tid] = await self.client_class(
-                headers=self.headers,
-                proxies=self.proxies,  # type:ignore
-                cookies=self.cookies,
-                http2=True,
-                follow_redirects=True,
-            ).__aenter__()
-        return self.clients[tid]
+        if self.client.is_closed:
+            self.client = await self.create_client().__aenter__()
+        return self.client
 
     async def __aexit__(
         self,
@@ -84,26 +96,11 @@ class BaseNetClient:
         exc_value: Optional[BaseException] = None,
         traceback: Optional[TracebackType] = None,
     ):
-        if exc_type is None:
+        if not (exc_type and exc_value and traceback):
             return
-        tid = current_thread().ident or 1
-        if tid not in self.clients:
-            return
-        await self.clients.pop(tid).__aexit__(exc_type, exc_value, traceback)
-
-    def __del__(self):
-        try:
-            asyncio.get_event_loop()
-        except ImportError:
-            return
-        asyncio.ensure_future(
-            asyncio.gather(
-                *map(
-                    lambda f: f.aclose(),
-                    self.clients.values(),
-                ),
-            )
-        )
+        if not self.client.is_closed:
+            await self.client.__aexit__(exc_type, exc_value, traceback)
+        return
 
 
 def catch_network_error(function: AsyncCallable_T) -> AsyncCallable_T:
