@@ -51,6 +51,7 @@ class NetRequest(BaseNetClient):
     def user(self, user: PixivAuthData):
         self._user = user
         self.headers["authorization"] = f"Bearer {user.access_token}"
+        self.reset_client()
 
     async def login(self):
         if self.user is not None:
@@ -59,7 +60,6 @@ class NetRequest(BaseNetClient):
             self.user = await self.auth(token)
         else:
             raise ValueError("Pixiv account refresh_token is not configured.")
-        await self.client.aclose()
         return self.user
 
     async def auth(self, refresh_token: str):

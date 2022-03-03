@@ -1,8 +1,10 @@
+import asyncio
 import functools
 from types import TracebackType
 from typing import (
     Any,
     Callable,
+    ClassVar,
     Coroutine,
     Dict,
     Optional,
@@ -60,7 +62,9 @@ class AsyncHTTPClient(AsyncClient):
 
 
 class BaseNetClient:
-    client: AsyncHTTPClient
+    connections: ClassVar[int] = 0
+
+    client: Optional[AsyncHTTPClient] = None
 
     def __init__(
         self,
@@ -85,9 +89,20 @@ class BaseNetClient:
         )
         return self.client
 
-    async def __aenter__(self) -> AsyncHTTPClient:
-        if self.client.is_closed:
+    def reset_client(self, close_wait: float = 10):
+        if self.client:
+            old_client = self.client
+            asyncio.get_running_loop().call_later(
+                close_wait, lambda: asyncio.ensure_future(old_client.aclose())
+            )
+        self.client = None
+        return
+
+    async def __aenter__(self):
+        if not self.client or self.client.is_closed:
             self.client = await self.create_client().__aenter__()
+
+        self.__class__.connections += 1
         return self.client
 
     async def __aexit__(
@@ -96,9 +111,11 @@ class BaseNetClient:
         exc_value: Optional[BaseException] = None,
         traceback: Optional[TracebackType] = None,
     ):
+        self.__class__.connections -= 1
+
         if not (exc_type and exc_value and traceback):
             return
-        if not self.client.is_closed:
+        if self.client and not self.client.is_closed:
             await self.client.__aexit__(exc_type, exc_value, traceback)
         return
 
