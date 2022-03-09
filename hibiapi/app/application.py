@@ -14,6 +14,7 @@ from hibiapi import __version__
 from hibiapi.utils.config import Config
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.log import logger
+from hibiapi.utils.net import BaseNetClient
 from hibiapi.utils.temp import TempFile
 
 from .routes import router as ImplRouter
@@ -125,7 +126,20 @@ def flush_sentry():
     if client is not None:
         client.close()
     sentry_sdk.flush()
-    logger.info("Sentry client has been closed")
+    logger.debug("Sentry client has been closed")
+
+
+@app.on_event("shutdown")
+async def cleanup_clients():
+    opened_clients = [
+        client for client in BaseNetClient.clients if not client.is_closed
+    ]
+    if opened_clients:
+        await asyncio.gather(
+            *map(lambda client: client.aclose(), opened_clients),
+            return_exceptions=True,
+        )
+    logger.debug(f"Cleaned <r>{len(opened_clients)}</r> unclosed HTTP clients")
 
 
 """

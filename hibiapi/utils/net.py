@@ -7,6 +7,7 @@ from typing import (
     ClassVar,
     Coroutine,
     Dict,
+    List,
     Optional,
     Type,
     TypeVar,
@@ -63,6 +64,7 @@ class AsyncHTTPClient(AsyncClient):
 
 class BaseNetClient:
     connections: ClassVar[int] = 0
+    clients: ClassVar[List[AsyncHTTPClient]] = []
 
     client: Optional[AsyncHTTPClient] = None
 
@@ -87,6 +89,7 @@ class BaseNetClient:
             http2=True,
             follow_redirects=True,
         )
+        BaseNetClient.clients.append(self.client)
         return self.client
 
     def reset_client(self, close_wait: float = 10):
