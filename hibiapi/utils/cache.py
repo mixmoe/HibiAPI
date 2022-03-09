@@ -6,7 +6,7 @@ import time
 import zlib
 from datetime import timedelta
 from functools import wraps
-from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, TypeVar
+from typing import Any, Awaitable, Callable, Dict, Optional, Tuple, TypeVar, cast
 
 from aiocache import Cache as AioCache  # type:ignore
 from aiocache.base import BaseCache  # type:ignore
@@ -17,11 +17,14 @@ from pydantic.decorator import ValidatedFunction
 from .config import Config
 from .log import logger
 
+CACHE_CONFIG_KEY = "_cache_config"
+
 CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
 CACHE_DELTA = timedelta(seconds=Config["cache"]["ttl"].as_number())
 CACHE_URI = Config["cache"]["uri"].as_str()
 
-T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Coroutine])
+AsyncFunc = Callable[..., Awaitable[Any]]
+T_AsyncFunc = TypeVar("T_AsyncFunc", bound=AsyncFunc)
 
 
 class GZippedBase85Serializer(BaseSerializer):
@@ -46,14 +49,25 @@ class GZippedBase85Serializer(BaseSerializer):
 
 
 class CacheConfig(BaseModel):
-    endpoint: Callable[..., Coroutine]
+    endpoint: AsyncFunc
     namespace: str
     enabled: bool = True
     ttl: timedelta = CACHE_DELTA
 
     @staticmethod
-    def new(function: Callable[..., Coroutine]):
-        return CacheConfig(endpoint=function, namespace=function.__qualname__)
+    def new(
+        function: AsyncFunc,
+        *,
+        enabled: bool = True,
+        ttl: timedelta = CACHE_DELTA,
+        namespace: Optional[str] = None,
+    ):
+        return CacheConfig(
+            endpoint=function,
+            enabled=enabled,
+            ttl=ttl,
+            namespace=namespace or function.__qualname__,
+        )
 
 
 def cache_config(
@@ -61,18 +75,13 @@ def cache_config(
     ttl: timedelta = CACHE_DELTA,
     namespace: Optional[str] = None,
 ):
-    def decorator(endpoint: T_AsyncFunc) -> T_AsyncFunc:
+    def decorator(function: T_AsyncFunc) -> T_AsyncFunc:
         setattr(
-            endpoint,
-            "cache_config",
-            CacheConfig(
-                endpoint=endpoint,
-                namespace=namespace or endpoint.__qualname__,
-                enabled=enabled,
-                ttl=ttl,
-            ),
+            function,
+            CACHE_CONFIG_KEY,
+            CacheConfig.new(function, enabled=enabled, ttl=ttl, namespace=namespace),
         )
-        return endpoint
+        return function
 
     return decorator
 
@@ -90,8 +99,11 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
     from .routing import request_headers, response_headers
 
     vf = CachedValidatedFunction(function, config={})
-    cache: BaseCache = AioCache.from_url(CACHE_URI)  # type:ignore
-    config: CacheConfig = getattr(function, "cache_config", CacheConfig.new(function))
+    cache = cast(BaseCache, AioCache.from_url(CACHE_URI))
+    config = cast(
+        CacheConfig,
+        getattr(function, CACHE_CONFIG_KEY, None) or CacheConfig.new(function),
+    )
 
     cache.namespace, cache.ttl = config.namespace, config.ttl.total_seconds()
     cache.serializer = GZippedBase85Serializer(encoding="utf-8")
@@ -103,7 +115,11 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
     async def wrapper(*args, **kwargs):
         cache_policy: str = request_headers.get().get("cache-control", "public")
 
-        if (not config.enabled) or (cache_policy.casefold() == "no-store"):
+        if (
+            not config.enabled
+            or cache.ttl is None
+            or cache_policy.casefold() == "no-store"
+        ):
             return await vf.call(*args, **kwargs)
 
         key = hashlib.md5(
@@ -112,25 +128,26 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
             .encode()
         ).hexdigest()
 
+        response_header = response_headers.get()
+        cache_result: Optional[Tuple[Any, float]] = None
+
         if cache_policy.casefold() == "no-cache":
             await cache.delete(key)
+        elif cache_result := await cache.get(key):
+            logger.debug(f"Request hit cache <e>{cache.namespace}</e>:<g>{key}</g>")
+            response_header.setdefault("X-Cache-Hit", key)
 
-        resp_header = response_headers.get()
+        now_time = time.time()
 
-        if await cache.exists(key):
-            logger.debug(
-                f"Request to endpoint <g>{function.__qualname__}</g> "
-                f"restoring from <e>{key=}</e> in cache data."
-            )
-            resp_header.setdefault("X-Cache-Hit", key)
-            result, cache_date = await cache.get(key)  # type:ignore
-        else:
-            result, cache_date = await vf.execute(model), time.time()
-            await cache.set(key, (result, cache_date))
+        if cache_result is None:
+            cache_result = await vf.execute(model), now_time
+            await cache.set(key, cache_result)
 
-        if (cache_remain := int(cache_date + cache.ttl - time.time())) > 0:
-            resp_header.setdefault("Cache-Control", f"max-age={cache_remain}")
+        return_result, cache_time = cache_result
 
-        return result
+        if (cache_remain := int(cache_time + cache.ttl - now_time)) > 0:
+            response_header.setdefault("Cache-Control", f"max-age={cache_remain}")
+
+        return return_result
 
     return wrapper  # type:ignore
