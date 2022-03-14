@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 from typing import Any, Awaitable, Callable, Dict, Optional, Tuple, TypeVar, cast
 
-from cashews import Cache
+from cashews import Cache  # type:ignore
 from pydantic import BaseModel
 from pydantic.decorator import ValidatedFunction
 
