@@ -115,7 +115,7 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
 
         if result is None:
             result = await vf.execute(model)
-            result = await cache.set(key, result, expire=config.ttl)
+            await cache.set(key, result, expire=config.ttl)
 
         if (cache_remain := await cache.get_expire(key)) > 0:
             response_header.setdefault("Cache-Control", f"max-age={cache_remain}")
