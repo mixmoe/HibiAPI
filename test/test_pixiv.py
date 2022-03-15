@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
+from pytest_benchmark.fixture import BenchmarkFixture  # type:ignore
 
 
 @pytest.fixture(scope="package")
@@ -117,3 +118,26 @@ def test_novel_new(client: TestClient):
     response = client.get("novel_new", params={"max_novel_id": 16002726})
     assert response.status_code == 200
     assert response.json().get("next_url")
+
+
+def test_request_cache(client: TestClient, benchmark: BenchmarkFixture):
+    client.headers["Cache-Control"] = "public"
+
+    first_response = client.get("rank")
+    assert first_response.status_code == 200
+
+    second_response = client.get("rank")
+    assert second_response.status_code == 200
+
+    assert "x-cache-hit" in second_response.headers
+    assert "cache-control" in second_response.headers
+    assert second_response.json() == first_response.json()
+
+    def cache_benchmark():
+        response = client.get("rank")
+        assert response.status_code == 200
+
+        assert "x-cache-hit" in response.headers
+        assert "cache-control" in response.headers
+
+    benchmark.pedantic(cache_benchmark, rounds=200, iterations=3)
