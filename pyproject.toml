@@ -25,8 +25,8 @@ pycryptodomex = "^3.10.1"
 sentry-sdk = "^1.5.0"
 pydantic = "^1.9.0"
 python-multipart = "^0.0.5"
-aiocache = "^0.11.1"
 click = "^8.0.1"
+cashews = { extras = ["redis", "diskcache"], version = "^3.3.0" }
 
 [tool.poetry.dev-dependencies]
 black = "^22.1"
@@ -38,7 +38,6 @@ types-click = "^7.1.8"
 types-requests = "^2.27.10"
 isort = "^5.10.1"
 pytest-httpserver = "^1.0.4"
-pytest-rerunfailures = "^10.2"
 pytest-cov = "^3.0.0"
 pytest-benchmark = "^3.4.1"
 

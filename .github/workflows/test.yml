@@ -59,7 +59,7 @@ jobs:
       - name: Testing with pytest
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > .env
-          poetry run pytest --cov ./hibiapi/ --cov-report xml --cov-report term-missing --reruns 5 --reruns-delay 7 ./test
+          poetry run pytest --cov ./hibiapi/ --cov-report xml --cov-report term-missing ./test
 
       - uses: codecov/codecov-action@v2.1.0
         with:

@@ -37,7 +37,7 @@ server:
 cache:
   enabled: true # 设置是否启用缓存
   ttl: 3600 # 缓存默认生存时间, 单位为秒
-  uri: "memory://" # 缓存URI
+  uri: "mem://" # 缓存URI
 
 log:
   level: INFO # 日志等级, 可选 [TRACE,DEBUG,INFO,WARNING,ERROR]
