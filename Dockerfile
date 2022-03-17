@@ -11,7 +11,7 @@ COPY . /hibi
 WORKDIR /hibi
 
 RUN touch .env && \
-    pip install . && 
+    pip install .
 
 CMD python -m hibiapi \
     --port $PORT --workers $PROCS
