@@ -702,7 +702,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-requests"
-version = "2.27.11"
+version = "2.27.13"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
@@ -817,7 +817,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "40a837733837d9ddc662592cf3f6dd611812dfedbf324fd2a185b187c95c1773"
+content-hash = "c4290ee710baa1f6ab2d29fe03530f209830d941cee3aa8a7c6ae7db00a8ab0b"
 
 [metadata.files]
 aiocache = [
@@ -1278,8 +1278,8 @@ types-click = [
     {file = "types_click-7.1.8-py3-none-any.whl", hash = "sha256:8cb030a669e2e927461be9827375f83c16b8178c365852c060a34e24871e7e81"},
 ]
 types-requests = [
-    {file = "types-requests-2.27.11.tar.gz", hash = "sha256:6a7ed24b21780af4a5b5e24c310b2cd885fb612df5fd95584d03d87e5f2a195a"},
-    {file = "types_requests-2.27.11-py3-none-any.whl", hash = "sha256:506279bad570c7b4b19ac1f22e50146538befbe0c133b2cea66a9b04a533a859"},
+    {file = "types-requests-2.27.13.tar.gz", hash = "sha256:cf0646031dd6307113b37814f743c04f0707a3357378c2bb1326f848412f5ba9"},
+    {file = "types_requests-2.27.13-py3-none-any.whl", hash = "sha256:5d6f77f3c7565659bdb7b7bce1d33d1abb7d0b056138cac714860e13da2f19df"},
 ]
 types-urllib3 = [
     {file = "types-urllib3-1.26.9.tar.gz", hash = "sha256:abd2d4857837482b1834b4817f0587678dcc531dbc9abe4cde4da28cef3f522c"},
