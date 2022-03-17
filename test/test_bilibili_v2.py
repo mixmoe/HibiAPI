@@ -125,6 +125,7 @@ def test_archive(client: TestClient):
     assert response.json()["code"] == 0
 
 
+@pytest.mark.skip(reason="not implemented yet")
 def test_favlist(client: TestClient):
     # TODO:add test case
     pass

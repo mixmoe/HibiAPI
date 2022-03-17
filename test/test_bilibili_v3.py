@@ -55,6 +55,7 @@ def test_user_uploaded(client: TestClient):
     assert response.json()["code"] == 0
 
 
+@pytest.mark.skip(reason="not implemented yet")
 def test_user_favorite(client: TestClient):
     # TODO:add test case
     pass
