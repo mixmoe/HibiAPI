@@ -6,10 +6,8 @@ name: Lint
 on:
   push:
     branches: [main, dev]
-    paths:
-      - "**.py"
-      - "**.pyi"
-      - ".github/workflows/*.yml"
+
+  pull_request_target:
 
 jobs:
   lint:
@@ -35,16 +33,9 @@ jobs:
           poetry config virtualenvs.create false
           poetry install
 
-      - uses: wearerequired/lint-action@v1
-        with:
-          auto_fix: true
-          flake8: true
-          flake8_args: "--config .flake8"
-          mypy: true
-          mypy_args: ". --config .mypy.ini"
-          black: true
-          commit_message: ":rotating_light: 自动进行代码格式化"
-          git_email: noreply@github.com
+      - uses: suo/flake8-github-action@v1
+
+      - uses: jakebailey/pyright-action@v1
 
   analyze:
     runs-on: ubuntu-latest
