@@ -1,5 +1,5 @@
 import hashlib
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import wraps
 from typing import Any, Awaitable, Callable, Dict, Optional, Tuple, TypeVar, cast
 
@@ -12,15 +12,16 @@ from .log import logger
 
 CACHE_CONFIG_KEY = "_cache_config"
 
-CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
-CACHE_DELTA = timedelta(seconds=Config["cache"]["ttl"].as_number())
-CACHE_URI = Config["cache"]["uri"].as_str()
-
 AsyncFunc = Callable[..., Awaitable[Any]]
 T_AsyncFunc = TypeVar("T_AsyncFunc", bound=AsyncFunc)
 
-cache = Cache(name="hibiapi")
 
+CACHE_ENABLED = Config["cache"]["enabled"].as_bool()
+CACHE_DELTA = timedelta(seconds=Config["cache"]["ttl"].as_number())
+CACHE_URI = Config["cache"]["uri"].as_str()
+CACHE_CONTROLLABLE = Config["cache"]["controllable"].as_bool()
+
+cache = Cache(name="hibiapi")
 try:
     cache.setup(CACHE_URI)
 except Exception as e:
@@ -90,7 +91,10 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
 
     @wraps(function)
     async def wrapper(*args, **kwargs):
-        cache_policy: str = request_headers.get().get("cache-control", "public")
+        cache_policy = "public"
+
+        if CACHE_CONTROLLABLE:
+            cache_policy = request_headers.get().get("cache-control", cache_policy)
 
         if not config.enabled or cache_policy.casefold() == "no-store":
             return await vf.call(*args, **kwargs)
@@ -105,7 +109,7 @@ def endpoint_cache(function: T_AsyncFunc) -> T_AsyncFunc:
         )
 
         response_header = response_headers.get()
-        result: Optional[Tuple[Any, datetime]] = None
+        result: Optional[Any] = None
 
         if cache_policy.casefold() == "no-cache":
             await cache.delete(key)

@@ -38,6 +38,7 @@ cache:
   enabled: true # 设置是否启用缓存
   ttl: 3600 # 缓存默认生存时间, 单位为秒
   uri: "mem://" # 缓存URI
+  controllable: true # 配置是否可以通过Cache-Control请求头刷新缓存
 
 log:
   level: INFO # 日志等级, 可选 [TRACE,DEBUG,INFO,WARNING,ERROR]
