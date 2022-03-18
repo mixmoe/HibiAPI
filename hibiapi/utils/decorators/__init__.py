@@ -130,8 +130,8 @@ def Retry(
 
 
 def ToAsync(
-    function: Callable[Argument_T, Return_T]  # type:ignore
-) -> Callable[Argument_T, Coroutine[Any, Any, Return_T]]:  # type:ignore
+    function: Callable[Argument_T, Return_T]
+) -> Callable[Argument_T, Coroutine[Any, Any, Return_T]]:
     @TimeIt
     @wraps(function)
     async def wrapper(*args, **kwargs):

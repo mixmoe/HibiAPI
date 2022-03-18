@@ -5,7 +5,7 @@ from traceback import format_tb
 from types import TracebackType
 from typing import Any, Dict, List, Optional
 
-from pydantic import AnyHttpUrl, BaseModel, Extra, Field, Protocol, conint, constr
+from pydantic import AnyHttpUrl, BaseModel, Extra, Field, Protocol
 
 from .config import DATA_PATH
 
@@ -13,17 +13,11 @@ EXCEPTION_PATH = DATA_PATH / "errors"
 EXCEPTION_PATH_DEPTH = 3
 TRACE_ID_LENGTH = 8
 
-TraceIDType = constr(
-    strict=True,
-    min_length=TRACE_ID_LENGTH * 2,
-    max_length=TRACE_ID_LENGTH * 2,
-)
-
 
 class ExceptionInfo(BaseModel):
     time: datetime
     stamp: float
-    id: TraceIDType  # type:ignore
+    id: str = Field(min_length=TRACE_ID_LENGTH, max_length=TRACE_ID_LENGTH)
     traceback: List[str]
 
     @staticmethod
@@ -58,9 +52,11 @@ class ExceptionInfo(BaseModel):
 class ExceptionReturn(BaseModel):
     url: Optional[AnyHttpUrl] = None
     time: datetime = Field(default_factory=datetime.now)
-    code: conint(ge=400, lt=600)  # type:ignore
+    code: int = Field(ge=400, le=599)
     detail: str
-    trace: Optional[TraceIDType] = None  # type:ignore
+    trace: Optional[str] = Field(
+        None, min_length=TRACE_ID_LENGTH, max_length=TRACE_ID_LENGTH
+    )
     headers: Dict[str, str] = {}
 
     class Config:
@@ -80,7 +76,7 @@ class BaseServerException(Exception):
         headers: Optional[Dict[str, Any]] = None,
         **params
     ) -> None:
-        self.data = ExceptionReturn(  # type:ignore
+        self.data = ExceptionReturn(
             detail=detail or self.__class__.detail,
             code=code or self.__class__.code,
             headers=headers or self.__class__.headers,

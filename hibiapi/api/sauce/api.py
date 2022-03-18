@@ -103,7 +103,7 @@ class SauceEndpoint(BaseEndpoint):
         database: Optional[int] = None,
         enabled_mask: Optional[int] = None,
         disabled_mask: Optional[int] = None,
-    ):
+    ) -> Dict[str, Any]:
         ...
 
     @overload
@@ -116,11 +116,11 @@ class SauceEndpoint(BaseEndpoint):
         database: Optional[int] = None,
         enabled_mask: Optional[int] = None,
         disabled_mask: Optional[int] = None,
-    ):
+    ) -> Dict[str, Any]:
         ...
 
     @disable_cache
-    async def search(  # type:ignore
+    async def search(
         self,
         *,
         url: Optional[HostUrl] = None,

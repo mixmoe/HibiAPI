@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
-from pytest_httpserver import HTTPServer  # type: ignore
+from pytest_httpserver import HTTPServer
 
 LOCAL_SAUCE_PATH = Path(__file__).parent / "test_sauce.jpg"
 

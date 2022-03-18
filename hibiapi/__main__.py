@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 import click
-import uvicorn  # type:ignore
+import uvicorn
 
 from . import __file__ as root_file
 from . import __version__
@@ -95,9 +95,7 @@ def main(host: str, port: int, workers: int, reload: bool):
         reload=reload,
         reload_dirs=[Path(root_file).parent, CONFIG_DIR],
         reload_includes=["*.py", "*.yml"],
-        forwarded_allow_ips=Config["server"]["allowed-forward"].get(
-            Optional[str]  # type:ignore
-        ),
+        forwarded_allow_ips=Config["server"]["allowed-forward"].get(Optional[str]),
     )
 
 

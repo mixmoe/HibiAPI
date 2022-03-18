@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from loguru import Logger
 
 
-LOG_FILE = Config["log"]["level"].get(Optional[Path])  # type: ignore
+LOG_FILE = Config["log"]["level"].get(Optional[Path])
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
 LOG_LEVEL = Config["log"]["level"].as_str().upper()
 
@@ -58,11 +58,11 @@ class LoguruHandler(logging.Handler):
         try:
             level = logger.level(record.levelname).name
         except ValueError:
-            level = record.levelno  # type:ignore
+            level = record.levelno
 
         frame, depth, message = logging.currentframe(), 2, record.getMessage()
-        while frame.f_code.co_filename == logging.__file__:  # type:ignore
-            frame = frame.f_back  # type:ignore
+        while frame.f_code.co_filename == logging.__file__:  # type: ignore
+            frame = frame.f_back  # type: ignore
             depth += 1
 
         logger.opt(depth=depth, exception=record.exc_info, colors=True).log(

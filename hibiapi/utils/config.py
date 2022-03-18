@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List, Type, TypeVar, overload
 
-import confuse  # type:ignore
+import confuse
 import dotenv
 from pydantic import parse_obj_as
 
@@ -45,7 +45,7 @@ class ConfigSubView(confuse.Subview):
     def get(self, template: Type[_T]) -> _T:
         ...
 
-    def get(self, template: Type[_T] = Any) -> _T:  # type: ignore
+    def get(self, template: Type[_T] = Any) -> _T:
         return parse_obj_as(template, super().get())
 
     def as_str(self) -> str:

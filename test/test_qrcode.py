@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 from fastapi.testclient import TestClient
-from pytest_benchmark.fixture import BenchmarkFixture  # type:ignore
+from pytest_benchmark.fixture import BenchmarkFixture
 from requests.models import Response
 
 

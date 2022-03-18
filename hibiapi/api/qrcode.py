@@ -4,11 +4,11 @@ from io import BytesIO
 from pathlib import Path
 from typing import List, Literal, Optional
 
-from PIL import Image  # type:ignore
-from pydantic import AnyHttpUrl, BaseModel, Field, conint, validate_arguments
+from PIL import Image
+from pydantic import AnyHttpUrl, BaseModel, Field, validate_arguments
 from pydantic.color import Color
-from qrcode import QRCode, constants  # type:ignore
-from qrcode.image.pil import PilImage  # type:ignore
+from qrcode import QRCode, constants
+from qrcode.image.pil import PilImage
 
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.decorators import ToAsync
@@ -45,7 +45,7 @@ class QRInfo(BaseModel):
     data: str
     logo: Optional[HostUrl] = None
     level: QRCodeLevel = QRCodeLevel.M
-    size: int = 200  # type:ignore
+    size: int = 200
     code: Literal[0] = 0
     status: Literal["success"] = "success"
 
@@ -55,11 +55,11 @@ class QRInfo(BaseModel):
         cls,
         text: str,
         *,
-        size: conint(  # type:ignore
-            strict=True,
-            gt=Config["qrcode"]["min-size"].as_number(),  # noqa:F821
-            lt=Config["qrcode"]["max-size"].as_number(),  # noqa:F821
-        ) = 200,
+        size: int = Field(
+            200,
+            gt=Config["qrcode"]["min-size"].as_number(),
+            lt=Config["qrcode"]["max-size"].as_number(),
+        ),
         logo: Optional[HostUrl] = None,
         level: QRCodeLevel = QRCodeLevel.M,
         bgcolor: Color = Color("FFFFFF"),
@@ -115,7 +115,7 @@ class QRInfo(BaseModel):
             PilImage,
             back_color=bgcolor,
             fill_color=fgcolor,
-        ).get_image()  # type:ignore
+        ).get_image()
         image = image.resize((size, size))
         if icon_stream is not None:
             try:
