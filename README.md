@@ -7,7 +7,7 @@
 
 # HibiAPI
 
-**_一个实现了多种常用站点的易用化API的程序._**
+**_一个实现了多种常用站点的易用化 API 的程序._**
 
 **_A program that implements easy-to-use APIs for a variety of commonly used sites._**
 
@@ -35,26 +35,25 @@
 
 ## 前言
 
-- `HibiAPI`提供多种网站公开内容的API集合, 它们包括:
-  - Pixiv的图片和小说相关信息获取和搜索
-  - Bilibili的视频/番剧等信息获取和搜索
-  - 网易云音乐的音乐/MV等信息获取和搜索
+- `HibiAPI`提供多种网站公开内容的 API 集合, 它们包括:
+
+  - Pixiv 的图片和小说相关信息获取和搜索
+  - Bilibili 的视频/番剧等信息获取和搜索
+  - 网易云音乐的音乐/MV 等信息获取和搜索
   - 百度贴吧的帖子内容的获取
   - [爱壁纸](https://adesk.com/)的横版和竖版壁纸获取
-  - and more…
+  - …
 
 - 该项目的前身是 Imjad API[^1]
   - 由于它的使用人数过多, 致使调用超出限制, 所以本人希望提供一个开源替代来供社区进行自由地部署和使用, 从而减轻一部分该 API 的使用压力
 
-[^1]: [什么是Imjad API](https://github.com/mixmoe/HibiAPI/wiki/FAQ#%E4%BB%80%E4%B9%88%E6%98%AFimjad-api)
+[^1]: [什么是 Imjad API](https://github.com/mixmoe/HibiAPI/wiki/FAQ#%E4%BB%80%E4%B9%88%E6%98%AFimjad-api)
 
 ## 优势
 
 ### 开源
 
-- 本项目以[Apache-2.0](./LICENSE)许可开源, 即:
-  - 你可以直接使用该项目提供的功能, 无需任何授权
-  - 你可以在**注明来源版权信息**的情况下对源代码进行任意分发和修改以及衍生
+- 本项目以[Apache-2.0](./LICENSE)许可开源, 请看[开源许可](#开源许可)一节
 
 ### 高效
 
@@ -62,13 +61,17 @@
 
 ### 稳定
 
-- 在代码中广泛使用了Python的[类型提示支持](https://docs.python.org/zh-cn/3/library/typing.html), 使代码可读性更高且更加易于维护和调试
+- 在代码中广泛使用了 Python 的[类型提示支持](https://docs.python.org/zh-cn/3/library/typing.html), 使代码可读性更高且更加易于维护和调试
 
-- 在开发初期起就一直使用[PyLance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), [Flake8](https://flake8.pycqa.org/en/latest/)以及[MyPy](https://mypy.readthedocs.io/)来对代码进行类型推断和纠错
+- 在开发初期起就一直使用多种现代 Python 开发工具辅助开发, 包括:
+
+  - 使用 [PyLance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) 进行静态类型推断
+  - 使用 [Flake8](https://flake8.pycqa.org/en/latest/) 对代码格式进行检查
+  - 使用 [Black](https://black.readthedocs.io/en/stable/) 格式化代码以提升代码可读性
 
 - 不直接使用第三方开发的 API 调用库, 而是全部用更加适合 Web 应用的逻辑重写第三方 API 请求, 更加可控 ~~疯狂造轮子~~
 
-## 已实现API[^2]
+## 已实现 API[^2]
 
 [^2]: 请查看 [#1](https://github.com/mixmoe/HibiAPI/issues/1)
 
@@ -77,7 +80,7 @@
 - [ ] ~~一言~~ (其代替方案<https://hitokoto.cn>提供的方案已足够好, 暂不考虑支持)
 - [x] Bilibili
 - [x] 二维码
-- [ ] ~~企鹅FM~~ (似乎用的人不是很多)
+- [ ] ~~企鹅 FM~~ (似乎用的人不是很多)
 - [x] 百度贴吧
 - [x] 爱壁纸
 
@@ -96,15 +99,15 @@
   - **又一个 Pixiv 阅览工具**
 
 - 公开搭建实例
-  |         **站点名称**         |            **网址**             |        **状态**         |
+  | **站点名称** | **网址** | **状态** |
   | :--------------------------: | :-----------------------------: | :---------------------: |
-  |      **官方 Demo[^3]**       |     <https://api.obfs.dev>      |  ![official][official]  |
-  |           轻零 API           |   <https://hibiapi.lite0.com>   |     ![lite0][lite0]     |
-  |     Kyomotoi の菜几服务      |   <https://api.kyomotoi.moe>    |       ![kyo][kyo]       |
-  |          老狐狸 API          | <https://hibiapi.aliserver.net> | ![older-fox][older-fox] |
-  | [MyCard](https://mycard.moe) |   <https://hibi.moecube.com>    |    ![mycard][mycard]    |
+  | **官方 Demo[^3]** | <https://api.obfs.dev> | ![official][official] |
+  | 轻零 API | <https://hibiapi.lite0.com> | ![lite0][lite0] |
+  | Kyomotoi の菜几服务 | <https://api.kyomotoi.moe> | ![kyo][kyo] |
+  | 老狐狸 API | <https://hibiapi.aliserver.net> | ![older-fox][older-fox] |
+  | [MyCard](https://mycard.moe) | <https://hibi.moecube.com> | ![mycard][mycard] |
 
-[^3]: 为了减轻服务器负担, Demo服务器已开启了Cloudflare全站缓存, 如果有实时获取更新的需求, 请自行搭建或使用其他部署实例
+[^3]: 为了减轻服务器负担, Demo 服务器已开启了 Cloudflare 全站缓存, 如果有实时获取更新的需求, 请自行搭建或使用其他部署实例
 
 [official]: https://img.shields.io/website?url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json
 [lite0]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json
@@ -114,7 +117,7 @@
 
 ## 特别鸣谢
 
-[**@journey-ad**](https://github.com/journey-ad) 大佬的 [Imjad API](https://api.imjad.cn/)
+[**@journey-ad**](https://github.com/journey-ad) 大佬的 **Imjad API**, 它是本项目的起源
 
 ### 参考项目
 
@@ -131,7 +134,9 @@
 ### 贡献者们
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些为这个项目作出贡献的各位大佬:
@@ -157,10 +162,6 @@
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 _本段符合 [all-contributors](https://github.com/all-contributors/all-contributors) 规范_
-
-## 联系方式
-
-- 邮箱: <admin@obfs.dev>
 
 ## 开源许可
 
