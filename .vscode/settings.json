@@ -1,11 +1,9 @@
 {
-    "python.pythonPath": ".venv/bin/python",
     "python.analysis.completeFunctionParens": true,
     "python.analysis.typeCheckingMode": "basic",
     "python.formatting.provider": "black",
     "python.languageServer": "Pylance",
     "python.linting.flake8Enabled": true,
-    "python.linting.mypyEnabled": true,
     "python.testing.pytestEnabled": true,
     "[python]": {
         "editor.codeActionsOnSave": {
@@ -24,10 +22,7 @@
         "**/.mypy_cache/**": true
     },
     "files.encoding": "utf8",
-    "git.autofetch": true,
-    "git.enableSmartCommit": true,
     "python.analysis.diagnosticMode": "workspace",
-    "jupyter.jupyterServerType": "local",
     "cSpell.words": [
         "Bilibili",
         "DOUGA",
