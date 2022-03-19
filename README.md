@@ -101,7 +101,7 @@
 - 公开搭建实例
   | **站点名称** | **网址** | **状态** |
   | :--------------------------: | :-----------------------------: | :---------------------: |
-  | **官方 Demo[^3]** | <https://api.obfs.dev> | ![official][official] |
+  | **官方 Demo[^3]** | <https://api.obfs.dev> | [![official][official]][official-stats] |
   | 轻零 API | <https://hibiapi.lite0.com> | ![lite0][lite0] |
   | Kyomotoi の菜几服务 | <https://api.kyomotoi.moe> | ![kyo][kyo] |
   | 老狐狸 API | <https://hibiapi.aliserver.net> | ![older-fox][older-fox] |
@@ -110,6 +110,7 @@
 [^3]: 为了减轻服务器负担, Demo 服务器已开启了 Cloudflare 全站缓存, 如果有实时获取更新的需求, 请自行搭建或使用其他部署实例
 
 [official]: https://img.shields.io/website?url=https%3A%2F%2Fapi.obfs.dev%2Fopenapi.json
+[official-stats]: https://metrics.librato.com/s/public/g1hepph3j
 [lite0]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.lite0.com%2Fopenapi.json
 [kyo]: https://img.shields.io/website?url=https%3A%2F%2Fapi.kyomotoi.moe%2Fopenapi.json
 [older-fox]: https://img.shields.io/website?url=https%3A%2F%2Fhibiapi.aliserver.net%2Fopenapi.json
