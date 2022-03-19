@@ -95,7 +95,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "cashews"
-version = "3.3.0"
+version = "4.0.0"
 description = "cache tools with async power"
 category = "main"
 optional = false
@@ -108,6 +108,7 @@ diskcache = {version = ">=5.0.0", optional = true, markers = "extra == \"diskcac
 [package.extras]
 diskcache = ["diskcache (>=5.0.0)"]
 redis = ["aioredis (<3.0.0)"]
+speedup = ["bitarray (<3.0.0)", "xxhash (<3.0.0)", "hiredis"]
 tests = ["pytest", "pytest-asyncio"]
 
 [[package]]
@@ -826,7 +827,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "1e263a0a6bc7862f7deca8f73f6c4a705aec0ff2a63d025e2e9bc7899c37a80d"
+content-hash = "c52113de25188483bcbd05e9c1b1d5c78fb67e65869c150d5870927b863cde8d"
 
 [metadata.files]
 aioredis = [
@@ -879,8 +880,8 @@ black = [
     {file = "black-22.1.0.tar.gz", hash = "sha256:a7c0192d35635f6fc1174be575cb7915e92e5dd629ee79fdaf0dcfa41a80afb5"},
 ]
 cashews = [
-    {file = "cashews-3.3.0-py3-none-any.whl", hash = "sha256:8914f76aee56218606ce1b3ea608f4c639ffc1c8aa04503b0e83c9f84d16046b"},
-    {file = "cashews-3.3.0.tar.gz", hash = "sha256:0d0ed7a48fbc32439e70882b4759fc52979143bb45dcffb61879314bd07cd716"},
+    {file = "cashews-4.0.0-py3-none-any.whl", hash = "sha256:39822824ce4e56b164c3434550fc60ba9c8da5a2e5a70f7c7fbff56fbb29ecc4"},
+    {file = "cashews-4.0.0.tar.gz", hash = "sha256:b1d4d96aef03f046f1e218b6176a0cc6cfc3f734242148c700ce743131ae968b"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
