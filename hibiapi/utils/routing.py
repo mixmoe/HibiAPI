@@ -27,15 +27,24 @@ class SlashRouter(APIRouter):
 
 
 class EndpointMeta(type):
-    def __new__(cls, name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]):
-        for name, func in namespace.items():
-            if name.startswith("_") or not inspect.iscoroutinefunction(func):
-                continue
-            namespace[name] = endpoint_cache(func)
-        return super().__new__(cls, name, bases, namespace)
+    def __new__(
+        cls,
+        name: str,
+        bases: Tuple[type, ...],
+        namespace: Dict[str, Any],
+        *,
+        cache_endpoints: bool = True,
+        **kwargs,
+    ):
+        if cache_endpoints:
+            for func_name, func in namespace.items():
+                if func_name.startswith("_") or not inspect.iscoroutinefunction(func):
+                    continue
+                namespace[func_name] = endpoint_cache(func)
+        return super().__new__(cls, name, bases, namespace, **kwargs)
 
 
-class BaseEndpoint(metaclass=EndpointMeta):
+class BaseEndpoint(metaclass=EndpointMeta, cache_endpoints=False):
     def __init__(self, client: AsyncHTTPClient):
         self.client = client
 
