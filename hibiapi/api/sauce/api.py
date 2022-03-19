@@ -5,7 +5,6 @@ from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError
 
-from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, BaseHostUrl
@@ -55,7 +54,7 @@ class DeduplicateType(IntEnum):
     ALL = 2
 
 
-class SauceEndpoint(BaseEndpoint):
+class SauceEndpoint(BaseEndpoint, cache_endpoints=False):
     base = "https://saucenao.com"
 
     async def fetch(self, host: HostUrl) -> UploadFileIO:
@@ -72,7 +71,6 @@ class SauceEndpoint(BaseEndpoint):
         except HTTPError as e:
             raise UnavailableSourceException(detail=str(e)) from e
 
-    @disable_cache
     @catch_network_error
     async def request(
         self, *, file: UploadFileIO, params: Dict[str, Any]
@@ -119,7 +117,6 @@ class SauceEndpoint(BaseEndpoint):
     ) -> Dict[str, Any]:
         ...
 
-    @disable_cache
     async def search(
         self,
         *,

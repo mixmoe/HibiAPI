@@ -196,7 +196,6 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     @staticmethod
     def _parse_json(content: str) -> Dict[str, Any]:
-        content = content.replace("http:", "https:")
         try:
             return json.loads(content)
         except json.JSONDecodeError:

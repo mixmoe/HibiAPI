@@ -40,7 +40,7 @@ class V3EndpointsType(str, Enum):
     comments = "comments"
 
 
-class BilibiliEndpointV3(BaseEndpoint):
+class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
     def __init__(self, client: AsyncHTTPClient):
         super().__init__(client)
         self.base = BaseBilibiliEndpoint(client)

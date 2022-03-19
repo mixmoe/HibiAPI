@@ -54,7 +54,7 @@ class SearchType(str, Enum):
     hot = "hot"
 
 
-class BilibiliEndpointV2(BaseEndpoint):
+class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
     def __init__(self, client: AsyncHTTPClient):
         super().__init__(client)
         self.base = BaseBilibiliEndpoint(client)
