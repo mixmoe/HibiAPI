@@ -633,7 +633,7 @@ idna2008 = ["idna"]
 
 [[package]]
 name = "sentry-sdk"
-version = "1.5.7"
+version = "1.5.8"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -698,33 +698,6 @@ description = "A lil' TOML parser"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
-
-[[package]]
-name = "types-click"
-version = "7.1.8"
-description = "Typing stubs for click"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[[package]]
-name = "types-requests"
-version = "2.27.13"
-description = "Typing stubs for requests"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-types-urllib3 = "<1.27"
-
-[[package]]
-name = "types-urllib3"
-version = "1.26.11"
-description = "Typing stubs for urllib3"
-category = "dev"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "typing-extensions"
@@ -827,7 +800,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c52113de25188483bcbd05e9c1b1d5c78fb67e65869c150d5870927b863cde8d"
+content-hash = "4a80d8f8e802ae3ccf42fc5f119243c24d2fd9bd81528f81597ca70b30097e57"
 
 [metadata.files]
 aioredis = [
@@ -1250,8 +1223,8 @@ rfc3986 = [
     {file = "rfc3986-1.5.0.tar.gz", hash = "sha256:270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.5.7.tar.gz", hash = "sha256:aa52da941c56b5a76fd838f8e9e92a850bf893a9eb1e33ffce6c21431d07ee30"},
-    {file = "sentry_sdk-1.5.7-py2.py3-none-any.whl", hash = "sha256:411a8495bd18cf13038e5749e4710beb4efa53da6351f67b4c2f307c2d9b6d49"},
+    {file = "sentry-sdk-1.5.8.tar.gz", hash = "sha256:38fd16a92b5ef94203db3ece10e03bdaa291481dd7e00e77a148aa0302267d47"},
+    {file = "sentry_sdk-1.5.8-py2.py3-none-any.whl", hash = "sha256:32af1a57954576709242beb8c373b3dbde346ac6bd616921def29d68846fb8c3"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -1268,18 +1241,6 @@ starlette = [
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
-]
-types-click = [
-    {file = "types-click-7.1.8.tar.gz", hash = "sha256:b6604968be6401dc516311ca50708a0a28baa7a0cb840efd7412f0dbbff4e092"},
-    {file = "types_click-7.1.8-py3-none-any.whl", hash = "sha256:8cb030a669e2e927461be9827375f83c16b8178c365852c060a34e24871e7e81"},
-]
-types-requests = [
-    {file = "types-requests-2.27.13.tar.gz", hash = "sha256:cf0646031dd6307113b37814f743c04f0707a3357378c2bb1326f848412f5ba9"},
-    {file = "types_requests-2.27.13-py3-none-any.whl", hash = "sha256:5d6f77f3c7565659bdb7b7bce1d33d1abb7d0b056138cac714860e13da2f19df"},
-]
-types-urllib3 = [
-    {file = "types-urllib3-1.26.11.tar.gz", hash = "sha256:24d64e441168851eb05f1d022de18ae31558f5649c8f1117e384c2e85e31315b"},
-    {file = "types_urllib3-1.26.11-py3-none-any.whl", hash = "sha256:bd0abc01e9fb963e4fddd561a56d21cc371b988d1245662195c90379077139cd"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
