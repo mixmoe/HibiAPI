@@ -154,11 +154,11 @@ def _redirect(request: Request, path: str, to: str) -> Response:
             "Location": ParseResult(
                 scheme="",
                 netloc="",
-                path=path + to,
+                path=to + path,
                 params="",
                 query=str(request.query_params),
                 fragment="",
-            )
+            ).geturl()
         },
     )
 
