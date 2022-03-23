@@ -129,3 +129,11 @@ def test_archive(client: TestClient):
 def test_favlist(client: TestClient):
     # TODO:add test case
     pass
+
+
+def test_rank_redirect(client: TestClient):
+    response = client.get("/bilibili/rank")
+
+    assert response.status_code == 200
+    assert response.history
+    assert response.history[0].status_code == 301

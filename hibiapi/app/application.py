@@ -154,11 +154,11 @@ def _redirect(request: Request, path: str, to: str) -> Response:
             "Location": ParseResult(
                 scheme="",
                 netloc="",
-                path=path + to,
+                path=to + path,
                 params="",
                 query=str(request.query_params),
                 fragment="",
-            )
+            ).geturl()
         },
     )
 
@@ -180,4 +180,4 @@ async def _netease_redirect(path: str, request: Request):
 
 @app.get("/bilibili/{path:path}", include_in_schema=False)
 async def _bilibili_redirect(path: str, request: Request):
-    return _redirect(request, path, "/api/bilibili/")
+    return _redirect(request, path, "/api/bilibili/v2/")

@@ -51,3 +51,14 @@ def test_qrcode_stress(client: TestClient, benchmark: BenchmarkFixture):
         rounds=50,
         iterations=3,
     )
+
+
+def test_qrcode_redirect(client: TestClient):
+    response = client.get("/qrcode/", params={"text": "Hello, World!"})
+
+    assert response.status_code == 200
+
+    redirect1, redirect2 = response.history
+
+    assert redirect1.status_code == 301
+    assert redirect2.status_code == 302

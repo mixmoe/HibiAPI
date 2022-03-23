@@ -119,3 +119,11 @@ def test_user_playlist(client: TestClient):
     response = client.get("user_playlist", params={"id": 1887530069})
     assert response.status_code == 200
     assert response.json()["code"] == 200
+
+
+def test_search_redirect(client: TestClient):
+    response = client.get("/netease/search", params={"s": "test"})
+
+    assert response.status_code == 200
+    assert response.history
+    assert response.history[0].status_code == 301
