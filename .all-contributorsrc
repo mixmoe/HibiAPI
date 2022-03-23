@@ -68,6 +68,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "journey-ad",
+      "name": "Jad",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16256221?v=4",
+      "profile": "https://nocilol.me/",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
