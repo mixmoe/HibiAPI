@@ -141,3 +141,11 @@ def test_request_cache(client: TestClient, benchmark: BenchmarkFixture):
         assert "cache-control" in response.headers
 
     benchmark.pedantic(cache_benchmark, rounds=200, iterations=3)
+
+
+def test_rank_redirect(client: TestClient):
+    response = client.get("/pixiv/rank")
+
+    assert response.status_code == 200
+    assert response.history
+    assert response.history[0].status_code == 301
