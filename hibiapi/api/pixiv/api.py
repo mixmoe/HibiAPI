@@ -179,10 +179,11 @@ class PixivEndpoints(BaseEndpoint):
         )
         return response.json()
 
-    @cache_config(ttl=timedelta(days=1))
+    @cache_config(ttl=timedelta(days=3))
     async def illust(self, *, id: int):
         return await self.request("v1/illust/detail", params={"illust_id": id})
 
+    @cache_config(ttl=timedelta(days=1))
     async def member(self, *, id: int):
         return await self.request("v1/user/detail", params={"user_id": id})
 
@@ -277,10 +278,11 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
+    @cache_config(ttl=timedelta(hours=12))
     async def tags(self):
         return await self.request("v1/trending-tags/illust")
 
-    @cache_config(ttl=timedelta(days=3))
+    @cache_config(ttl=timedelta(minutes=15))
     async def related(self, id: int, page: int = 1, size: int = 20):
         return await self.request(
             "v2/illust/related",
@@ -290,6 +292,7 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
+    @cache_config(ttl=timedelta(days=3))
     async def ugoira_metadata(self, *, id: int):
         return await self.request(
             "v1/ugoira/metadata",
