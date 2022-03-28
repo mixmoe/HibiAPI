@@ -95,7 +95,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "cashews"
-version = "4.0.0"
+version = "4.1.0"
 description = "cache tools with async power"
 category = "main"
 optional = false
@@ -853,8 +853,8 @@ black = [
     {file = "black-22.1.0.tar.gz", hash = "sha256:a7c0192d35635f6fc1174be575cb7915e92e5dd629ee79fdaf0dcfa41a80afb5"},
 ]
 cashews = [
-    {file = "cashews-4.0.0-py3-none-any.whl", hash = "sha256:39822824ce4e56b164c3434550fc60ba9c8da5a2e5a70f7c7fbff56fbb29ecc4"},
-    {file = "cashews-4.0.0.tar.gz", hash = "sha256:b1d4d96aef03f046f1e218b6176a0cc6cfc3f734242148c700ce743131ae968b"},
+    {file = "cashews-4.1.0-py3-none-any.whl", hash = "sha256:0121175ebb6b6020d91cd47680e43e5e8c4a00b955c5c4b198b4230257c8eb56"},
+    {file = "cashews-4.1.0.tar.gz", hash = "sha256:17da639db11a8e11fe9c8e5597274f1905cf5a10059fb5e89fba6baee0c8ed61"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
