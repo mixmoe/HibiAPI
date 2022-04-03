@@ -1,52 +1,7 @@
 from datetime import datetime
-from pathlib import Path
-from secrets import token_hex
-from traceback import format_tb
-from types import TracebackType
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-from pydantic import AnyHttpUrl, BaseModel, Extra, Field, Protocol
-
-from .config import DATA_PATH
-
-EXCEPTION_PATH = DATA_PATH / "errors"
-EXCEPTION_PATH_DEPTH = 3
-TRACE_ID_LENGTH = 8
-
-
-class ExceptionInfo(BaseModel):
-    time: datetime
-    stamp: float
-    id: str = Field(min_length=TRACE_ID_LENGTH, max_length=TRACE_ID_LENGTH)
-    traceback: List[str]
-
-    @staticmethod
-    def _resolve_path(id_: str) -> Path:
-        assert len(id_) >= EXCEPTION_PATH_DEPTH
-        path = EXCEPTION_PATH / ("/".join(id_[:EXCEPTION_PATH_DEPTH])) / (id_ + ".json")
-        path.parent.mkdir(exist_ok=True, parents=True)
-        return path
-
-    @classmethod
-    def new(cls, traceback: Optional[TracebackType] = None):
-        trace_id = token_hex(TRACE_ID_LENGTH).upper()
-        time = datetime.now()
-        return cls(
-            time=time,
-            stamp=time.timestamp(),
-            id=trace_id,
-            traceback=format_tb(traceback),
-        )
-
-    @classmethod
-    def read(cls, id_: str):
-        path = cls._resolve_path(id_)
-        assert path.exists()
-        return cls.parse_file(path, proto=Protocol.json, encoding="utf-8")
-
-    def persist(self):
-        self._resolve_path(self.id).write_text(self.json(), encoding="utf-8")
-        return self
+from pydantic import AnyHttpUrl, BaseModel, Extra, Field
 
 
 class ExceptionReturn(BaseModel):
@@ -54,9 +9,6 @@ class ExceptionReturn(BaseModel):
     time: datetime = Field(default_factory=datetime.now)
     code: int = Field(ge=400, le=599)
     detail: str
-    trace: Optional[str] = Field(
-        None, min_length=TRACE_ID_LENGTH, max_length=TRACE_ID_LENGTH
-    )
     headers: Dict[str, str] = {}
 
     class Config:

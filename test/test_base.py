@@ -103,7 +103,7 @@ def test_net_request():
     api_router.include_router(router, prefix="/test")
 
     from hibiapi.app import app
-    from hibiapi.utils.exceptions import ExceptionInfo, ExceptionReturn
+    from hibiapi.utils.exceptions import ExceptionReturn
 
     with TestClient(app, base_url="http://testserver/api/test/") as client:
         response = client.post("form", json=test_data)
@@ -116,5 +116,3 @@ def test_net_request():
         response = client.post("teapot", json=test_data)
         exception_return = ExceptionReturn.parse_obj(response.json())
         assert exception_return.code == response.status_code
-        assert exception_return.trace is not None
-        assert "teapot" in ExceptionInfo.read(exception_return.trace).traceback
