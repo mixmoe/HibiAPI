@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from io import BytesIO
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, cast
 
 from PIL import Image
 from pydantic import AnyHttpUrl, BaseModel, Field, validate_arguments
@@ -111,11 +111,14 @@ class QRInfo(BaseModel):
             box_size=8,
         )
         qr.add_data(text)
-        image: Image.Image = qr.make_image(
-            PilImage,
-            back_color=bgcolor,
-            fill_color=fgcolor,
-        ).get_image()
+        image = cast(
+            Image.Image,
+            qr.make_image(
+                PilImage,
+                back_color=bgcolor,
+                fill_color=fgcolor,
+            ).get_image(),
+        )
         image = image.resize((size, size))
         if icon_stream is not None:
             try:
