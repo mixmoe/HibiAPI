@@ -1,5 +1,6 @@
 import base64
 import json
+from datetime import timedelta
 from enum import Enum, IntEnum
 from ipaddress import IPv4Address
 from random import randint
@@ -9,7 +10,7 @@ from typing import Any, Dict, List, Optional
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
 
-from hibiapi.utils.cache import disable_cache
+from hibiapi.utils.cache import cache_config, disable_cache
 from hibiapi.utils.exceptions import UpstreamAPIException
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint
@@ -204,6 +205,7 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
+    @cache_config(ttl=timedelta(minutes=20))
     async def song(self, *, id: List[int], br: BitRateType = BitRateType.STANDARD):
         return await self.request(
             "weapi/song/enhance/player/url",
