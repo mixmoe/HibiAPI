@@ -34,6 +34,8 @@ AsyncCallable_T = TypeVar("AsyncCallable_T", bound=Callable[..., Coroutine])
 
 
 class AsyncHTTPClient(AsyncClient):
+    net_client: "BaseNetClient"
+
     @staticmethod
     async def _log_request(request: Request):
         method, url = request.method, request.url
@@ -89,17 +91,9 @@ class BaseNetClient:
             http2=True,
             follow_redirects=True,
         )
+        self.client.net_client = self
         BaseNetClient.clients.append(self.client)
         return self.client
-
-    def reset_client(self, close_wait: float = 10):
-        if self.client:
-            old_client = self.client
-            asyncio.get_running_loop().call_later(
-                close_wait, lambda: asyncio.ensure_future(old_client.aclose())
-            )
-        self.client = None
-        return
 
     async def __aenter__(self):
         if not self.client or self.client.is_closed:

@@ -1,10 +1,14 @@
+import asyncio
 import hashlib
+import random
 from datetime import datetime
-from typing import Optional
+from itertools import cycle
+from typing import Dict, Optional, Union, cast
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
 
+from hibiapi.utils.log import logger
 from hibiapi.utils.net import BaseNetClient
 
 from .constants import PixivConstants
@@ -32,35 +36,53 @@ class PixivAuthData(AccountDataModel):
 
 
 class NetRequest(BaseNetClient):
-    _user: Optional[PixivAuthData] = None
+    _users_iter: Optional["cycle[PixivAuthData]"] = None
 
-    def __init__(self, user: Optional[PixivAuthData] = None):
+    def __init__(self):
         super().__init__(
             headers=PixivConstants.DEFAULT_HEADERS.copy(),
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
         )
-        if user is not None:
-            self.user = user
+        self._users: Dict[int, PixivAuthData] = {}
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
 
     @property
     def user(self):
-        return self._user.copy() if self._user else None
+        return next(self._users_iter, None) if self._users_iter else None
 
     @user.setter
     def user(self, user: PixivAuthData):
-        self._user = user
-        self.headers["authorization"] = f"Bearer {user.access_token}"
-        self.reset_client()
+        logger.opt(colors=True).info(
+            f"Pixiv account <m>{user.user.id}</m> info <b>Updated</b>: "
+            f"<b><e>{user.user.name}</e>({user.user.account})</b>."
+        )
+        self._users[user.user.id] = user
+
+        users_data = [*self._users.values()]
+        random.shuffle(users_data)
+        self._users_iter = cycle(users_data)
 
     async def login(self):
-        if self.user is not None:
-            self.user = await self.auth(self.user.refresh_token)
-        elif token := PixivConstants.CONFIG["account"]["token"].as_str().strip():
-            self.user = await self.auth(token)
-        else:
+        tokens = [
+            token.strip()
+            for token in PixivConstants.CONFIG["account"]["token"].as_str_seq()
+        ]
+        if not tokens:
             raise ValueError("Pixiv account refresh_token is not configured.")
-        return self.user
+
+        for result in await asyncio.gather(
+            *map(self.auth, tokens), return_exceptions=True
+        ):
+            result = cast(Union[PixivAuthData, Exception], result)
+            if isinstance(result, Exception):
+                logger.opt(exception=result).error(
+                    "Pixiv account failed to authenticate:"
+                )
+                continue
+            self.user = result
+
+        if not self.user:
+            raise ValueError("No available Pixiv account.")
 
     async def auth(self, refresh_token: str):
         url = URL(PixivConstants.AUTH_HOST).join("/auth/token")

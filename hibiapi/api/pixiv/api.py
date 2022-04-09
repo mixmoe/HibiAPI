@@ -1,12 +1,13 @@
 from datetime import date, timedelta
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, cast
 
 from hibiapi.utils.cache import cache_config, disable_cache
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, request_headers
 
 from .constants import PixivConstants
+from .net import NetRequest as PixivNetClient
 
 
 class EndpointsType(str, Enum):
@@ -166,6 +167,8 @@ class PixivEndpoints(BaseEndpoint):
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         headers = self.client.headers.copy()
+        if user := cast(PixivNetClient, self.client.net_client).user:
+            headers["Authorization"] = f"Bearer {user.access_token}"
         if language := request_headers.get().get("Accept-Language"):
             language = self._parse_accept_language(language)
             headers["Accept-Language"] = language

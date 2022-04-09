@@ -46,21 +46,20 @@ async def request_client():
 
 @router.on_event("startup")
 async def login():
+    logger.debug("Trying to refresh Pixiv account identity.")
+
     asyncio.get_running_loop().call_later(
         PixivConstants.REFRESH_INTERVAL,
         callback=lambda: asyncio.ensure_future(login()),
     )
 
-    logger.debug("Trying to refresh Pixiv account identity.")
     try:
-        account_data = await PixivAPIRoot.login()
+        await PixivAPIRoot.login()
     except Exception:
-        logger.error("Error occurred during login to Pixiv account.")
+        logger.error("Error occurred during logging to Pixiv account:")
         raise
-    logger.opt(colors=True).info(
-        "<b><g>Successfully</g></b> logged in Pixiv account as "
-        f"<b><e>{account_data.user.name}</e>({account_data.user.account})</b>."
-    )
+
+    return
 
 
 @router.get("/", summary="Pixiv API 兼容实现", deprecated=True)
