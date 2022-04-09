@@ -1,4 +1,3 @@
-import asyncio
 import functools
 from types import TracebackType
 from typing import (
