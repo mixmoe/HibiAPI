@@ -6,9 +6,8 @@ from functools import partial, wraps
 from inspect import iscoroutinefunction
 from time import sleep as sync_sleep
 from typing import (
-    Any,
+    Awaitable,
     Callable,
-    Coroutine,
     Iterable,
     Optional,
     Protocol,
@@ -131,12 +130,12 @@ def Retry(
 
 def ToAsync(
     function: Callable[Argument_T, Return_T]
-) -> Callable[Argument_T, Coroutine[Any, Any, Return_T]]:
+) -> Callable[Argument_T, Awaitable[Return_T]]:
     @TimeIt
     @wraps(function)
-    async def wrapper(*args, **kwargs):
+    async def wrapper(*args: Argument_T.args, **kwargs: Argument_T.kwargs) -> Return_T:
         return await asyncio.get_running_loop().run_in_executor(
             None, lambda: function(*args, **kwargs)
         )
 
-    return wrapper
+    return wrapper  # type: ignore
