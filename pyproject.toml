@@ -32,7 +32,7 @@ typing-extensions = ">=3.10"
 [tool.poetry.dev-dependencies]
 black = "^22.3"
 flake8 = "^4.0.1"
-pytest = "^7.1.1"
+pytest = "^7.1.2"
 requests = "^2.27.1"
 isort = "^5.10.1"
 pytest-httpserver = "^1.0.4"
