@@ -61,6 +61,6 @@ jobs:
           curl -L ${{ secrets.DOTENV_LINK }} > .env
           poetry run pytest --cov ./hibiapi/ --cov-report xml --cov-report term-missing ./test
 
-      - uses: codecov/codecov-action@v3.0.0
+      - uses: codecov/codecov-action@v3.1.0
         with:
           file: coverage.xml
