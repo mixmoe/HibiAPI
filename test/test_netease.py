@@ -38,12 +38,12 @@ def test_detail(client: TestClient):
 
 
 def test_detail_multiple(client: TestClient):
-    response = client.get("detail", params={"id": [657666, 657667]})
+    response = client.get("detail", params={"id": [657666, 657667, 77185]})
     assert response.status_code == 200
     data = response.json()
 
     assert data["code"] == 200
-    assert len(data["songs"]) == 2
+    assert len(data["songs"]) == 3
 
 
 def test_song(client: TestClient):
@@ -53,12 +53,12 @@ def test_song(client: TestClient):
 
 
 def test_song_multiple(client: TestClient):
-    response = client.get("song", params={"id": [657666, 657667]})
+    response = client.get("song", params={"id": [657666, 657667, 77185]})
     assert response.status_code == 200
     data = response.json()
 
     assert data["code"] == 200
-    assert len(data["data"]) == 2
+    assert len(data["data"]) == 3
 
 
 def test_playlist(client: TestClient):
