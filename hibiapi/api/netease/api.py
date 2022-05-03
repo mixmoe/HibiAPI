@@ -1,10 +1,11 @@
 import base64
 import json
+import secrets
+import string
 from datetime import timedelta
 from enum import Enum, IntEnum
 from ipaddress import IPv4Address
 from random import randint
-from secrets import token_urlsafe
 from typing import Any, Dict, List, Optional
 
 from Cryptodome.Cipher import AES
@@ -89,6 +90,8 @@ class RecordPeriodType(IntEnum):
 
 
 class _EncryptUtil:
+    alphabets = bytearray(ord(char) for char in string.ascii_letters + string.digits)
+
     @staticmethod
     def _aes(data: bytes, key: bytes) -> bytes:
         data = pad(data, 16) if len(data) % 16 else data
@@ -111,7 +114,7 @@ class _EncryptUtil:
 
     @classmethod
     def encrypt(cls, data: Dict[str, Any]) -> Dict[str, str]:
-        secret = token_urlsafe(12).encode()
+        secret = bytes(secrets.choice(cls.alphabets) for _ in range(16))
         secure_key = cls._rsa(bytes(reversed(secret)))
         return {
             "params": cls._aes(
@@ -143,7 +146,10 @@ class NeteaseEndpoint(BaseEndpoint):
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        params = {**(params or {}), "csrf_token": ""}
+        params = {
+            **(params or {}),
+            "csrf_token": self.client.cookies.get("__csrf", ""),
+        }
         response = await self.client.post(
             self._join(
                 NeteaseConstants.HOST,
@@ -169,7 +175,7 @@ class NeteaseEndpoint(BaseEndpoint):
         offset: int = 0,
     ):
         return await self.request(
-            "weapi/cloudsearch/get/web",
+            "api/cloudsearch/pc",
             params={
                 "s": s,
                 "type": search_type,
@@ -210,7 +216,7 @@ class NeteaseEndpoint(BaseEndpoint):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={
-                "ids": id,
+                "ids": [str(i) for i in id],
                 "br": br,
             },
         )
