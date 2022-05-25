@@ -1,10 +1,14 @@
+from math import inf
+
 import pytest
 from fastapi.testclient import TestClient
 
 
 @pytest.fixture(scope="package")
 def client():
-    from hibiapi.app import app
+    from hibiapi.app import app, application
+
+    application.RATE_LIMIT_MAX = inf
 
     with TestClient(app, base_url="http://testserver/api/bilibili/v2/") as client:
         yield client

@@ -1,3 +1,4 @@
+from math import inf
 from secrets import token_urlsafe
 from typing import List
 
@@ -9,7 +10,9 @@ from requests.models import Response
 
 @pytest.fixture(scope="package")
 def client():
-    from hibiapi.app import app
+    from hibiapi.app import app, application
+
+    application.RATE_LIMIT_MAX = inf
 
     with TestClient(app, base_url="http://testserver/api/") as client:
         yield client

@@ -1,3 +1,4 @@
+from math import inf
 from pathlib import Path
 
 import pytest
@@ -9,7 +10,9 @@ LOCAL_SAUCE_PATH = Path(__file__).parent / "test_sauce.jpg"
 
 @pytest.fixture(scope="package")
 def client():
-    from hibiapi.app import app
+    from hibiapi.app import app, application
+
+    application.RATE_LIMIT_MAX = inf
 
     with TestClient(app, base_url="http://testserver/api/") as client:
         yield client

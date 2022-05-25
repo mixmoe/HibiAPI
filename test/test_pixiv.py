@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from math import inf
 
 import pytest
 from fastapi.testclient import TestClient
@@ -7,7 +8,9 @@ from pytest_benchmark.fixture import BenchmarkFixture
 
 @pytest.fixture(scope="package")
 def client():
-    from hibiapi.app import app
+    from hibiapi.app import app, application
+
+    application.RATE_LIMIT_MAX = inf
 
     with TestClient(app, base_url="http://testserver/api/pixiv/") as client:
         client.headers["Cache-Control"] = "no-cache"
@@ -149,3 +152,16 @@ def test_rank_redirect(client: TestClient):
     assert response.status_code == 200
     assert response.history
     assert response.history[0].status_code == 301
+
+
+def test_rate_limit(client: TestClient):
+    from hibiapi.app import application
+
+    application.RATE_LIMIT_MAX = 1
+
+    first_response = client.get("rank")
+    assert first_response.status_code in (200, 429)
+
+    second_response = client.get("rank")
+    assert second_response.status_code == 429
+    assert "retry-after" in second_response.headers
