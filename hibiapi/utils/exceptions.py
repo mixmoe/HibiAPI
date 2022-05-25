@@ -70,3 +70,8 @@ class ClientSideException(BaseServerException):
 
 class ValidationException(ClientSideException):
     code = 422
+
+
+class RateLimitReachedException(ClientSideException):
+    code = 429
+    detail = "Rate limit reached"

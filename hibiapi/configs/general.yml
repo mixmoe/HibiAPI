@@ -34,6 +34,11 @@ server:
 
   allowed-forward: null # Reference: https://stackoverflow.com/questions/63511413
 
+limit: # 单IP速率限制策略
+  enabled: true
+  max: 60 # 每个单位时间内最大请求数
+  interval: 60 # 单位时间长度, 单位为秒
+
 cache:
   enabled: true # 设置是否启用缓存
   ttl: 3600 # 缓存默认生存时间, 单位为秒

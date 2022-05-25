@@ -1,4 +1,5 @@
 import asyncio
+from ipaddress import ip_address
 from secrets import compare_digest
 from typing import List, NoReturn
 from urllib.parse import ParseResult
@@ -11,8 +12,9 @@ from pydantic import BaseModel
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 from hibiapi import __version__
+from hibiapi.utils.cache import cache
 from hibiapi.utils.config import Config
-from hibiapi.utils.exceptions import ClientSideException
+from hibiapi.utils.exceptions import ClientSideException, RateLimitReachedException
 from hibiapi.utils.log import logger
 from hibiapi.utils.net import BaseNetClient
 from hibiapi.utils.temp import TempFile
@@ -53,7 +55,6 @@ class AuthorizationModel(BaseModel):
 AUTHORIZATION_ENABLED = Config["authorization"]["enabled"].as_bool()
 AUTHORIZATION_ALLOWED = Config["authorization"]["allowed"].get(List[AuthorizationModel])
 
-
 security = HTTPBasic()
 
 
@@ -74,6 +75,28 @@ async def basic_authorization_depend(
     )
 
 
+RATE_LIMIT_ENABLED = Config["limit"]["enabled"].as_bool()
+RATE_LIMIT_MAX = Config["limit"]["max"].as_number()
+RATE_LIMIT_INTERVAL = Config["limit"]["interval"].as_number()
+
+
+async def rate_limit_depend(request: Request):
+    try:
+        client_ip = ip_address(request.client.host)
+        limit_key = f"rate_limit:IPv{client_ip.version}-{client_ip:x}"
+    except ValueError:
+        limit_key = f"rate_limit:fallback-{request.client.host}"
+
+    request_count: int = await cache.incr(limit_key)  # type:ignore
+    if request_count <= 1:
+        await cache.expire(limit_key, timeout=RATE_LIMIT_INTERVAL)
+    elif request_count > RATE_LIMIT_MAX:
+        limit_remain: int = await cache.get_expire(limit_key)
+        raise RateLimitReachedException(headers={"Retry-After": limit_remain})
+
+    return
+
+
 app = FastAPI(
     debug=Config["debug"].as_bool(),
     title="HibiAPI",
@@ -86,7 +109,8 @@ app.include_router(
     ImplRouter,
     prefix="/api",
     dependencies=(
-        [Depends(basic_authorization_depend)] if AUTHORIZATION_ENABLED else []
+        ([Depends(basic_authorization_depend)] if AUTHORIZATION_ENABLED else [])
+        + ([Depends(rate_limit_depend)] if RATE_LIMIT_ENABLED else [])
     ),
 )
 app.mount(
