@@ -9,7 +9,7 @@ account:
   # Pixiv 登录凭证刷新令牌 (Refresh Token)
   # 获取方法请参考: https://github.com/mixmoe/HibiAPI/issues/53
   # 支持使用多个账户进行负载均衡, 每行一个token
-  token: "jjId-TiTty_WnYiaklG1O6vezG7Aha5mMnsH-W39Ajk"
+  token: jjId-TiTty_WnYiaklG1O6vezG7Aha5mMnsH-W39Ajk
 
   refresh-interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
 
