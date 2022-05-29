@@ -11,6 +11,6 @@ account:
   # 支持使用多个账户进行负载均衡, 每行一个token
   token: "5AyIGFBJCNJqi9HwxkbaNrOCrFplbi1_ybkVIDo0aXc"
 
-  refresh-interval: 1800 # 刷新帐号登录凭证间隔,单位为秒
+  refresh-interval: 1000 # 刷新帐号登录凭证间隔,单位为秒
 
 language: zh-cn # 返回语言, 会影响标签的翻译
