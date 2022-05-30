@@ -12,7 +12,7 @@ net:
   # api-key: |
   #   aaaaaaa
   #   bbbbbbb
-  api-key: ""
+  api-key: "149d6878c124d216c515327ab86230a1d7e83a51"
 
   keys: # SauceNAO 的API KEY, 支持多个以进行负载均衡
     - ""
@@ -25,4 +25,4 @@ image:
   allowed: # 获取图片的站点白名单, 可以阻止服务器ip泄漏, 支持通配符
     - localhost
     - i.loli.net
-    # - "*"
+    - "*"
