@@ -28,6 +28,8 @@ server:
       - "https://localhost.tiangolo.com"
       - "http://localhost"
       - "http://localhost:8080"
+      - "https://localhost"
+      - "https://localhost:8080"
     credentials: true
     methods: ["*"]
     headers: ["*"]
