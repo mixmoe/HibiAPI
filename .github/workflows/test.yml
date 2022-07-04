@@ -57,6 +57,7 @@ jobs:
           poetry install -vvv
 
       - name: Testing with pytest
+        timeout-minutes: 15
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > .env
           poetry run pytest --cov ./hibiapi/ --cov-report xml --cov-report term-missing ./test
