@@ -83,7 +83,8 @@ RATE_LIMIT_INTERVAL = Config["limit"]["interval"].as_number()
 async def rate_limit_depend(request: Request):
     try:
         client_ip = ip_address(request.client.host)
-        limit_key = f"rate_limit:IPv{client_ip.version}-{client_ip:x}"
+        client_ip_hex = client_ip.packed.hex()
+        limit_key = f"rate_limit:IPv{client_ip.version}-{client_ip_hex:x}"
     except ValueError:
         limit_key = f"rate_limit:fallback-{request.client.host}"
 
