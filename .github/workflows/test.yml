@@ -34,7 +34,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/setup-python@v4.1.0
+      - uses: actions/setup-python@v4.2.0
         with:
           python-version: ${{ matrix.python }}
 
