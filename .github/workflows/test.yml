@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(poetry config cache-dir)"
 
-      - uses: actions/cache@v3.0.8
+      - uses: actions/cache@v3.0.10
         with:
           path: |
             ${{ steps.cache-poetry.outputs.dir }}
