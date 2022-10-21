@@ -36,7 +36,7 @@ pytest = "^7.1.2"
 requests = "^2.28.1"
 isort = "^5.10.1"
 pytest-httpserver = "^1.0.4"
-pytest-cov = "^3.0.0"
+pytest-cov = "^4.0.0"
 pytest-benchmark = "^3.4.1"
 
 [tool.isort]
