@@ -41,7 +41,7 @@ HttpxIntegration.setup_once()
 @app.middleware("http")
 async def request_logger(request: Request, call_next: RequestHandler) -> Response:
     start_time = datetime.now()
-    host, port = request.client
+    host, port = request.client or (None, None)
     response = await call_next(request)
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     response_headers.get().setdefault("X-Process-Time", f"{process_time:.3f}")

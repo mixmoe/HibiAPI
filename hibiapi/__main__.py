@@ -5,10 +5,10 @@ from typing import Optional
 import click
 import uvicorn
 
-from . import __file__ as root_file
-from . import __version__
-from .utils.config import CONFIG_DIR, DEBUG, Config
-from .utils.log import LOG_LEVEL, logger
+from hibiapi import __file__ as root_file
+from hibiapi import __version__
+from hibiapi.utils.config import CONFIG_DIR, DEBUG, Config
+from hibiapi.utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""<b><g>
   _    _ _ _     _          _____ _____  
@@ -88,12 +88,13 @@ def main(host: str, port: int, workers: int, reload: bool):
         "hibiapi.app:app",
         host=host,
         port=port,
-        debug=DEBUG,
         access_log=False,
         log_config=LOG_CONFIG,
         workers=workers,
         reload=reload,
-        reload_dirs=[Path(root_file).parent, CONFIG_DIR],
+        reload_dirs=[
+            *map(str, [Path(root_file).parent.absolute(), CONFIG_DIR.absolute()])
+        ],
         reload_includes=["*.py", "*.yml"],
         forwarded_allow_ips=Config["server"]["allowed-forward"].get(Optional[str]),
     )

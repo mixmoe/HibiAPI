@@ -12,14 +12,13 @@ from pydantic import BaseModel
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 from hibiapi import __version__
+from hibiapi.app.routes import router as ImplRouter
 from hibiapi.utils.cache import cache
 from hibiapi.utils.config import Config
 from hibiapi.utils.exceptions import ClientSideException, RateLimitReachedException
 from hibiapi.utils.log import logger
 from hibiapi.utils.net import BaseNetClient
 from hibiapi.utils.temp import TempFile
-
-from .routes import router as ImplRouter
 
 DESCRIPTION = (
     """
@@ -81,6 +80,9 @@ RATE_LIMIT_INTERVAL = Config["limit"]["interval"].as_number()
 
 
 async def rate_limit_depend(request: Request):
+    if not request.client:
+        return
+
     try:
         client_ip = ip_address(request.client.host)
         client_ip_hex = client_ip.packed.hex()
