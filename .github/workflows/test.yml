@@ -8,6 +8,10 @@ on:
 
   pull_request_target:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -22,7 +26,7 @@ jobs:
             os: ubuntu-latest
           - python: pypy3.9
             os: ubuntu-latest
-      fail-fast: true
+      fail-fast: false
       max-parallel: 3
 
     env:
