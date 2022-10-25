@@ -73,7 +73,7 @@ class ConfigSubView(confuse.Subview):
 class AppConfig(confuse.Configuration):
     def __init__(self, name: str):
         self._config_name = name
-        self._config = CONFIG_DIR / (filename := name + ".yml")
+        self._config = CONFIG_DIR / (filename := f"{name}.yml")
         self._default = DEFAULT_DIR / filename
         super().__init__(name)
         self._add_env_source()
@@ -85,7 +85,7 @@ class AppConfig(confuse.Configuration):
         return str(self._config)
 
     def _add_env_source(self):
-        config_name = self._config_name.lower() + "_"
+        config_name = f"{self._config_name.lower()}_"
         env_configs = {
             k[len(config_name) :].lower(): str(v)
             for k, v in os.environ.items()
@@ -128,5 +128,4 @@ class APIConfig(GeneralConfig):
 
 Config = GeneralConfig("general")
 
-DATA_PATH = Config["data"]["path"].as_path().expanduser().absolute()
 DEBUG = Config["debug"].as_bool()
