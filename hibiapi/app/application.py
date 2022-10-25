@@ -1,7 +1,7 @@
 import asyncio
 from ipaddress import ip_address
 from secrets import compare_digest
-from typing import List, NoReturn
+from typing import List
 from urllib.parse import ParseResult
 
 import sentry_sdk
@@ -116,11 +116,7 @@ app.include_router(
         + ([Depends(rate_limit_depend)] if RATE_LIMIT_ENABLED else [])
     ),
 )
-app.mount(
-    "/temp",
-    StaticFiles(directory=str(TempFile.path), check_dir=False),
-    "Temporary file directory",
-)
+app.mount("/temp", StaticFiles(directory=TempFile.path, check_dir=False))
 
 
 @app.get("/", include_in_schema=False)
@@ -132,19 +128,6 @@ async def redirect():
 async def robots():
     content = Config["content"]["robots"].as_str().strip()
     return Response(content, status_code=200)
-
-
-@app.on_event("startup")
-async def cleaner():
-    async def clean() -> NoReturn:
-        while True:
-            try:
-                await TempFile.clean()
-            except Exception:
-                logger.exception("Exception occurred during executing cleaning task:")
-            await asyncio.sleep(3600)
-
-    asyncio.ensure_future(clean())
 
 
 @app.on_event("shutdown")

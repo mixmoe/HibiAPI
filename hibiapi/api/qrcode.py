@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from io import BytesIO
+from os import fdopen
 from pathlib import Path
 from typing import List, Literal, Optional, cast
 
@@ -136,5 +137,7 @@ class QRInfo(BaseModel):
                 ),
                 mask=icon if icon.mode == "RGBA" else None,
             )
-        image.save(file := TempFile.create(ext=".png"))
-        return file
+        descriptor, path = TempFile.create(".png")
+        with fdopen(descriptor, "wb") as f:
+            image.save(f, format="PNG")
+        return path
