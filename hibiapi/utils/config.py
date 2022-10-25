@@ -15,27 +15,6 @@ DEFAULT_DIR = Path(root_file).parent / "configs"
 _T = TypeVar("_T")
 
 
-def _generate_default() -> int:
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    generated = 0
-    for file in os.listdir(DEFAULT_DIR):
-        default_path = DEFAULT_DIR / file
-        config_path = CONFIG_DIR / file
-        if config_path.is_file():
-            continue
-        generated += config_path.write_text(
-            default_path.read_text(encoding="utf-8"),
-            encoding="utf-8",
-        )
-    return generated
-
-
-if dotenv.find_dotenv():
-    assert dotenv.load_dotenv(), "Failed to load .env"
-else:
-    assert _generate_default() <= 0, "Please complete config file!"
-
-
 class ConfigSubView(confuse.Subview):
     @overload
     def get(self) -> Any:
@@ -85,6 +64,8 @@ class AppConfig(confuse.Configuration):
         return str(self._config)
 
     def _add_env_source(self):
+        if dotenv.find_dotenv():
+            dotenv.load_dotenv()
         config_name = f"{self._config_name.lower()}_"
         env_configs = {
             k[len(config_name) :].lower(): str(v)
