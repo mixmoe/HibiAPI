@@ -16,16 +16,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/setup-python@v4.2.0
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.8
-
-      - uses: Gr1N/setup-poetry@v7
-
-      - uses: actions/cache@v3.0.8
-        with:
-          path: ~/.cache/pypoetry
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          cache: poetry
 
       - name: Install Dependencies
         run: |
