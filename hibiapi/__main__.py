@@ -62,6 +62,8 @@ def run(
             f"Directly usage of command <r>{ctx.info_name}</r> is <b>deprecated</b>, "
             f"please use <g>{ctx.info_name} run</g> instead."
         )
+    else:
+        return
 
     try:
         terminal_width, _ = os.get_terminal_size()
