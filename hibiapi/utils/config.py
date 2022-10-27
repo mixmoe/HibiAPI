@@ -108,5 +108,3 @@ class APIConfig(GeneralConfig):
 
 
 Config = GeneralConfig("general")
-
-DEBUG = Config["debug"].as_bool()

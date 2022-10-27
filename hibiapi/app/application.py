@@ -101,7 +101,6 @@ async def rate_limit_depend(request: Request):
 
 
 app = FastAPI(
-    debug=Config["debug"].as_bool(),
     title="HibiAPI",
     version=__version__,
     description=DESCRIPTION,
