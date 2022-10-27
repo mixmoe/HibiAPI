@@ -2,12 +2,12 @@ import os
 from pathlib import Path
 from typing import Optional
 
-import click
+import typer
 import uvicorn
 
 from hibiapi import __file__ as root_file
 from hibiapi import __version__
-from hibiapi.utils.config import CONFIG_DIR, DEBUG, DEFAULT_DIR, Config
+from hibiapi.utils.config import CONFIG_DIR, DEFAULT_DIR, Config
 from hibiapi.utils.log import LOG_LEVEL, logger
 
 COPYRIGHT = r"""
@@ -44,63 +44,34 @@ LOG_CONFIG = {
     },
 }
 
-try:
-    width, height = os.get_terminal_size()
-except OSError:
-    width, height = 0, 0
+
+cli = typer.Typer()
 
 
-@click.group(invoke_without_command=True)
-@click.pass_context
-def main(ctx: click.Context):
-    if not ctx.invoked_subcommand:
+@cli.callback(invoke_without_command=True)
+@cli.command()
+def run(
+    ctx: typer.Context,
+    host: str = Config["server"]["host"].as_str(),
+    port: int = Config["server"]["port"].as_number(),
+    workers: int = 1,
+    reload: bool = False,
+):
+    if ctx.invoked_subcommand is None:
         logger.warning(
-            f"Directly usage of <y>{ctx.info_name}</y> is <b><r>deprecated</r></b>, "
+            f"Directly usage of command <r>{ctx.info_name}</r> is <b>deprecated</b>, "
             f"please use <g>{ctx.info_name} run</g> instead."
         )
-        ctx.invoke(run)
 
-
-@main.command(help="to run the server")
-@click.option(
-    "--host",
-    "-h",
-    default=Config["server"]["host"].as_str(),
-    help="listened server address",
-    show_default=True,
-)
-@click.option(
-    "--port",
-    "-p",
-    default=Config["server"]["port"].as_number(),
-    help="listened server port",
-    show_default=True,
-)
-@click.option(
-    "--workers",
-    "-w",
-    default=1,
-    help="amount of server workers",
-    show_default=True,
-)
-@click.option(
-    "--reload",
-    "-r",
-    default=DEBUG,
-    help="automatic reload while file changes",
-    show_default=True,
-    is_flag=True,
-)
-def run(host: str, port: int, workers: int, reload: bool):
+    try:
+        terminal_width, _ = os.get_terminal_size()
+    except OSError:
+        terminal_width = 0
     logger.warning(
-        "\n".join(i.center(width) for i in COPYRIGHT.splitlines()),
+        "\n".join(i.center(terminal_width) for i in COPYRIGHT.splitlines()),
     )
     logger.info(f"HibiAPI version: <g><b>{__version__}</b></g>")
-    logger.info(
-        "Server is running under <b>{}</b> mode!".format(
-            "<r>debug</r>" if DEBUG else "<g>production</g>"
-        )
-    )
+
     uvicorn.run(
         "hibiapi.app:app",
         host=host,
@@ -117,15 +88,8 @@ def run(host: str, port: int, workers: int, reload: bool):
     )
 
 
-@main.command(help="to generate a config file folder")
-@click.option(
-    "--force",
-    "-f",
-    default=False,
-    is_flag=True,
-    help="force recreate config folder, will delete existing config folder",
-)
-def config(force: bool):
+@cli.command()
+def config(force: bool = False):
     total_written = 0
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     for file in os.listdir(DEFAULT_DIR):
@@ -136,13 +100,13 @@ def config(force: bool):
                 default_path.read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
-            click.echo(
-                click.style(("Overwritten" if existed else "Created") + ": ", fg="blue")
-                + click.style(str(config_path), fg="yellow")
+            typer.echo(
+                typer.style(("Overwritten" if existed else "Created") + ": ", fg="blue")
+                + typer.style(str(config_path), fg="yellow")
             )
     if total_written > 0:
-        click.echo(f"Config folder generated, {total_written=}")
+        typer.echo(f"Config folder generated, {total_written=}")
 
 
 if __name__ == "__main__":
-    main()
+    cli()
