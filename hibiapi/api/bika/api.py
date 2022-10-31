@@ -63,7 +63,7 @@ class BikaEndpoints(BaseEndpoint):
     @catch_network_error
     async def request(
         self,
-        path: str,
+        endpoint: str,
         *,
         params: Optional[Dict[str, Any]] = None,
         body: Optional[Dict[str, Any]] = None,
@@ -74,7 +74,6 @@ class BikaEndpoints(BaseEndpoint):
             await net_client.login(self)
 
         headers = {
-            **BikaConstants.DEFAULT_HEADERS,
             "Authorization": net_client.token or "",
             "Time": (current_time := f"{time():.0f}".encode()),
             "Image-Quality": request_headers.get().get(
@@ -82,10 +81,10 @@ class BikaEndpoints(BaseEndpoint):
             ),
             "Nonce": (nonce := hashlib.md5(current_time).hexdigest().encode()),
             "Signature": self._sign(
-                request_url := (
-                    URL(BikaConstants.API_HOST)
-                    .join(path)
-                    .copy_merge_params(params or {})
+                request_url := self._join(
+                    base=BikaConstants.API_HOST,
+                    endpoint=endpoint,
+                    params=params or {},
                 ),
                 current_time,
                 nonce,
@@ -162,26 +161,42 @@ class BikaEndpoints(BaseEndpoint):
 
     @cache_config(ttl=timedelta(days=3))
     async def comic_detail(self, *, id: str):
-        return await self.request(f"comics/{id}")
+        return await self.request("comics/{id}", params={"id": id})
 
     async def comic_recommendation(self, *, id: str):
-        return await self.request(f"comics/{id}/recommendation")
+        return await self.request("comics/{id}/recommendation", params={"id": id})
 
     async def comic_episodes(self, *, id: str, page: int = 1):
-        return await self.request(f"comics/{id}/eps", params={"page": page})
+        return await self.request(
+            "comics/{id}/eps",
+            params={
+                "id": id,
+                "page": page,
+            },
+        )
 
     async def comic_page(self, *, id: str, order: int = 1, page: int = 1):
         return await self.request(
-            f"comics/{id}/order/{order}/pages",
-            params={"page": page},
+            "comics/{id}/order/{order}/pages",
+            params={
+                "id": id,
+                "order": order,
+                "page": page,
+            },
         )
 
     async def comic_comments(self, *, id: str, page: int = 1):
-        return await self.request(f"comics/{id}/comments", params={"page": page})
+        return await self.request(
+            "comics/{id}/comments",
+            params={
+                "id": id,
+                "page": page,
+            },
+        )
 
     async def games(self, *, page: int = 1):
         return await self.request("games", params={"page": page})
 
     @cache_config(ttl=timedelta(days=3))
     async def game_detail(self, *, id: str):
-        return await self.request(f"games/{id}")
+        return await self.request("games/{id}", params={"id": id})
