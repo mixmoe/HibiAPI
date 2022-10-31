@@ -68,5 +68,6 @@
         "vmid",
         "weapi"
     ],
-    "gitmoji.outputType": "code"
+    "gitmoji.outputType": "code",
+    "python.analysis.autoImportCompletions": true
 }

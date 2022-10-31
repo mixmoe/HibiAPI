@@ -2,15 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: FastAPI",
+            "name": "Python: Module",
             "type": "python",
             "request": "launch",
-            "module": "uvicorn",
+            "module": "hibiapi",
             "args": [
-                "app:app"
+                "run",
+                "--reload"
             ],
-            "jinja": true,
-            "justMyCode": false
-        }
+            "justMyCode": true
+        },
     ]
 }
