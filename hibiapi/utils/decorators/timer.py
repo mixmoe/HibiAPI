@@ -4,9 +4,11 @@ import time
 from dataclasses import dataclass, field
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, Callable, ClassVar, Dict, Optional
+from typing import Any, Callable, ClassVar, Dict, Optional, TypeVar
 
-from ..log import logger
+from hibiapi.utils.log import logger
+
+Callable_T = TypeVar("Callable_T", bound=Callable)
 
 
 class TimerError(Exception):
@@ -64,7 +66,7 @@ class Timer:
     def _recreate_cm(self) -> Timer:
         return self.__class__(self.name, self.text, self.logger_func)
 
-    def __call__(self, function: Callable) -> Callable:
+    def __call__(self, function: Callable_T) -> Callable_T:
         @wraps(function)
         async def async_wrapper(*args: Any, **kwargs: Any):
             self.text = (
@@ -85,7 +87,9 @@ class Timer:
             with self._recreate_cm():
                 return function(*args, **kwargs)
 
-        return async_wrapper if iscoroutinefunction(function) else sync_wrapper
+        return (
+            async_wrapper if iscoroutinefunction(function) else sync_wrapper
+        )  # type:ignore
 
 
 TimeIt = Timer(logger_func=logger.trace)
