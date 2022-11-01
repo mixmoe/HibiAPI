@@ -3,18 +3,7 @@ from contextvars import ContextVar
 from enum import Enum
 from fnmatch import fnmatch
 from functools import wraps
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Literal,
-    Mapping,
-    Optional,
-    Tuple,
-    Type,
-    TypeVar,
-)
+from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Tuple, Type
 from urllib.parse import ParseResult, urlparse
 
 from fastapi import Depends, Request
@@ -25,12 +14,29 @@ from pydantic.errors import UrlHostError
 from starlette.datastructures import Headers, MutableHeaders
 
 from hibiapi.utils.cache import endpoint_cache
-from hibiapi.utils.net import AsyncHTTPClient, BaseNetClient
+from hibiapi.utils.net import AsyncCallable_T, AsyncHTTPClient, BaseNetClient
 
-_T = TypeVar("_T")
+DONT_ROUTE_KEY = "_dont_route"
+
+
+def dont_route(func: AsyncCallable_T) -> AsyncCallable_T:
+    setattr(func, DONT_ROUTE_KEY, True)
+    return func
 
 
 class EndpointMeta(type):
+    @staticmethod
+    def _list_router_function(members: Dict[str, Any]):
+        return {
+            name: object
+            for name, object in members.items()
+            if (
+                inspect.iscoroutinefunction(object)
+                and not name.startswith("_")
+                and not getattr(object, DONT_ROUTE_KEY, False)
+            )
+        }
+
     def __new__(
         cls,
         name: str,
@@ -40,20 +46,15 @@ class EndpointMeta(type):
         cache_endpoints: bool = True,
         **kwargs,
     ):
-        if cache_endpoints:
-            for func_name, func in namespace.items():
-                if func_name.startswith("_") or not inspect.iscoroutinefunction(func):
-                    continue
-                namespace[func_name] = endpoint_cache(func)
+        for object_name, object in cls._list_router_function(namespace).items():
+            namespace[object_name] = (
+                endpoint_cache(object) if cache_endpoints else object
+            )
         return super().__new__(cls, name, bases, namespace, **kwargs)
 
     @property
     def router_functions(self):
-        return {
-            name: object
-            for name, object in inspect.getmembers(self)
-            if not name.startswith("_") and inspect.iscoroutinefunction(object)
-        }
+        return self._list_router_function(dict(inspect.getmembers(self)))
 
 
 class BaseEndpoint(metaclass=EndpointMeta, cache_endpoints=False):
