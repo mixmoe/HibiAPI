@@ -320,6 +320,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def favorite_video(
         self,
+        *,
         fid: int,
         vmid: int,
         page: int = 1,
@@ -450,7 +451,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             },
         )
 
-    async def timeline(self, type: TimelineType = TimelineType.GLOBAL):
+    async def timeline(self, *, type: TimelineType = TimelineType.GLOBAL):
         return await self.request(
             "web_api/timeline_{type}",
             "bgm",

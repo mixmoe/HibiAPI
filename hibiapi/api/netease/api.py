@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
+from fastapi import Query
 
 from hibiapi.api.netease.constants import NeteaseConstants
 from hibiapi.utils.cache import cache_config
@@ -182,7 +183,7 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def detail(self, *, id: List[int]):
+    async def detail(self, *, id: List[int] = Query()):
         return await self.request(
             "weapi/v3/song/detail",
             params={
@@ -193,7 +194,12 @@ class NeteaseEndpoint(BaseEndpoint):
         )
 
     @cache_config(ttl=timedelta(minutes=20))
-    async def song(self, *, id: List[int], br: BitRateType = BitRateType.STANDARD):
+    async def song(
+        self,
+        *,
+        id: List[int] = Query(),
+        br: BitRateType = BitRateType.STANDARD,
+    ):
         return await self.request(
             "weapi/song/enhance/player/url",
             params={

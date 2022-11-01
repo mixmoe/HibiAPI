@@ -102,7 +102,7 @@ class EndpointRouter(SlashRouter):
         method_name: Optional[str] = None,
     ):
         @wraps(func)
-        async def route_func(endpoint: endpoint_class, /, **kwargs):
+        async def route_func(endpoint: endpoint_class, **kwargs):
             endpoint_method = getattr(endpoint, method_name or func.__name__)
             return await endpoint_method(**kwargs)
 
@@ -110,7 +110,7 @@ class EndpointRouter(SlashRouter):
             parameters=[
                 inspect.Parameter(
                     name="endpoint",
-                    kind=inspect.Parameter.POSITIONAL_ONLY,
+                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
                     annotation=endpoint_class,
                     default=Depends(request_client),
                 ),

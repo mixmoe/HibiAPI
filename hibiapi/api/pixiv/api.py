@@ -265,7 +265,7 @@ class PixivEndpoints(BaseEndpoint):
         return await self.request("v1/trending-tags/illust")
 
     @cache_config(ttl=timedelta(minutes=15))
-    async def related(self, id: int, page: int = 1, size: int = 20):
+    async def related(self, *, id: int, page: int = 1, size: int = 20):
         return await self.request(
             "v2/illust/related",
             params={
@@ -283,7 +283,7 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
-    async def member_novels(self, id: int, page: int = 1, size: int = 20):
+    async def member_novel(self, *, id: int, page: int = 1, size: int = 20):
         return await self.request(
             "/v1/user/novels",
             params={
@@ -292,13 +292,13 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
-    async def novel_series(self, id: int):
+    async def novel_series(self, *, id: int):
         return await self.request("/v2/novel/series", params={"series_id": id})
 
-    async def novel_detail(self, id: int):
+    async def novel_detail(self, *, id: int):
         return await self.request("/v2/novel/detail", params={"novel_id": id})
 
-    async def novel_text(self, id: int):
+    async def novel_text(self, *, id: int):
         return await self.request("/v1/novel/text", params={"novel_id": id})
 
     async def search_novel(
@@ -326,7 +326,7 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
-    async def novel_new(self, max_novel_id: Optional[int] = None):
+    async def novel_new(self, *, max_novel_id: Optional[int] = None):
         return await self.request(
             "/v1/novel/new", params={"max_novel_id": max_novel_id}
         )

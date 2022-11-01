@@ -45,6 +45,7 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
     @process_keyerror
     async def playurl(
         self,
+        *,
         aid: int,
         page: Optional[int] = None,
         quality: VideoQualityType = VideoQualityType.VIDEO_480P,
@@ -79,7 +80,7 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
         index: Optional[int] = None,
         sort: CommentSortType = CommentSortType.TIME,
         page: int = 1,
-        pagesize: int = 20
+        pagesize: int = 20,
     ):  # NOTE: not same with origin
         if season_id is not None:
             assert index is not None, "parameter 'index' is required"
@@ -104,7 +105,7 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
         type: SearchType = SearchType.search,
         page: int = 1,
         pagesize: int = 20,
-        limit: int = 50
+        limit: int = 50,
     ):
         if type == SearchType.suggest:
             return await self.base.search_suggest(keyword=keyword)
@@ -122,7 +123,7 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
         *,
         content: Union[RankContentType, RankBangumiType] = RankContentType.FULL_SITE,
         duration: RankDurationType = RankDurationType.THREE_DAY,
-        new: bool = True
+        new: bool = True,
     ):
         if isinstance(content, int):
             return await self.base.rank_list(
@@ -154,14 +155,14 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
             pagesize=pagesize,
         )
 
-    async def archive(self, vmid: int, page: int = 1, pagesize: int = 10):
+    async def archive(self, *, vmid: int, page: int = 1, pagesize: int = 10):
         return await self.base.space_archive(
             vmid=vmid,
             page=page,
             pagesize=pagesize,
         )
 
-    async def favlist(self, fid: int, vmid: int, page: int = 1, pagesize: int = 20):
+    async def favlist(self, *, fid: int, vmid: int, page: int = 1, pagesize: int = 20):
         return await self.base.favorite_video(
             fid=fid,
             vmid=vmid,

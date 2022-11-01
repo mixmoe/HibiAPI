@@ -36,9 +36,7 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
             type=type,
         )
 
-    async def video_recommend(
-        self,
-    ):
+    async def video_recommend(self):
         return await self.base.recommend()
 
     async def video_dynamic(self):
@@ -46,6 +44,7 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
 
     async def video_ranking(
         self,
+        *,
         type: RankContentType = RankContentType.FULL_SITE,
         duration: RankDurationType = RankDurationType.THREE_DAY,
     ):
@@ -82,10 +81,10 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
     async def season_recommend(self, *, season_id: int):
         return await self.base.season_recommend(season_id=season_id)
 
-    async def season_episode(self, episode_id: int):
+    async def season_episode(self, *, episode_id: int):
         return await self.base.bangumi_source(episode_id=episode_id)
 
-    async def season_timeline(self, type: TimelineType = TimelineType.GLOBAL):
+    async def season_timeline(self, *, type: TimelineType = TimelineType.GLOBAL):
         return await self.base.timeline(type=type)
 
     async def season_ranking(
@@ -99,7 +98,7 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
             duration=duration,
         )
 
-    async def search(self, keyword: str, page: int = 1, size: int = 20):
+    async def search(self, *, keyword: str, page: int = 1, size: int = 20):
         return await self.base.search(
             keyword=keyword,
             page=page,
