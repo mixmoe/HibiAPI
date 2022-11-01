@@ -2,32 +2,11 @@ from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional, cast
 
-from hibiapi.utils.cache import cache_config, disable_cache
+from hibiapi.api.pixiv.constants import PixivConstants
+from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
+from hibiapi.utils.cache import cache_config
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint, request_headers
-
-from .constants import PixivConstants
-from .net import NetRequest as PixivNetClient
-
-
-class EndpointsType(str, Enum):
-    illust = "illust"
-    member = "member"
-    member_illust = "member_illust"
-    favorite = "favorite"
-    following = "following"
-    follower = "follower"
-    rank = "rank"
-    search = "search"
-    tags = "tags"
-    related = "related"
-    ugoira_metadata = "ugoira_metadata"
-    member_novel = "member_novel"
-    novel_series = "novel_series"
-    novel_detail = "novel_detail"
-    novel_text = "novel_text"
-    search_novel = "search_novel"
-    novel_new = "novel_new"
+from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 
 
 class IllustType(str, Enum):
@@ -161,7 +140,7 @@ class PixivEndpoints(BaseEndpoint):
         language_code, *_ = first_language.partition(";")
         return language_code.lower().strip()
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None

@@ -6,11 +6,9 @@ from typing import Any, Dict, Optional, overload
 
 from httpx import URL
 
-from hibiapi.utils.cache import disable_cache
+from hibiapi.api.bilibili.constants import BilibiliConstants
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint
-
-from ..constants import BilibiliConstants
+from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 
 class TimelineType(str, Enum):
@@ -224,7 +222,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
     ) -> Dict[str, Any]:
         ...
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self,
@@ -235,10 +233,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         params: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         host = BilibiliConstants.SERVER_HOST[source or "app"]
-        url = (
-            self._join(base=host, endpoint=endpoint, params=params or {})
-            if not sign
-            else self._sign(base=host, endpoint=endpoint, params=params or {})
+        url = (self._sign if sign else self._join)(
+            base=host, endpoint=endpoint, params=params or {}
         )
         response = await self.client.get(url)
         response.raise_for_status()

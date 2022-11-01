@@ -2,11 +2,7 @@ from enum import Enum
 from functools import wraps
 from typing import Callable, Coroutine, Optional, TypeVar, Union
 
-from hibiapi.utils.exceptions import ClientSideException
-from hibiapi.utils.net import AsyncHTTPClient
-from hibiapi.utils.routing import BaseEndpoint
-
-from .base import (
+from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,
     CommentSortType,
     CommentType,
@@ -17,6 +13,9 @@ from .base import (
     VideoFormatType,
     VideoQualityType,
 )
+from hibiapi.utils.exceptions import ClientSideException
+from hibiapi.utils.net import AsyncHTTPClient
+from hibiapi.utils.routing import BaseEndpoint
 
 _AnyCallable = TypeVar("_AnyCallable", bound=Callable[..., Coroutine])
 
@@ -30,22 +29,6 @@ def process_keyerror(function: _AnyCallable) -> _AnyCallable:
             raise ClientSideException(detail=str(e)) from None
 
     return wrapper  # type:ignore
-
-
-class V2EndpointsType(str, Enum):
-    playurl = "playurl"
-    seasoninfo = "seasoninfo"
-    source = "source"
-    seasonrecommend = "seasonrecommend"
-    comments = "comments"
-    search = "search"
-    rank = "rank"
-    typedynamic = "typedynamic"
-    recommend = "recommend"
-    timeline = "timeline"
-    space = "space"
-    archive = "archive"
-    favlist = "favlist"
 
 
 class SearchType(str, Enum):

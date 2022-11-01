@@ -2,17 +2,12 @@ from datetime import timedelta
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from hibiapi.utils.cache import cache_config, disable_cache
+from hibiapi.utils.cache import cache_config
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint
+from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 Config = APIConfig("wallpaper")
-
-
-class EndpointsType(str, Enum):
-    wallpaper = "wallpaper"
-    vertical = "vertical"
 
 
 class WallpaperCategoryType(str, Enum):
@@ -64,7 +59,7 @@ class WallpaperOrderType(str, Enum):
 class WallpaperEndpoint(BaseEndpoint):
     base = "http://service.aibizhi.adesk.com"
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None

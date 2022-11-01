@@ -9,25 +9,9 @@ from httpx import URL
 
 from hibiapi.api.bika.constants import BikaConstants
 from hibiapi.api.bika.net import NetRequest
-from hibiapi.utils.cache import cache_config, disable_cache
+from hibiapi.utils.cache import cache_config
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint, request_headers
-
-
-class EndpointsType(str, Enum):
-    collections = "collections"
-    categories = "categories"
-    keywords = "keywords"
-    advanced_search = "advanced_search"
-    category_list = "category_list"
-    author_list = "author_list"
-    comic_detail = "comic_detail"
-    comic_recommendation = "comic_recommendation"
-    comic_episodes = "comic_episodes"
-    comic_page = "comic_page"
-    comic_comments = "comic_comments"
-    games = "games"
-    game_detail = "game_detail"
+from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 
 
 class ImageQuality(str, Enum):
@@ -59,7 +43,7 @@ class BikaEndpoints(BaseEndpoint):
             hashlib.sha256,
         ).hexdigest()
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self,

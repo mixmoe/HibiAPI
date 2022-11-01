@@ -3,7 +3,7 @@ import json
 import secrets
 import string
 from datetime import timedelta
-from enum import Enum, IntEnum
+from enum import IntEnum
 from ipaddress import IPv4Address
 from random import randint
 from typing import Any, Dict, List, Optional
@@ -11,30 +11,11 @@ from typing import Any, Dict, List, Optional
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
 
-from hibiapi.utils.cache import cache_config, disable_cache
+from hibiapi.api.netease.constants import NeteaseConstants
+from hibiapi.utils.cache import cache_config
 from hibiapi.utils.exceptions import UpstreamAPIException
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint
-
-from .constants import NeteaseConstants
-
-
-class EndpointsType(str, Enum):
-    search = "search"
-    artist = "artist"
-    album = "album"
-    detail = "detail"
-    song = "song"
-    playlist = "playlist"
-    lyric = "lyric"
-    mv = "mv"
-    comments = "comments"
-    record = "record"
-    djradio = "djradio"
-    dj = "dj"
-    detail_dj = "detail_dj"
-    user = "user"
-    user_playlist = "user_playlist"
+from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 
 class SearchType(IntEnum):
@@ -141,7 +122,7 @@ class NeteaseEndpoint(BaseEndpoint):
         )
         return headers
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None

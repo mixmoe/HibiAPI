@@ -1,9 +1,4 @@
-from enum import Enum
-
-from hibiapi.utils.net import AsyncHTTPClient
-from hibiapi.utils.routing import BaseEndpoint
-
-from .base import (
+from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,
     CommentSortType,
     CommentType,
@@ -14,30 +9,8 @@ from .base import (
     VideoFormatType,
     VideoQualityType,
 )
-
-
-class V3EndpointsType(str, Enum):
-    video_info = "video_info"
-    video_address = "video_address"
-    video_recommend = "video_recommend"
-    video_dynamic = "video_dynamic"
-    video_ranking = "video_ranking"
-
-    user_info = "user_info"
-    user_uploaded = "user_uploaded"
-    user_favorite = "user_favorite"
-
-    season_info = "season_info"
-    season_recommend = "season_recommend"
-    season_episode = "season_episode"
-    season_ranking = "season_ranking"
-    season_timeline = "season_timeline"
-
-    search = "search"
-    search_recommend = "search_recommend"
-    search_suggestion = "search_suggestion"
-
-    comments = "comments"
+from hibiapi.utils.net import AsyncHTTPClient
+from hibiapi.utils.routing import BaseEndpoint
 
 
 class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):

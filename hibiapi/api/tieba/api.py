@@ -3,20 +3,11 @@ from enum import Enum
 from random import randint
 from typing import Any, Dict, Optional
 
-from hibiapi.utils.cache import disable_cache
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint
+from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 Config = APIConfig("tieba")
-
-
-class EndpointsType(str, Enum):
-    post_list = "post_list"
-    post_detail = "post_detail"
-    subpost_detail = "subpost_detail"
-    user_profile = "user_profile"
-    user_subscribed = "user_subscribed"
 
 
 class TiebaSignUtils:
@@ -70,7 +61,7 @@ class TiebaSignUtils:
 class TiebaEndpoint(BaseEndpoint):
     base = "http://c.tieba.baidu.com"
 
-    @disable_cache
+    @dont_route
     @catch_network_error
     async def request(
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
