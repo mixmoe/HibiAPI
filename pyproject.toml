@@ -28,6 +28,8 @@ python-multipart = "^0.0.5"
 cashews = { extras = ["redis", "diskcache"], version = ">=3.3,<5.0" }
 typing-extensions = ">=3.10"
 typer = { extras = ["all"], version = "^0.6.1" }
+pyqt6 = { version = "^6.4.0", optional = true }
+pyqt6-webengine = { version = "^6.4.0", optional = true }
 
 [tool.poetry.dev-dependencies]
 black = "^22.6"
@@ -38,6 +40,9 @@ isort = "^5.10.1"
 pytest-httpserver = "^1.0.4"
 pytest-cov = "^3.0.0"
 pytest-benchmark = "^4.0.0"
+
+[tool.poetry.extras]
+scripts = ["pyqt6", "pyqt6-webengine"]
 
 [tool.isort]
 profile = "black"
