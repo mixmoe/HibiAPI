@@ -2,28 +2,32 @@ import inspect
 from contextvars import ContextVar
 from enum import Enum
 from fnmatch import fnmatch
-from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
+from functools import wraps
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Literal,
+    Mapping,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+)
 from urllib.parse import ParseResult, urlparse
 
+from fastapi import Depends, Request
 from fastapi.routing import APIRouter
 from httpx import URL
 from pydantic import AnyHttpUrl
 from pydantic.errors import UrlHostError
 from starlette.datastructures import Headers, MutableHeaders
 
-from .cache import endpoint_cache
-from .net import AsyncHTTPClient
+from hibiapi.utils.cache import endpoint_cache
+from hibiapi.utils.net import AsyncHTTPClient, BaseNetClient
 
-
-def exclude_params(func: Callable, params: Mapping[str, Any]) -> Dict[str, Any]:
-    func_params = inspect.signature(func).parameters
-    return {k: v for k, v in params.items() if k in func_params}
-
-
-class SlashRouter(APIRouter):
-    def api_route(self, path: str, **kwargs):
-        path = path if path.startswith("/") else ("/" + path)
-        return super().api_route(path, **kwargs)
+_T = TypeVar("_T")
 
 
 class EndpointMeta(type):
@@ -42,6 +46,14 @@ class EndpointMeta(type):
                     continue
                 namespace[func_name] = endpoint_cache(func)
         return super().__new__(cls, name, bases, namespace, **kwargs)
+
+    @property
+    def router_functions(self):
+        return {
+            name: object
+            for name, object in inspect.getmembers(self)
+            if not name.startswith("_") and inspect.iscoroutinefunction(object)
+        }
 
 
 class BaseEndpoint(metaclass=EndpointMeta, cache_endpoints=False):
@@ -67,6 +79,86 @@ class BaseEndpoint(metaclass=EndpointMeta, cache_endpoints=False):
             ).geturl(),
             params=params,
         )
+
+
+class SlashRouter(APIRouter):
+    def api_route(self, path: str, **kwargs):
+        path = path if path.startswith("/") else f"/{path}"
+        return super().api_route(path, **kwargs)
+
+
+class EndpointRouter(SlashRouter):
+    @staticmethod
+    def _exclude_params(func: Callable, params: Mapping[str, Any]) -> Dict[str, Any]:
+        func_params = inspect.signature(func).parameters
+        return {k: v for k, v in params.items() if k in func_params}
+
+    @staticmethod
+    def _router_signature_convert(
+        func,
+        endpoint_class: Type["BaseEndpoint"],
+        request_client: Callable,
+        method_name: Optional[str] = None,
+    ):
+        @wraps(func)
+        async def route_func(endpoint: endpoint_class, /, **kwargs):
+            endpoint_method = getattr(endpoint, method_name or func.__name__)
+            return await endpoint_method(**kwargs)
+
+        route_func.__signature__ = inspect.signature(route_func).replace(
+            parameters=[
+                inspect.Parameter(
+                    name="endpoint",
+                    kind=inspect.Parameter.POSITIONAL_ONLY,
+                    annotation=endpoint_class,
+                    default=Depends(request_client),
+                ),
+                *(
+                    param
+                    for param in inspect.signature(func).parameters.values()
+                    if param.kind == inspect.Parameter.KEYWORD_ONLY
+                ),
+            ]
+        )
+        return route_func
+
+    def include_endpoint(
+        self,
+        endpoint_class: Type[BaseEndpoint],
+        net_client: BaseNetClient,
+        add_match_all: bool = True,
+    ):
+        router_functions = endpoint_class.router_functions
+
+        async def request_client():
+            async with net_client as client:
+                yield endpoint_class(client)
+
+        for func_name, func in router_functions.items():
+            self.add_api_route(
+                path=f"/{func_name}",
+                endpoint=self._router_signature_convert(
+                    func,
+                    endpoint_class=endpoint_class,
+                    request_client=request_client,
+                    method_name=func_name,
+                ),
+                methods=["GET"],
+            )
+
+        if not add_match_all:
+            return
+
+        @self.get("/", description="JournalAD style API routing", deprecated=True)
+        async def match_all(
+            request: Request,
+            type: Literal[tuple(router_functions.keys())],  # type: ignore
+            endpoint: endpoint_class = Depends(request_client),
+        ):
+            func = router_functions[type]
+            return await func(
+                endpoint, **self._exclude_params(func, request.query_params)
+            )
 
 
 class BaseHostUrl(AnyHttpUrl):
