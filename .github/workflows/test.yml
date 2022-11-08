@@ -26,7 +26,6 @@ jobs:
             os: ubuntu-latest
           - python: pypy3.9
             os: ubuntu-latest
-      fail-fast: false
       max-parallel: 3
 
     env:
@@ -54,7 +53,7 @@ jobs:
         timeout-minutes: 15
         run: |
           curl -L ${{ secrets.DOTENV_LINK }} > .env
-          poetry run pytest --cov ./hibiapi/ --cov-report xml --cov-report term-missing ./test
+          poetry run pytest -n auto --dist loadfile --cov ./hibiapi/ --cov-report xml --cov-report term-missing ./test
 
       - uses: codecov/codecov-action@v3
         with:
