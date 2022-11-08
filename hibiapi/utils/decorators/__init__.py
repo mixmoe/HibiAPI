@@ -20,10 +20,9 @@ from typing import (
 
 from typing_extensions import ParamSpec
 
+from hibiapi.utils.decorators.enum import enum_auto_doc as enum_auto_doc  # noqa: F401
 from hibiapi.utils.decorators.timer import Callable_T, TimeIt
 from hibiapi.utils.log import logger
-
-_T = TypeVar("_T")
 
 Argument_T = ParamSpec("Argument_T")
 Return_T = TypeVar("Return_T")
