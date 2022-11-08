@@ -5,47 +5,39 @@ from typing import Any, Dict, Optional, cast
 from hibiapi.api.pixiv.constants import PixivConstants
 from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
 from hibiapi.utils.cache import cache_config
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 
 
+@enum_auto_doc
 class IllustType(str, Enum):
-    """
-    画作类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | illust | 插画 |
-    | manga | 漫画 |
-    """
+    """画作类型"""
 
     illust = "illust"
+    """插画"""
     manga = "manga"
+    """漫画"""
 
 
+@enum_auto_doc
 class RankingType(str, Enum):
-    """
-    排行榜内容类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | day  | 日榜 |
-    | week  | 周榜 |
-    | month  | 月榜 |
-    | week_rookie  | 新人 |
-    | week_original  | 原创 |
-    | day_male  | 男性向 |
-    | day_female  | 女性向 |
-    | ...  | and more |
-    """
+    """排行榜内容类型"""
 
     day = "day"
+    """日榜"""
     week = "week"
+    """周榜"""
     month = "month"
+    """月榜"""
     day_male = "day_male"
+    """男性向"""
     day_female = "day_female"
+    """女性向"""
     week_original = "week_original"
+    """原创"""
     week_rookie = "week_rookie"
+    """新人"""
     day_r18 = "day_r18"
     day_male_r18 = "day_male_r18"
     day_female_r18 = "day_female_r18"
@@ -53,70 +45,54 @@ class RankingType(str, Enum):
     week_r18g = "week_r18g"
 
 
+@enum_auto_doc
 class SearchModeType(str, Enum):
-    """
-    搜索匹配类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | partial_match_for_tags  | 标签部分一致 |
-    | exact_match_for_tags  | 标签完全一致 |
-    | title_and_caption  | 标题说明文 |
-    """
+    """搜索匹配类型"""
 
     partial_match_for_tags = "partial_match_for_tags"
+    """标签部分一致"""
     exact_match_for_tags = "exact_match_for_tags"
+    """标签完全一致"""
     title_and_caption = "title_and_caption"
+    """标题说明文"""
 
 
+@enum_auto_doc
 class SearchNovelModeType(str, Enum):
-    """
-    搜索匹配类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | partial_match_for_tags  | 标签部分一致 |
-    | exact_match_for_tags  | 标签完全一致 |
-    | text  | 正文 |
-    | keyword  | 关键词 |
-    """
+    """搜索匹配类型"""
 
     partial_match_for_tags = "partial_match_for_tags"
+    """标签部分一致"""
     exact_match_for_tags = "exact_match_for_tags"
+    """标签完全一致"""
     text = "text"
-    keyword = "keywords"
+    """正文"""
+    keywords = "keywords"
+    """关键词"""
 
 
+@enum_auto_doc
 class SearchSortType(str, Enum):
-    """
-    搜索排序类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | date_desc  | 按日期倒序 |
-    | date_asc  | 按日期正序 |
-    | popular_desc  | 受欢迎降序(Premium功能) |
-    """
+    """搜索排序类型"""
 
     date_desc = "date_desc"
+    """按日期倒序"""
     date_asc = "date_asc"
+    """按日期正序"""
     popular_desc = "popular_desc"
+    """受欢迎降序(Premium功能)"""
 
 
+@enum_auto_doc
 class SearchDurationType(str, Enum):
-    """
-    搜索时段类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | within_last_day | 一天内 |
-    | within_last_week | 一周内 |
-    | within_last_month | 一个月内 |
-    """
+    """搜索时段类型"""
 
     within_last_day = "within_last_day"
+    """一天内"""
     within_last_week = "within_last_week"
+    """一周内"""
     within_last_month = "within_last_month"
+    """一个月内"""
 
 
 class RankingDate(date):

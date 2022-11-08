@@ -4,38 +4,35 @@ from typing import Any, Dict, Optional
 
 from hibiapi.utils.cache import cache_config
 from hibiapi.utils.config import APIConfig
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 Config = APIConfig("wallpaper")
 
 
+@enum_auto_doc
 class WallpaperCategoryType(str, Enum):
-    """
-    壁纸分类
-
-    | **数值** | **含义** |
-    |---|---|
-    | girl | 女生 |
-    | animal | 动物 |
-    | landscape | 自然 |
-    | anime | 二次元 |
-    | drawn | 手绘 |
-    | mechanics | 机械 |
-    | boy | 男生 |
-    | game | 游戏 |
-    | text | 文字 |
-    """
+    """壁纸分类"""
 
     girl = "girl"
+    """女生"""
     animal = "animal"
+    """动物"""
     landscape = "landscape"
+    """自然"""
     anime = "anime"
+    """二次元"""
     drawn = "drawn"
+    """手绘"""
     mechanics = "mechanics"
+    """机械"""
     boy = "boy"
+    """男生"""
     game = "game"
+    """游戏"""
     text = "text"
+    """文字"""
 
 
 CATEGORY: Dict[WallpaperCategoryType, str] = {
@@ -51,9 +48,14 @@ CATEGORY: Dict[WallpaperCategoryType, str] = {
 }
 
 
+@enum_auto_doc
 class WallpaperOrderType(str, Enum):
+    """壁纸排序方式"""
+
     hot = "hot"
+    """热门"""
     new = "new"
+    """最新"""
 
 
 class WallpaperEndpoint(BaseEndpoint):

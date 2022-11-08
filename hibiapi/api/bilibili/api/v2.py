@@ -13,6 +13,7 @@ from hibiapi.api.bilibili.api.base import (
     VideoFormatType,
     VideoQualityType,
 )
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.net import AsyncHTTPClient
 from hibiapi.utils.routing import BaseEndpoint
@@ -31,10 +32,18 @@ def process_keyerror(function: _AnyCallable) -> _AnyCallable:
     return wrapper  # type:ignore
 
 
+@enum_auto_doc
 class SearchType(str, Enum):
+    """搜索类型"""
+
     search = "search"
+    """综合搜索"""
+
     suggest = "suggest"
+    """搜索建议"""
+
     hot = "hot"
+    """热门"""
 
 
 class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):

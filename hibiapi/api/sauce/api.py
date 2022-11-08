@@ -5,11 +5,11 @@ from typing import Any, Dict, Optional, overload
 
 from httpx import HTTPError
 
+from hibiapi.api.sauce.constants import SauceConstants
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.exceptions import ClientSideException
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, BaseHostUrl
-
-from .constants import SauceConstants
 
 
 class UnavailableSourceException(ClientSideException):
@@ -41,17 +41,14 @@ class UploadFileIO(BytesIO):
         return v
 
 
+@enum_auto_doc
 class DeduplicateType(IntEnum):
-    """
-    0=no result deduping
-    1=consolidate booru results and dedupe by item identifier
-    2=all implemented dedupe methods such as by series name.
-    Default is 2, more levels may be added in future.
-    """
-
     DISABLED = 0
+    """no result deduplicating"""
     IDENTIFIER = 1
+    """consolidate search results and deduplicate by item identifier"""
     ALL = 2
+    """all implemented deduplicate methods such as by series name"""
 
 
 class SauceEndpoint(BaseEndpoint, cache_endpoints=False):

@@ -32,7 +32,7 @@ async def qrcode_api(
     size: int = 200,
     logo: Optional[HostUrl] = None,
     encode: ReturnEncode = ReturnEncode.raw,
-    level: QRCodeLevel = QRCodeLevel.M,
+    level: QRCodeLevel = QRCodeLevel.MEDIUM,
     bgcolor: Color = Color("FFFFFF"),
     fgcolor: Color = Color("000000"),
     fun: str = "qrcode",

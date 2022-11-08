@@ -10,22 +10,37 @@ from httpx import URL
 from hibiapi.api.bika.constants import BikaConstants
 from hibiapi.api.bika.net import NetRequest
 from hibiapi.utils.cache import cache_config
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 
 
+@enum_auto_doc
 class ImageQuality(str, Enum):
+    """哔咔API返回的图片质量"""
+
     low = "low"
+    """低质量"""
     medium = "medium"
+    """中等质量"""
     high = "high"
+    """高质量"""
     original = "original"
+    """原图"""
 
 
+@enum_auto_doc
 class ResultSort(str, Enum):
+    """哔咔API返回的搜索结果排序方式"""
+
     date_descending = "dd"
+    """最新发布"""
     date_ascending = "da"
+    """最早发布"""
     like_descending = "ld"
+    """最多喜欢"""
     views_descending = "vd"
+    """最多浏览"""
 
 
 class BikaEndpoints(BaseEndpoint):

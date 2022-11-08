@@ -14,42 +14,39 @@ from fastapi import Query
 
 from hibiapi.api.netease.constants import NeteaseConstants
 from hibiapi.utils.cache import cache_config
+from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.exceptions import UpstreamAPIException
 from hibiapi.utils.net import catch_network_error
 from hibiapi.utils.routing import BaseEndpoint, dont_route
 
 
+@enum_auto_doc
 class SearchType(IntEnum):
-    """
-    搜索内容类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | 1  | 单曲 |
-    | 10  | 专辑 |
-    | 100  | 歌手 |
-    | 1000  | 歌单 |
-    | 1002  | 用户 |
-    | 1004  | mv |
-    | 1006  | 歌词 |
-    | 1009  | 主播电台 |
-    """
+    """搜索内容类型"""
 
     SONG = 1
+    """单曲"""
     ALBUM = 10
+    """专辑"""
     ARTIST = 100
+    """歌手"""
     PLAYLIST = 1000
+    """歌单"""
     USER = 1002
+    """用户"""
     MV = 1004
+    """MV"""
     LYRICS = 1006
+    """歌词"""
     DJ = 1009
+    """主播电台"""
     VIDEO = 1014
+    """视频"""
 
 
+@enum_auto_doc
 class BitRateType(IntEnum):
-    """
-    歌曲码率
-    """
+    """歌曲码率"""
 
     LOW = 64000
     MEDIUM = 128000
@@ -57,18 +54,14 @@ class BitRateType(IntEnum):
     HIGH = 320000
 
 
+@enum_auto_doc
 class RecordPeriodType(IntEnum):
-    """
-    听歌记录时段类型
-
-    | **数值** | **含义** |
-    |---|---|
-    | 0 | 所有时段 |
-    | 1 | 本周 |
-    """
+    """听歌记录时段类型"""
 
     WEEKLY = 1
+    """本周"""
     ALL = 0
+    """所有时段"""
 
 
 class _EncryptUtil:
