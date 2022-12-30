@@ -165,6 +165,9 @@
 
 _本段符合 [all-contributors](https://github.com/all-contributors/all-contributors) 规范_
 
+![Stargazers repo roster for @mixmoe/HibiAPI](https://reporoster.com/stars/dark/mixmoe/HibiAPI#gh-dark-mode-only)
+![Stargazers repo roster for @mixmoe/HibiAPI](https://reporoster.com/stars/mixmoe/HibiAPI#gh-light-mode-only)
+
 ## 开源许可
 
     Copyright 2020-2021 Mix Technology
