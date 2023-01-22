@@ -122,8 +122,12 @@ class PixivEndpoints(BaseEndpoint):
         self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         headers = self.client.headers.copy()
-        if user := cast(PixivNetClient, self.client.net_client).user:
-            headers["Authorization"] = f"Bearer {user.access_token}"
+        net_client = cast(PixivNetClient, self.client.net_client)
+        auth, token = net_client.get_available_user()
+        if auth is None:
+            auth = await net_client.auth(token)
+        headers["Authorization"] = f"Bearer {auth.access_token}"
+
         if language := request_headers.get().get("Accept-Language"):
             language = self._parse_accept_language(language)
             headers["Accept-Language"] = language

@@ -15,7 +15,5 @@ class PixivConstants:
         b"28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c"
     )
     CONFIG: APIConfig = APIConfig("pixiv")
-    REFRESH_INTERVAL: int = CONFIG["account"]["refresh-interval"].as_number()
     APP_HOST: str = "https://app-api.pixiv.net"
-    PUB_HOST: str = "https://public-api.secure.pixiv.net"
     AUTH_HOST: str = "https://oauth.secure.pixiv.net"
