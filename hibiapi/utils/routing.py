@@ -182,5 +182,5 @@ class BaseHostUrl(AnyHttpUrl):
         )
 
 
-request_headers = ContextVar("request_headers", default=Headers())
-response_headers = ContextVar("response_headers", default=MutableHeaders())
+request_headers = ContextVar[Headers]("request_headers")
+response_headers = ContextVar[MutableHeaders]("response_headers")
