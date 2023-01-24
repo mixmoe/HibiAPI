@@ -43,6 +43,8 @@ class RankingType(str, Enum):
     day_female_r18 = "day_female_r18"
     week_r18 = "week_r18"
     week_r18g = "week_r18g"
+    day_ai = "day_ai"
+    day_r18_ai = "day_r18_ai"
 
 
 @enum_auto_doc
