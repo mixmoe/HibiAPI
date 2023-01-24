@@ -669,7 +669,7 @@ summary = "A small Python utility to set file creation time on Windows"
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:318235fadd5f4515e93b2bafe710c5e2c8b98f874121c474a4bc554944dd2440"
+content_hash = "sha256:4c1a6dc5847770b7df180b4f3524c18909ed9794b52323afc0840c8f2f8d85f1"
 
 [metadata.files]
 "anyio 3.6.2" = [
