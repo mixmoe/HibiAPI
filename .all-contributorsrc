@@ -78,6 +78,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "asadahimeka",
+      "name": "Yumine Sakura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31837214?v=4",
+      "profile": "http://nanoka.top",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
