@@ -16,17 +16,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/setup-python@v4
+      - uses: pdm-project/setup-pdm@v3
         with:
           python-version: 3.8
 
-      - name: Install poetry
-        run: pip install poetry
-
       - name: Install Dependencies
         run: |
-          poetry config virtualenvs.create false
-          poetry install -E scripts
+          pdm config python.use_venv false
+          pdm export --group :all --dev --format requirements --output requirements.txt
+          pip install -r requirements.txt
 
       - uses: suo/flake8-github-action@v1
 
@@ -46,7 +44,7 @@ jobs:
         with:
           languages: python
 
-      - name: Autobuild
+      - name: Auto build
         uses: github/codeql-action/autobuild@v2
 
       - name: Perform CodeQL Analysis

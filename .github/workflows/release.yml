@@ -13,19 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - uses: actions/setup-python@v4
+      - uses: pdm-project/setup-pdm@v3
         with:
           python-version: 3.8
-          cache: poetry
 
       - name: Install Dependencies
-        run: poetry install
+        run: |
+          pdm install --prod
 
       - name: Release to PyPI
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+          PDM_PUBLISH_USERNAME: __token__
+          PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
-          poetry publish --build
+          pdm publish
