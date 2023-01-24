@@ -4,8 +4,8 @@ from typing import List
 
 import pytest
 from fastapi.testclient import TestClient
+from httpx import Response
 from pytest_benchmark.fixture import BenchmarkFixture
-from requests.models import Response
 
 
 @pytest.fixture(scope="package")
