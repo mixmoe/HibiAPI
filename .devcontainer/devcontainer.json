@@ -1,8 +1,0 @@
-{
-    "image": "mcr.microsoft.com/vscode/devcontainers/python:3-bullseye",
-    "forwardPorts": [
-        8080
-    ],
-    "initializeCommand": "poetry config virtualenvs.in-project true",
-    "postStartCommand": "poetry install"
-}
