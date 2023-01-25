@@ -69,8 +69,9 @@ class BikaEndpoints(BaseEndpoint):
         no_token: bool = False,
     ):
         net_client = cast(NetRequest, self.client.net_client)
-        if net_client.token is None and not no_token:
-            await net_client.login(self)
+        async with net_client.auth_lock:
+            if net_client.token is None and not no_token:
+                await net_client.login(self)
 
         headers = {
             "Authorization": net_client.token or "",

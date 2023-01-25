@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 from datetime import datetime, timedelta, timezone
 from itertools import cycle
@@ -40,6 +41,7 @@ class NetRequest(BaseNetClient):
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
         )
         self.user_tokens = cycle(tokens)
+        self.auth_lock = asyncio.Lock()
         self.user_tokens_dict: Dict[str, PixivAuthData] = {}
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
 

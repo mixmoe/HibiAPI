@@ -1,3 +1,4 @@
+import asyncio
 from base64 import urlsafe_b64decode
 from datetime import datetime, timezone
 from functools import lru_cache
@@ -47,6 +48,7 @@ class NetRequest(BaseNetClient):
             headers=BikaConstants.DEFAULT_HEADERS.copy(),
             proxies=BikaConstants.CONFIG["proxy"].as_dict(),
         )
+        self.auth_lock = asyncio.Lock()
 
     @property
     def token(self) -> Optional[str]:
