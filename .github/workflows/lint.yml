@@ -23,7 +23,9 @@ jobs:
       - name: Install Dependencies
         run: |
           pdm config python.use_venv false
-          pdm export --group :all --dev --format requirements --output requirements.txt
+          pdm export --group :all --dev \
+            --format requirements --without-hashes \
+            --output requirements.txt
           pip install -r requirements.txt
 
       - uses: suo/flake8-github-action@v1
