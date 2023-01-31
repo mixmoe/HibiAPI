@@ -82,7 +82,7 @@ def test_tags(client: TestClient):
 
 
 def test_tags_autocomplete(client: TestClient):
-    response = client.get("tags_autocomplete")
+    response = client.get("tags_autocomplete", params={"word": "甘雨"})
     assert response.status_code == 200
     assert response.json().get("tags")
 
