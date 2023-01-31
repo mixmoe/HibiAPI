@@ -248,10 +248,30 @@ class PixivEndpoints(BaseEndpoint):
             },
         )
 
-    async def search_user(self, *, word: str):
+    async def search_user(
+        self,
+        *,
+        word: str,
+        page: int = 1,
+        size: int = 30,
+    ):
         return await self.request(
             "v1/search/user",
-            params={"word": word},
+            params={"word": word, "offset": (page - 1) * size},
+        )
+
+    async def tags_autocomplete(
+        self,
+        *,
+        word: str,
+        merge_plain_keyword_results: bool = True,
+    ):
+        return await self.request(
+            "/v2/search/autocomplete",
+            params={
+                "word": word,
+                "merge_plain_keyword_results": merge_plain_keyword_results,
+            },
         )
 
     @cache_config(ttl=timedelta(hours=12))

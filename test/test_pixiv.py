@@ -81,6 +81,12 @@ def test_tags(client: TestClient):
     assert response.json().get("trend_tags")
 
 
+def test_tags_autocomplete(client: TestClient):
+    response = client.get("tags_autocomplete")
+    assert response.status_code == 200
+    assert response.json().get("tags")
+
+
 def test_related(client: TestClient):
     response = client.get("related", params={"id": 85162550})
     assert response.status_code == 200
