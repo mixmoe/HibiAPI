@@ -123,8 +123,11 @@ class BikaEndpoints(BaseEndpoint):
             "comics/advanced-search",
             body={
                 "keyword": keyword,
-                "page": page,
                 "sort": sort,
+            },
+            params={
+                "page": page,
+                "s": sort,
             },
         )
 
