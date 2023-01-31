@@ -234,6 +234,7 @@ class PixivEndpoints(BaseEndpoint):
         duration: Optional[SearchDurationType] = None,
         page: int = 1,
         size: int = 30,
+        include_translated_tag_results: bool = True,
     ):
         return await self.request(
             "v1/search/illust",
@@ -243,7 +244,14 @@ class PixivEndpoints(BaseEndpoint):
                 "sort": order,
                 "duration": duration,
                 "offset": (page - 1) * size,
+                "include_translated_tag_results": include_translated_tag_results,
             },
+        )
+
+    async def search_user(self, *, word: str):
+        return await self.request(
+            "v1/search/user",
+            params={"word": word},
         )
 
     @cache_config(ttl=timedelta(hours=12))
