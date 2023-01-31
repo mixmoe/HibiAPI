@@ -40,12 +40,22 @@ class RankingType(str, Enum):
     """新人周榜"""
     day_ai = "day_ai"
     """AI日榜"""
+    day_manga = "day_manga"
+    """漫画日榜"""
+    week_manga = "week_manga"
+    """漫画周榜"""
+    month_manga = "month_manga"
+    """漫画月榜"""
+    week_rookie_manga = "week_rookie_manga"
+    """漫画新人周榜"""
     day_r18 = "day_r18"
     day_male_r18 = "day_male_r18"
     day_female_r18 = "day_female_r18"
     week_r18 = "week_r18"
     week_r18g = "week_r18g"
     day_r18_ai = "day_r18_ai"
+    day_r18_manga = "day_r18_manga"
+    week_r18_manga = "week_r18_manga"
 
 
 @enum_auto_doc
