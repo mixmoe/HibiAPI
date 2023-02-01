@@ -69,10 +69,22 @@ def test_search(client: TestClient):
     assert response.json().get("illusts")
 
 
+def test_search_user(client: TestClient):
+    response = client.get("search_user", params={"word": "鬼针草"})
+    assert response.status_code == 200
+    assert response.json().get("user_previews")
+
+
 def test_tags(client: TestClient):
     response = client.get("tags")
     assert response.status_code == 200
     assert response.json().get("trend_tags")
+
+
+def test_tags_autocomplete(client: TestClient):
+    response = client.get("tags_autocomplete", params={"word": "甘雨"})
+    assert response.status_code == 200
+    assert response.json().get("tags")
 
 
 def test_related(client: TestClient):

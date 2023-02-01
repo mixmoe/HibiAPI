@@ -40,12 +40,22 @@ class RankingType(str, Enum):
     """新人周榜"""
     day_ai = "day_ai"
     """AI日榜"""
+    day_manga = "day_manga"
+    """漫画日榜"""
+    week_manga = "week_manga"
+    """漫画周榜"""
+    month_manga = "month_manga"
+    """漫画月榜"""
+    week_rookie_manga = "week_rookie_manga"
+    """漫画新人周榜"""
     day_r18 = "day_r18"
     day_male_r18 = "day_male_r18"
     day_female_r18 = "day_female_r18"
     week_r18 = "week_r18"
     week_r18g = "week_r18g"
     day_r18_ai = "day_r18_ai"
+    day_r18_manga = "day_r18_manga"
+    week_r18_manga = "week_r18_manga"
 
 
 @enum_auto_doc
@@ -234,6 +244,7 @@ class PixivEndpoints(BaseEndpoint):
         duration: Optional[SearchDurationType] = None,
         page: int = 1,
         size: int = 30,
+        include_translated_tag_results: bool = True,
     ):
         return await self.request(
             "v1/search/illust",
@@ -243,6 +254,33 @@ class PixivEndpoints(BaseEndpoint):
                 "sort": order,
                 "duration": duration,
                 "offset": (page - 1) * size,
+                "include_translated_tag_results": include_translated_tag_results,
+            },
+        )
+
+    async def search_user(
+        self,
+        *,
+        word: str,
+        page: int = 1,
+        size: int = 30,
+    ):
+        return await self.request(
+            "v1/search/user",
+            params={"word": word, "offset": (page - 1) * size},
+        )
+
+    async def tags_autocomplete(
+        self,
+        *,
+        word: str,
+        merge_plain_keyword_results: bool = True,
+    ):
+        return await self.request(
+            "/v2/search/autocomplete",
+            params={
+                "word": word,
+                "merge_plain_keyword_results": merge_plain_keyword_results,
             },
         )
 
