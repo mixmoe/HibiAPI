@@ -135,7 +135,7 @@
 ### 贡献者们
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 感谢这些为这个项目作出贡献的各位大佬:
@@ -157,6 +157,7 @@
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://nocilol.me/"><img src="https://avatars.githubusercontent.com/u/16256221?v=4?s=100" width="100px;" alt="Jad"/><br /><sub><b>Jad</b></sub></a><br /><a href="https://github.com/mixmoe/HibiAPI/issues?q=author%3Ajourney-ad" title="Bug reports">🐛</a> <a href="#ideas-journey-ad" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://nanoka.top"><img src="https://avatars.githubusercontent.com/u/31837214?v=4?s=100" width="100px;" alt="Yumine Sakura"/><br /><sub><b>Yumine Sakura</b></sub></a><br /><a href="https://github.com/mixmoe/HibiAPI/commits?author=asadahimeka" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yeyang52"><img src="https://avatars.githubusercontent.com/u/107110851?v=4?s=100" width="100px;" alt="yeyang"/><br /><sub><b>yeyang</b></sub></a><br /><a href="https://github.com/mixmoe/HibiAPI/commits?author=yeyang52" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
