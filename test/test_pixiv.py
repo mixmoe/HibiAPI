@@ -41,9 +41,11 @@ def test_favorite(client: TestClient):
     response = client.get("favorite", params={"id": 3036679})
     assert response.status_code == 200
 
+
 def test_favorite_novel(client: TestClient):
     response = client.get("favorite_novel", params={"id": 55170615})
     assert response.status_code == 200
+
 
 def test_following(client: TestClient):
     response = client.get("following", params={"id": 3036679})
@@ -71,10 +73,12 @@ def test_search(client: TestClient):
     assert response.status_code == 200
     assert response.json().get("illusts")
 
+
 def test_popular_preview(client: TestClient):
     response = client.get("popular_preview", params={"word": "東方Project"})
     assert response.status_code == 200
     assert response.json().get("illusts")
+
 
 def test_search_user(client: TestClient):
     response = client.get("search_user", params={"word": "鬼针草"})
@@ -105,35 +109,42 @@ def test_ugoira_metadata(client: TestClient):
     assert response.status_code == 200
     assert response.json().get("ugoira_metadata")
 
+
 def test_spotlights(client: TestClient):
     response = client.get("spotlights")
     assert response.status_code == 200
     assert response.json().get("spotlight_articles")
+
 
 def test_illust_new(client: TestClient):
     response = client.get("illust_new")
     assert response.status_code == 200
     assert response.json().get("illusts")
 
+
 def test_illust_comments(client: TestClient):
     response = client.get("illust_comments", params={"id": 99973718})
     assert response.status_code == 200
     assert response.json().get("comments")
+
 
 def test_illust_comment_replies(client: TestClient):
     response = client.get("illust_comment_replies", params={"id": 151400579})
     assert response.status_code == 200
     assert response.json().get("comments")
 
+
 def test_novel_comments(client: TestClient):
     response = client.get("novel_comments", params={"id": 19205075})
     assert response.status_code == 200
     assert response.json().get("comments")
 
+
 def test_novel_comment_replies(client: TestClient):
     response = client.get("novel_comment_replies", params={"id": 41470327})
     assert response.status_code == 200
     assert response.json().get("comments")
+
 
 def test_rank_novel(client: TestClient):
     for i in range(2, 5):
@@ -142,6 +153,7 @@ def test_rank_novel(client: TestClient):
         )
         assert response.status_code == 200
         assert response.json().get("novels")
+
 
 def test_member_novel(client: TestClient):
     response = client.get("member_novel", params={"id": 14883165})
@@ -166,20 +178,24 @@ def test_novel_text(client: TestClient):
     assert response.status_code == 200
     assert response.json().get("novel_text")
 
+
 def test_tags_novel(client: TestClient):
     response = client.get("tags_novel")
     assert response.status_code == 200
     assert response.json().get("trend_tags")
+
 
 def test_search_novel(client: TestClient):
     response = client.get("search_novel", params={"word": "碧蓝航线"})
     assert response.status_code == 200
     assert response.json().get("novels")
 
+
 def test_popular_preview_novel(client: TestClient):
     response = client.get("popular_preview_novel", params={"word": "東方Project"})
     assert response.status_code == 200
     assert response.json().get("novels")
+
 
 def test_novel_new(client: TestClient):
     response = client.get("novel_new", params={"max_novel_id": 16002726})

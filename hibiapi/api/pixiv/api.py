@@ -198,7 +198,7 @@ class PixivEndpoints(BaseEndpoint):
                 "max_bookmark_id": max_bookmark_id or None,
             },
         )
-    
+
     # 用户收藏的小说
     async def favorite_novel(
         self,
@@ -209,9 +209,9 @@ class PixivEndpoints(BaseEndpoint):
         return await self.request(
             "v1/user/bookmarks/novel",
             params={
-               "user_id": id,
-               "tag": tag,
-               "restrict": "public",
+                "user_id": id,
+                "tag": tag,
+                "restrict": "public",
             },
         )
 
@@ -353,7 +353,7 @@ class PixivEndpoints(BaseEndpoint):
                 "filter": "for_ios",
             },
         )
-    
+
     # pixivision(亮点/特辑) 列表
     async def spotlights(
         self,
@@ -430,7 +430,7 @@ class PixivEndpoints(BaseEndpoint):
                 "comment_id": id,
             },
         )
-    
+
     # 小说排行榜
     async def rank_novel(
         self,
