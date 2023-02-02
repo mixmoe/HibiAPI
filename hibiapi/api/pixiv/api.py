@@ -279,15 +279,19 @@ class PixivEndpoints(BaseEndpoint):
         self,
         *,
         word: str,
+        mode: SearchModeType = SearchModeType.partial_match_for_tags,
+        merge_plain_keyword_results: bool = True,
+        include_translated_tag_results: bool = True,
+        filter: str = "for_ios",
     ):
         return await self.request(
             "v1/search/popular-preview/illust",
             params={
                 "word": word,
-                "filter": "for_ios",
-                "include_translated_tag_results": "true",
-                "merge_plain_keyword_results": "true",
-                "search_target": "partial_match_for_tags",
+                "search_target": mode,
+                "merge_plain_keyword_results": merge_plain_keyword_results,
+                "include_translated_tag_results": include_translated_tag_results,
+                "filter": filter,
             },
         )
 
@@ -376,15 +380,14 @@ class PixivEndpoints(BaseEndpoint):
         self,
         *,
         id: int,
-        offset: Optional[int] = None,
-        include_total_comments: Optional[bool] = None,
+        page: int = 1,
+        size: int = 30,
     ):
         return await self.request(
             "v3/illust/comments",
             params={
                 "illust_id": id,
-                "offset": offset,
-                "include_total_comments": include_total_comments,
+                "offset": (page - 1) * size,
             },
         )
 
@@ -406,15 +409,14 @@ class PixivEndpoints(BaseEndpoint):
         self,
         *,
         id: int,
-        offset: Optional[int] = None,
-        include_total_comments: Optional[bool] = None,
+        page: int = 1,
+        size: int = 30,
     ):
         return await self.request(
             "v3/novel/comments",
             params={
                 "novel_id": id,
-                "offset": offset,
-                "include_total_comments": include_total_comments,
+                "offset": (page - 1) * size,
             },
         )
 
@@ -467,6 +469,7 @@ class PixivEndpoints(BaseEndpoint):
     async def novel_text(self, *, id: int):
         return await self.request("/v1/novel/text", params={"novel_id": id})
 
+    @cache_config(ttl=timedelta(hours=12)) 
     async def tags_novel(self):
         return await self.request("v1/trending-tags/novel")
 
@@ -500,15 +503,19 @@ class PixivEndpoints(BaseEndpoint):
         self,
         *,
         word: str,
+        mode: SearchNovelModeType = SearchNovelModeType.partial_match_for_tags,
+        merge_plain_keyword_results: bool = True,
+        include_translated_tag_results: bool = True,
+        filter: str = "for_ios",
     ):
         return await self.request(
             "v1/search/popular-preview/novel",
             params={
                 "word": word,
-                "filter": "for_ios",
-                "include_translated_tag_results": "true",
-                "merge_plain_keyword_results": "true",
-                "search_target": "partial_match_for_tags",
+                "search_target": mode,
+                "merge_plain_keyword_results": merge_plain_keyword_results,
+                "include_translated_tag_results": include_translated_tag_results,
+                "filter": filter,
             },
         )
 
