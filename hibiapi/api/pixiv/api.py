@@ -469,7 +469,7 @@ class PixivEndpoints(BaseEndpoint):
     async def novel_text(self, *, id: int):
         return await self.request("/v1/novel/text", params={"novel_id": id})
 
-    @cache_config(ttl=timedelta(hours=12)) 
+    @cache_config(ttl=timedelta(hours=12))
     async def tags_novel(self):
         return await self.request("v1/trending-tags/novel")
 
