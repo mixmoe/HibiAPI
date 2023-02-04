@@ -409,13 +409,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "pytest-sugar"
-version = "0.9.6"
-summary = "pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly)."
+name = "pytest-pretty"
+version = "1.1.0"
+requires_python = ">=3.7"
+summary = "pytest plugin for printing summary data as I want it"
 dependencies = [
-    "packaging>=14.1",
-    "pytest>=2.9",
-    "termcolor>=1.1.0",
+    "pytest>=7",
+    "rich>=12",
 ]
 
 [[package]]
@@ -543,12 +543,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "termcolor"
-version = "2.2.0"
-requires_python = ">=3.7"
-summary = "ANSI color formatting for output in terminal"
-
-[[package]]
 name = "tomli"
 version = "2.0.1"
 requires_python = ">=3.7"
@@ -653,7 +647,7 @@ summary = "A small Python utility to set file creation time on Windows"
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:ce7f7408d12045c07d1d57b75ab732ea3001c5d15336df0378beae4b28a0652c"
+content_hash = "sha256:bff552f58d52c91a6569c0690ed5bb496d3853d45aded2144908ff547c74e392"
 
 [metadata.files]
 "anyio 3.6.2" = [
@@ -1243,9 +1237,9 @@ content_hash = "sha256:ce7f7408d12045c07d1d57b75ab732ea3001c5d15336df0378beae4b2
     {url = "https://files.pythonhosted.org/packages/27/7b/3f5bdca6a6732fd02f5bd61ed6a7971c76db422ed2a93b61111bfa1dac43/pytest_httpserver-1.0.6.tar.gz", hash = "sha256:9040d07bf59ac45d8de3db1d4468fd2d1d607975e4da4c872ecc0402cdbf7b3e"},
     {url = "https://files.pythonhosted.org/packages/c3/53/73bcf0bae91ae9cb85d9926a08865c168973a9d3affa499e238d8fce0110/pytest_httpserver-1.0.6-py3-none-any.whl", hash = "sha256:ac2379acc91fe8bdbe2911c93af8dd130e33b5899fb9934d15669480739c6d32"},
 ]
-"pytest-sugar 0.9.6" = [
-    {url = "https://files.pythonhosted.org/packages/11/71/2bddd9f3f7fb267b31d7c6236dfb021d28b843f810b3fff57cf9194ef34b/pytest-sugar-0.9.6.tar.gz", hash = "sha256:c4793495f3c32e114f0f5416290946c316eb96ad5a3684dcdadda9267e59b2b8"},
-    {url = "https://files.pythonhosted.org/packages/3e/05/4375ccf896e5dccce262a37a432ae0eea0fdaa8d6812020271ce9087263b/pytest_sugar-0.9.6-py2.py3-none-any.whl", hash = "sha256:30e5225ed2b3cc988a8a672f8bda0fc37bcd92d62e9273937f061112b3f2186d"},
+"pytest-pretty 1.1.0" = [
+    {url = "https://files.pythonhosted.org/packages/05/34/83ca87833c2525280e05fb5aa86fe8dc1db8c473fa4387d6db6c3511796a/pytest_pretty-1.1.0.tar.gz", hash = "sha256:425e116c1ed10ce67eeb688f22d1bcb91ca58a97986026bf42c0717da80740b3"},
+    {url = "https://files.pythonhosted.org/packages/bf/39/ff6ca84f7701848e288343c8e7a931babbb2908ff7c364e41d761da647ab/pytest_pretty-1.1.0-py3-none-any.whl", hash = "sha256:e7e63e0437694e5a7c557d99c81d6e29e0dcaab3b6b9dcb3ba23ddf3eebb5b42"},
 ]
 "python-dotenv 0.21.1" = [
     {url = "https://files.pythonhosted.org/packages/64/62/f19d1e9023aacb47241de3ab5a5d5fedf32c78a71a9e365bb2153378c141/python_dotenv-0.21.1-py3-none-any.whl", hash = "sha256:41e12e0318bebc859fcc4d97d4db8d20ad21721a6aa5047dd59f090391cb549a"},
@@ -1334,10 +1328,6 @@ content_hash = "sha256:ce7f7408d12045c07d1d57b75ab732ea3001c5d15336df0378beae4b2
 "starlette 0.22.0" = [
     {url = "https://files.pythonhosted.org/packages/1d/4e/30eda84159d5b3ad7fe663c40c49b16dd17436abe838f10a56c34bee44e8/starlette-0.22.0-py3-none-any.whl", hash = "sha256:b5eda991ad5f0ee5d8ce4c4540202a573bb6691ecd0c712262d0bc85cf8f2c50"},
     {url = "https://files.pythonhosted.org/packages/f7/ff/64bd3362f80e81402f21e0f1ba55f8801cd899ad3f2a1bcc4a94d284c786/starlette-0.22.0.tar.gz", hash = "sha256:b092cbc365bea34dd6840b42861bdabb2f507f8671e642e8272d2442e08ea4ff"},
-]
-"termcolor 2.2.0" = [
-    {url = "https://files.pythonhosted.org/packages/aa/f4/8ddd8a684b4c005345f45740a449d93d0af7ccecd91319d0f4426cf08b36/termcolor-2.2.0-py3-none-any.whl", hash = "sha256:91ddd848e7251200eac969846cbae2dacd7d71c2871e92733289e7e3666f48e7"},
-    {url = "https://files.pythonhosted.org/packages/e5/4e/b2a54a21092ad2d5d70b0140e4080811bee06a39cc8481651579fe865c89/termcolor-2.2.0.tar.gz", hash = "sha256:dfc8ac3f350788f23b2947b3e6cfa5a53b630b612e6cd8965a015a776020b99a"},
 ]
 "tomli 2.0.1" = [
     {url = "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
