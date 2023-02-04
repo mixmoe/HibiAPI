@@ -43,7 +43,11 @@ repository = "https://github.com/mixmoe/HibiAPI"
 documentation = "https://github.com/mixmoe/HibiAPI/wiki"
 
 [project.optional-dependencies]
-scripts = ["pyqt6<7.0.0,>=6.4.0", "pyqt6-webengine<7.0.0,>=6.4.0"]
+scripts = [
+    "pyqt6<7.0.0,>=6.4.0",
+    "pyqt6-webengine<7.0.0,>=6.4.0",
+    "requests>=2.28.2",
+]
 
 [project.scripts]
 hibiapi = "hibiapi.__main__:cli"
