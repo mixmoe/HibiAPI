@@ -44,6 +44,14 @@ LOG_CONFIG = {
     },
 }
 
+RELOAD_CONFIG = {
+    "reload": True,
+    "reload_dirs": [
+        *map(str, [Path(root_file).parent.absolute(), CONFIG_DIR.absolute()])
+    ],
+    "reload_includes": ["*.py", "*.yml"],
+}
+
 
 cli = typer.Typer()
 
@@ -82,12 +90,8 @@ def run(
         access_log=False,
         log_config=LOG_CONFIG,
         workers=workers,
-        reload=reload,
-        reload_dirs=[
-            *map(str, [Path(root_file).parent.absolute(), CONFIG_DIR.absolute()])
-        ],
-        reload_includes=["*.py", "*.yml"],
         forwarded_allow_ips=Config["server"]["allowed-forward"].get(Optional[str]),
+        **(RELOAD_CONFIG if reload else {}),
     )
 
 
