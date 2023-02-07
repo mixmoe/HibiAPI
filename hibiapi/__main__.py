@@ -57,13 +57,14 @@ def run(
     workers: int = 1,
     reload: bool = False,
 ):
-    if ctx.invoked_subcommand is None:
+    if ctx.invoked_subcommand is not None:
+        return
+
+    if ctx.info_name != (func_name := run.__name__):
         logger.warning(
             f"Directly usage of command <r>{ctx.info_name}</r> is <b>deprecated</b>, "
-            f"please use <g>{ctx.info_name} run</g> instead."
+            f"please use <g>{ctx.info_name} {func_name}</g> instead."
         )
-    else:
-        return
 
     try:
         terminal_width, _ = os.get_terminal_size()
