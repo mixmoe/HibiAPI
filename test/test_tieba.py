@@ -41,10 +41,10 @@ def test_subpost_detail(client: TestClient):
         "subpost_detail", params={"tid": 1766018024, "pid": 22616319749}
     )
     assert response.status_code == 200
-    assert response.json()["error_code"] == "0"
+    assert int(response.json()["error_code"]) == 0
 
 
 def test_user_profile(client: TestClient):
     response = client.get("user_profile", params={"uid": 105525655})
     assert response.status_code == 200
-    assert response.json()["error_code"] == "0"
+    assert int(response.json()["error_code"]) == 0
