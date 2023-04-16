@@ -135,13 +135,13 @@ def test_illust_comment_replies(client: TestClient):
 
 
 def test_novel_comments(client: TestClient):
-    response = client.get("novel_comments", params={"id": 19205075})
+    response = client.get("novel_comments", params={"id": 12656898})
     assert response.status_code == 200
     assert response.json().get("comments")
 
 
 def test_novel_comment_replies(client: TestClient):
-    response = client.get("novel_comment_replies", params={"id": 41470327})
+    response = client.get("novel_comment_replies", params={"id": 42372000})
     assert response.status_code == 200
     assert response.json().get("comments")
 
