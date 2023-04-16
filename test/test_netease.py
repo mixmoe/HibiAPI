@@ -57,12 +57,14 @@ def test_song(client: TestClient):
 
 
 def test_song_multiple(client: TestClient):
-    response = client.get("song", params={"id": [657666, 657667, 77185]})
+    response = client.get(
+        "song", params={"id": (input_ids := [657666, 657667, 77185, 86369])}
+    )
     assert response.status_code == 200
     data = response.json()
 
     assert data["code"] == 200
-    assert len(data["data"]) == 3
+    assert len(data["data"]) == len(input_ids)
 
 
 def test_playlist(client: TestClient):
@@ -79,6 +81,12 @@ def test_lyric(client: TestClient):
 
 def test_mv(client: TestClient):
     response = client.get("mv", params={"id": 425588})
+    assert response.status_code == 200
+    assert response.json()["code"] == 200
+
+
+def test_mv_url(client: TestClient):
+    response = client.get("mv_url", params={"id": 425588})
     assert response.status_code == 200
     assert response.json()["code"] == 200
 
