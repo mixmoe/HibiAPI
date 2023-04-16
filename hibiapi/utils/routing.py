@@ -106,7 +106,7 @@ class EndpointRouter(SlashRouter):
             endpoint_method = getattr(endpoint, method_name or func.__name__)
             return await endpoint_method(**kwargs)
 
-        route_func.__signature__ = inspect.signature(route_func).replace(
+        route_func.__signature__ = inspect.signature(route_func).replace(  # type:ignore
             parameters=[
                 inspect.Parameter(
                     name="endpoint",
