@@ -55,6 +55,16 @@ class BitRateType(IntEnum):
 
 
 @enum_auto_doc
+class MVResolutionType(IntEnum):
+    """MV分辨率"""
+
+    QVGA = 240
+    VGA = 480
+    HD = 720
+    FHD = 1080
+
+
+@enum_auto_doc
 class RecordPeriodType(IntEnum):
     """听歌记录时段类型"""
 
@@ -178,7 +188,7 @@ class NeteaseEndpoint(BaseEndpoint):
 
     async def detail(self, *, id: List[int] = Query()):
         return await self.request(
-            "weapi/v3/song/detail",
+            "api/v3/song/detail",
             params={
                 "c": json.dumps(
                     [{"id": str(i)} for i in id],
@@ -230,6 +240,20 @@ class NeteaseEndpoint(BaseEndpoint):
             "api/v1/mv/detail",
             params={
                 "id": id,
+            },
+        )
+
+    async def mv_url(
+        self,
+        *,
+        id: int,
+        res: MVResolutionType = MVResolutionType.FHD,
+    ):
+        return await self.request(
+            "weapi/song/enhance/play/mv/url",
+            params={
+                "id": id,
+                "r": res,
             },
         )
 
