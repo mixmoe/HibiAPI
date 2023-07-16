@@ -42,6 +42,7 @@
   - 网易云音乐的音乐/MV 等信息获取和搜索
   - 百度贴吧的帖子内容的获取
   - [爱壁纸](https://adesk.com/)的横版和竖版壁纸获取
+  - 哔咔漫画的漫画信息获取和搜索
   - …
 
 - 该项目的前身是 Imjad API[^1]
@@ -83,6 +84,7 @@
 - [ ] ~~企鹅 FM~~ (似乎用的人不是很多)
 - [x] 百度贴吧
 - [x] 爱壁纸
+- [x] 哔咔漫画
 
 ## 部署指南
 
@@ -132,11 +134,9 @@
 
 - 百度贴吧: [`libsgh/tieba-api`](https://github.com/libsgh/tieba-api)
 
-### 贡献者们
+- 哔咔漫画：[`niuhuan/pica-rust`](https://github.com/niuhuan/pica-rust) [`abbeyokgo/PicaComic-Api`](https://github.com/abbeyokgo/PicaComic-Api)
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+### 贡献者们
 
 感谢这些为这个项目作出贡献的各位大佬:
 
