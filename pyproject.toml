@@ -1,6 +1,6 @@
 [project]
 name = "HibiAPI"
-version = "0.7.7"
+version = "0.8.0"
 description = "A program that implements easy-to-use APIs for a variety of commonly used sites"
 readme = "README.md"
 license = { text = "Apache-2.0" }
