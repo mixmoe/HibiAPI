@@ -19,8 +19,8 @@ def client():
 
 
 def test_illust(client: TestClient):
-    # https://www.pixiv.net/artworks/86742914
-    response = client.get("illust", params={"id": 86742914})
+    # https://www.pixiv.net/artworks/109862531
+    response = client.get("illust", params={"id": 109862531})
     assert response.status_code == 200
     assert response.json().get("illust")
 
