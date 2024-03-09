@@ -8,8 +8,9 @@ from typing import List, Literal, Optional, cast
 from PIL import Image
 from pydantic import AnyHttpUrl, BaseModel, Field, validate_arguments
 from pydantic.color import Color
-from qrcode import QRCode, constants
+from qrcode import constants
 from qrcode.image.pil import PilImage
+from qrcode.main import QRCode
 
 from hibiapi.utils.config import APIConfig
 from hibiapi.utils.decorators import ToAsync, enum_auto_doc
