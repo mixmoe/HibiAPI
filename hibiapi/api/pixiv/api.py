@@ -2,7 +2,7 @@ import json
 import re
 from datetime import date, timedelta
 from enum import Enum
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, Literal, Optional, Union, cast, overload
 
 from hibiapi.api.pixiv.constants import PixivConstants
 from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
@@ -131,6 +131,24 @@ class PixivEndpoints(BaseEndpoint):
         language_code, *_ = first_language.partition(";")
         return language_code.lower().strip()
 
+    @overload
+    async def request(
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: Literal[False] = False,
+    ) -> Dict[str, Any]: ...
+
+    @overload
+    async def request(
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: Literal[True],
+    ) -> str: ...
+
     @dont_route
     @catch_network_error
     async def request(
@@ -139,7 +157,7 @@ class PixivEndpoints(BaseEndpoint):
         *,
         params: Optional[Dict[str, Any]] = None,
         return_text: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> Union[Dict[str, Any], str]:
         headers = self.client.headers.copy()
 
         net_client = cast(PixivNetClient, self.client.net_client)
@@ -493,11 +511,8 @@ class PixivEndpoints(BaseEndpoint):
             return_text=True,
         )
 
-        novel_match = re.search(r"novel:\s({.+}),\s+isOwnWork", response)
-        if not novel_match:
-            return json.loads(response)
-        novel_json = novel_match.groups()[0].encode()
-        return json.loads(novel_json)
+        novel_match = re.search(r"novel:\s+(?P<data>{.+?}),\s+isOwnWork", response)
+        return json.loads(novel_match["data"] if novel_match else response)
 
     @cache_config(ttl=timedelta(hours=12))
     async def tags_novel(self):
@@ -558,9 +573,9 @@ class PixivEndpoints(BaseEndpoint):
 
     # 人气直播列表
     async def live_list(self, *, page: int = 1, size: int = 30):
-        params = {"list_type": "popular"}
-        if page > 1:
-            params["offset"] = (page - 1) * size
+        params = {"list_type": "popular", "offset": (page - 1) * size}
+        if not params["offset"]:
+            del params["offset"]
         return await self.request("v1/live/list", params=params)
 
     # 相关小说作品
