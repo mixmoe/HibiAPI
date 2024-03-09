@@ -1,3 +1,5 @@
+import json
+import re
 from datetime import date, timedelta
 from enum import Enum
 from typing import Any, Dict, Optional, cast
@@ -7,10 +9,7 @@ from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
 from hibiapi.utils.cache import cache_config
 from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
-
-import json
-import re
+from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers, response_headers
 
 
 @enum_auto_doc
@@ -270,7 +269,7 @@ class PixivEndpoints(BaseEndpoint):
         page: int = 1,
         size: int = 30,
         include_translated_tag_results: bool = True,
-        search_ai_type: int = None,  # 0: 过滤 AI 生成作品, 1: 反之
+        search_ai_type: bool = True,  # 搜索结果是否包含AI作品
     ):
         return await self.request(
             "v1/search/illust",
@@ -281,7 +280,7 @@ class PixivEndpoints(BaseEndpoint):
                 "duration": duration,
                 "offset": (page - 1) * size,
                 "include_translated_tag_results": include_translated_tag_results,
-                "search_ai_type": search_ai_type,
+                "search_ai_type": 1 if search_ai_type else 0,
             },
         )
 
@@ -488,18 +487,20 @@ class PixivEndpoints(BaseEndpoint):
         response = await self.request(
             "webview/v2/novel",
             params={
-              "id": id,
-              "viewer_version": "20221031_ai",
+                "id": id,
+                "viewer_version": "20221031_ai",
             },
             return_text=True,
         )
         if raw:
-            # 直接返回 HTML，但是返回头 content-type 还是 application/json
-            # 可能需要修改为 text/html
+            # 直接返回 HTML
+            response_headers.get().setdefault("content-type", "text/html; charset=UTF-8")
             return response
 
         try:
-            novel_json = re.search(r"novel:\s({.+}),\s+isOwnWork", response).groups()[0].encode()
+            novel_json = (
+                re.search(r"novel:\s({.+}),\s+isOwnWork", response).groups()[0].encode()
+            )
             return json.loads(novel_json)
         except Exception as e:
             return {"error": "Parsing novel error: %s" % e}
@@ -519,7 +520,7 @@ class PixivEndpoints(BaseEndpoint):
         duration: Optional[SearchDurationType] = None,
         page: int = 1,
         size: int = 30,
-        search_ai_type: int = None,  # 0: 过滤 AI 生成作品, 1: 反之
+        search_ai_type: bool = True,  # 搜索结果是否包含AI作品
     ):
         return await self.request(
             "/v1/search/novel",
@@ -531,7 +532,7 @@ class PixivEndpoints(BaseEndpoint):
                 "include_translated_tag_results": include_translated_tag_results,
                 "duration": duration,
                 "offset": (page - 1) * size,
-                "search_ai_type": search_ai_type,
+                "search_ai_type": 1 if search_ai_type else 0,
             },
         )
 
@@ -586,28 +587,18 @@ class PixivEndpoints(BaseEndpoint):
     async def illust_series(self, *, id: int, page: int = 1, size: int = 30):
         return await self.request(
             "v1/illust/series",
-            params={
-                "illust_series_id": id,
-                "offset": (page - 1) * size
-            },
+            params={"illust_series_id": id, "offset": (page - 1) * size},
         )
 
     # 用户的漫画系列
     async def member_illust_series(self, *, id: int, page: int = 1, size: int = 30):
         return await self.request(
             "v1/user/illust-series",
-            params={
-                "user_id": id,
-                "offset": (page - 1) * size
-            },
+            params={"user_id": id, "offset": (page - 1) * size},
         )
 
     # 用户的小说系列
     async def member_novel_series(self, *, id: int, page: int = 1, size: int = 30):
         return await self.request(
-            "v1/user/novel-series",
-            params={
-                "user_id": id,
-                "offset": (page - 1) * size
-            }
+            "v1/user/novel-series", params={"user_id": id, "offset": (page - 1) * size}
         )
