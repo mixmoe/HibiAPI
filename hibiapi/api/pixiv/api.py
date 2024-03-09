@@ -479,7 +479,7 @@ class PixivEndpoints(BaseEndpoint):
     # 已被官方移除，调用 webview/v2/novel 作兼容处理
     async def novel_text(self, *, id: int):
         # return await self.request("/v1/novel/text", params={"novel_id": id})
-        response = await self.webview_novel(id=id, raw=False)
+        response = await self.webview_novel(id=id)
         return {"novel_text": response["text"] or ""}
 
     # 获取小说 HTML 后解析 JSON
