@@ -53,10 +53,9 @@ scripts = [
 hibiapi = "hibiapi.__main__:cli"
 
 [build-system]
-requires = ["pdm-pep517>=1.0.0"]
-build-backend = "pdm.pep517.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
-[tool.pdm]
 [tool.pdm.dev-dependencies]
 dev = [
     "pytest<8.0.0,>=7.1.2",
