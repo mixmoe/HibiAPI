@@ -59,14 +59,12 @@ build-backend = "pdm.pep517.api"
 [tool.pdm]
 [tool.pdm.dev-dependencies]
 dev = [
-    "black<23.0,>=22.6",
-    "flake8<6.0.0,>=5.0.4",
     "pytest<8.0.0,>=7.1.2",
-    "isort<6.0.0,>=5.10.1",
     "pytest-httpserver<2.0.0,>=1.0.4",
     "pytest-cov<4.0.0,>=3.0.0",
     "pytest-benchmark<5.0.0,>=4.0.0",
     "pytest-pretty>=1.1.0",
+    "ruff>=0.3.2",
 ]
 
 [tool.pdm.build]
@@ -79,10 +77,21 @@ test = """pytest \
     --cov-report term-missing \
     ./test"""
 start = "hibiapi run"
-sort-imports = "isort ."
-format-code = "black ."
-format = { composite = ["sort-imports", "format-code"] }
+format = "ruff --fix"
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
+[tool.ruff]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+target-version = "py38"
