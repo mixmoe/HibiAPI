@@ -9,7 +9,7 @@ from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
 from hibiapi.utils.cache import cache_config
 from hibiapi.utils.decorators import enum_auto_doc
 from hibiapi.utils.net import catch_network_error
-from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers, response_headers
+from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 
 
 @enum_auto_doc
@@ -483,7 +483,7 @@ class PixivEndpoints(BaseEndpoint):
         return {"novel_text": response["text"] or ""}
 
     # 获取小说 HTML 后解析 JSON
-    async def webview_novel(self, *, id: int, raw: bool = False):
+    async def webview_novel(self, *, id: int):
         response = await self.request(
             "webview/v2/novel",
             params={
@@ -492,18 +492,12 @@ class PixivEndpoints(BaseEndpoint):
             },
             return_text=True,
         )
-        if raw:
-            # 直接返回 HTML
-            response_headers.get().setdefault("content-type", "text/html; charset=UTF-8")
-            return response
 
-        try:
-            novel_json = (
-                re.search(r"novel:\s({.+}),\s+isOwnWork", response).groups()[0].encode()
-            )
-            return json.loads(novel_json)
-        except Exception as e:
-            return {"error": "Parsing novel error: %s" % e}
+        novel_match = re.search(r"novel:\s({.+}),\s+isOwnWork", response)
+        if not novel_match:
+            return json.loads(response)
+        novel_json = novel_match.groups()[0].encode()
+        return json.loads(novel_json)
 
     @cache_config(ttl=timedelta(hours=12))
     async def tags_novel(self):
