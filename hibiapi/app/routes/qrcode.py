@@ -53,7 +53,7 @@ async def qrcode_api(
         )
         if encode == ReturnEncode.raw
         else Response(
-            content="{fun}({json})".format(json=qr.json(), fun=fun),
+            content=f"{fun}({qr.json()})",
             media_type="text/javascript",
         )
         if encode == ReturnEncode.jsc
