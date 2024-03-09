@@ -178,6 +178,40 @@ def test_novel_text(client: TestClient):
     assert response.status_code == 200
     assert response.json().get("novel_text")
 
+def test_webview_novel(client: TestClient):
+    response = client.get("webview_novel", params={"id": 19791013})
+    assert response.status_code == 200
+    assert response.json().get("text")
+
+def test_live_list(client: TestClient):
+    response = client.get("live_list")
+    assert response.status_code == 200
+    assert response.json().get("lives")
+
+def test_related_novel(client: TestClient):
+    response = client.get("related_novel", params={"id": 19791013})
+    assert response.status_code == 200
+    assert response.json().get("novels")
+
+def test_related_member(client: TestClient):
+    response = client.get("related_member", params={"id": 10109777})
+    assert response.status_code == 200
+    assert response.json().get("user_previews")
+
+def test_illust_series(client: TestClient):
+    response = client.get("illust_series", params={"id": 218893})
+    assert response.status_code == 200
+    assert response.json().get("illust_series_detail")
+
+def test_member_illust_series(client: TestClient):
+    response = client.get("member_illust_series", params={"id": 4087934})
+    assert response.status_code == 200
+    assert response.json().get("illust_series_details")
+
+def test_member_novel_series(client: TestClient):
+    response = client.get("member_novel_series", params={"id": 86832559})
+    assert response.status_code == 200
+    assert response.json().get("novel_series_details")
 
 def test_tags_novel(client: TestClient):
     response = client.get("tags_novel")
