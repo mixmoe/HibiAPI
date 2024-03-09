@@ -12,6 +12,7 @@ from hibiapi.utils.routing import BaseEndpoint, dont_route, request_headers
 import json
 import re
 
+
 @enum_auto_doc
 class IllustType(str, Enum):
     """画作类型"""
@@ -134,7 +135,11 @@ class PixivEndpoints(BaseEndpoint):
     @dont_route
     @catch_network_error
     async def request(
-        self, endpoint: str, *, params: Optional[Dict[str, Any]] = None, return_text: bool = False
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: bool = False,
     ) -> Dict[str, Any]:
         headers = self.client.headers.copy()
 
@@ -265,7 +270,7 @@ class PixivEndpoints(BaseEndpoint):
         page: int = 1,
         size: int = 30,
         include_translated_tag_results: bool = True,
-        search_ai_type: int = None, # 0: 过滤 AI 生成作品, 1: 反之
+        search_ai_type: int = None,  # 0: 过滤 AI 生成作品, 1: 反之
     ):
         return await self.request(
             "v1/search/illust",
@@ -476,7 +481,7 @@ class PixivEndpoints(BaseEndpoint):
     async def novel_text(self, *, id: int):
         # return await self.request("/v1/novel/text", params={"novel_id": id})
         response = await self.webview_novel(id=id, raw=False)
-        return { "novel_text": response["text"] or "" }
+        return {"novel_text": response["text"] or ""}
 
     # 获取小说 HTML 后解析 JSON
     async def webview_novel(self, *, id: int, raw: bool = False):
@@ -489,12 +494,15 @@ class PixivEndpoints(BaseEndpoint):
             return_text=True,
         )
         if raw:
-          return response # 直接返回 HTML，但是返回头 content-type 还是 application/json，可能需要修改为 text/html
+            # 直接返回 HTML，但是返回头 content-type 还是 application/json
+            # 可能需要修改为 text/html
+            return response
+
         try:
-          novel_json = re.search(r"novel:\s({.+}),\s+isOwnWork", response).groups()[0].encode()
-          return json.loads(novel_json)
+            novel_json = re.search(r"novel:\s({.+}),\s+isOwnWork", response).groups()[0].encode()
+            return json.loads(novel_json)
         except Exception as e:
-          return { "error": "Parsing novel error: %s" % e }
+            return {"error": "Parsing novel error: %s" % e}
 
     @cache_config(ttl=timedelta(hours=12))
     async def tags_novel(self):
@@ -511,7 +519,7 @@ class PixivEndpoints(BaseEndpoint):
         duration: Optional[SearchDurationType] = None,
         page: int = 1,
         size: int = 30,
-        search_ai_type: int = None, # 0: 过滤 AI 生成作品, 1: 反之
+        search_ai_type: int = None,  # 0: 过滤 AI 生成作品, 1: 反之
     ):
         return await self.request(
             "/v1/search/novel",
@@ -555,7 +563,7 @@ class PixivEndpoints(BaseEndpoint):
 
     # 人气直播列表
     async def live_list(self, *, page: int = 1, size: int = 30):
-        params = { "list_type": "popular" }
+        params = {"list_type": "popular"}
         if page > 1:
             params["offset"] = (page - 1) * size
         return await self.request("v1/live/list", params=params)
@@ -576,12 +584,30 @@ class PixivEndpoints(BaseEndpoint):
 
     # 漫画系列
     async def illust_series(self, *, id: int, page: int = 1, size: int = 30):
-        return await self.request("v1/illust/series", params={"illust_series_id": id, "offset": (page - 1) * size})
+        return await self.request(
+            "v1/illust/series",
+            params={
+                "illust_series_id": id,
+                "offset": (page - 1) * size
+            },
+        )
 
     # 用户的漫画系列
     async def member_illust_series(self, *, id: int, page: int = 1, size: int = 30):
-        return await self.request("v1/user/illust-series", params={"user_id": id, "offset": (page - 1) * size})
+        return await self.request(
+            "v1/user/illust-series",
+            params={
+                "user_id": id,
+                "offset": (page - 1) * size
+            },
+        )
 
     # 用户的小说系列
     async def member_novel_series(self, *, id: int, page: int = 1, size: int = 30):
-        return await self.request("v1/user/novel-series", params={"user_id": id, "offset": (page - 1) * size})
+        return await self.request(
+            "v1/user/novel-series",
+            params={
+                "user_id": id,
+                "offset": (page - 1) * size
+            }
+        )
