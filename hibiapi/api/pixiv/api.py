@@ -1,6 +1,8 @@
+import json
+import re
 from datetime import date, timedelta
 from enum import Enum
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, Literal, Optional, Union, cast, overload
 
 from hibiapi.api.pixiv.constants import PixivConstants
 from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
@@ -129,11 +131,33 @@ class PixivEndpoints(BaseEndpoint):
         language_code, *_ = first_language.partition(";")
         return language_code.lower().strip()
 
+    @overload
+    async def request(
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: Literal[False] = False,
+    ) -> Dict[str, Any]: ...
+
+    @overload
+    async def request(
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: Literal[True],
+    ) -> str: ...
+
     @dont_route
     @catch_network_error
     async def request(
-        self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        self,
+        endpoint: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        return_text: bool = False,
+    ) -> Union[Dict[str, Any], str]:
         headers = self.client.headers.copy()
 
         net_client = cast(PixivNetClient, self.client.net_client)
@@ -155,6 +179,8 @@ class PixivEndpoints(BaseEndpoint):
             ),
             headers=headers,
         )
+        if return_text:
+            return response.text
         return response.json()
 
     @cache_config(ttl=timedelta(days=3))
@@ -261,6 +287,7 @@ class PixivEndpoints(BaseEndpoint):
         page: int = 1,
         size: int = 30,
         include_translated_tag_results: bool = True,
+        search_ai_type: bool = True,  # 搜索结果是否包含AI作品
     ):
         return await self.request(
             "v1/search/illust",
@@ -271,6 +298,7 @@ class PixivEndpoints(BaseEndpoint):
                 "duration": duration,
                 "offset": (page - 1) * size,
                 "include_translated_tag_results": include_translated_tag_results,
+                "search_ai_type": 1 if search_ai_type else 0,
             },
         )
 
@@ -466,8 +494,25 @@ class PixivEndpoints(BaseEndpoint):
     async def novel_detail(self, *, id: int):
         return await self.request("/v2/novel/detail", params={"novel_id": id})
 
+    # 已被官方移除，调用 webview/v2/novel 作兼容处理
     async def novel_text(self, *, id: int):
-        return await self.request("/v1/novel/text", params={"novel_id": id})
+        # return await self.request("/v1/novel/text", params={"novel_id": id})
+        response = await self.webview_novel(id=id)
+        return {"novel_text": response["text"] or ""}
+
+    # 获取小说 HTML 后解析 JSON
+    async def webview_novel(self, *, id: int):
+        response = await self.request(
+            "webview/v2/novel",
+            params={
+                "id": id,
+                "viewer_version": "20221031_ai",
+            },
+            return_text=True,
+        )
+
+        novel_match = re.search(r"novel:\s+(?P<data>{.+?}),\s+isOwnWork", response)
+        return json.loads(novel_match["data"] if novel_match else response)
 
     @cache_config(ttl=timedelta(hours=12))
     async def tags_novel(self):
@@ -484,6 +529,7 @@ class PixivEndpoints(BaseEndpoint):
         duration: Optional[SearchDurationType] = None,
         page: int = 1,
         size: int = 30,
+        search_ai_type: bool = True,  # 搜索结果是否包含AI作品
     ):
         return await self.request(
             "/v1/search/novel",
@@ -495,6 +541,7 @@ class PixivEndpoints(BaseEndpoint):
                 "include_translated_tag_results": include_translated_tag_results,
                 "duration": duration,
                 "offset": (page - 1) * size,
+                "search_ai_type": 1 if search_ai_type else 0,
             },
         )
 
@@ -522,4 +569,45 @@ class PixivEndpoints(BaseEndpoint):
     async def novel_new(self, *, max_novel_id: Optional[int] = None):
         return await self.request(
             "/v1/novel/new", params={"max_novel_id": max_novel_id}
+        )
+
+    # 人气直播列表
+    async def live_list(self, *, page: int = 1, size: int = 30):
+        params = {"list_type": "popular", "offset": (page - 1) * size}
+        if not params["offset"]:
+            del params["offset"]
+        return await self.request("v1/live/list", params=params)
+
+    # 相关小说作品
+    async def related_novel(self, *, id: int, page: int = 1, size: int = 30):
+        return await self.request(
+            "v1/novel/related",
+            params={
+                "novel_id": id,
+                "offset": (page - 1) * size,
+            },
+        )
+
+    # 相关用户
+    async def related_member(self, *, id: int):
+        return await self.request("v1/user/related", params={"seed_user_id": id})
+
+    # 漫画系列
+    async def illust_series(self, *, id: int, page: int = 1, size: int = 30):
+        return await self.request(
+            "v1/illust/series",
+            params={"illust_series_id": id, "offset": (page - 1) * size},
+        )
+
+    # 用户的漫画系列
+    async def member_illust_series(self, *, id: int, page: int = 1, size: int = 30):
+        return await self.request(
+            "v1/user/illust-series",
+            params={"user_id": id, "offset": (page - 1) * size},
+        )
+
+    # 用户的小说系列
+    async def member_novel_series(self, *, id: int, page: int = 1, size: int = 30):
+        return await self.request(
+            "v1/user/novel-series", params={"user_id": id, "offset": (page - 1) * size}
         )
