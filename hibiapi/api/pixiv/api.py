@@ -82,7 +82,7 @@ class SearchNovelModeType(str, Enum):
     """标签完全一致"""
     text = "text"
     """正文"""
-    keywords = "keywords"
+    keyword = "keyword"
     """关键词"""
 
 
