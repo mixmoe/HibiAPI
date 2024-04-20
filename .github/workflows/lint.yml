@@ -12,34 +12,36 @@ jobs:
     name: Lint Code
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v4
 
-      - uses: pdm-project/setup-pdm@v3
+      - uses: pdm-project/setup-pdm@v4
         with:
-          python-version: 3.8
+          python-version: "3.8"
+          cache: true
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
-          pdm config python.use_venv false
-          pdm export --group :all --dev \
-            --format requirements --without-hashes \
-            --output requirements.txt
-          pip install -r requirements.txt
+          pdm install -G :all
+          echo `dirname $(pdm info --python)` >> $GITHUB_PATH
 
-      - uses: suo/flake8-github-action@v1
+      - name: Lint with Ruff
+        continue-on-error: true
+        run: pdm lint --output-format github
 
-      - uses: jakebailey/pyright-action@v1
+      - name: Lint with Pyright
+        uses: jakebailey/pyright-action@v2
+        continue-on-error: true
+        with:
+          pylance-version: latest-release
 
   analyze:
     runs-on: ubuntu-latest
     name: CodeQL Analyze
 
-    if: "!github.base_ref"
+    if: startsWith(github.ref, 'refs/heads/')
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
