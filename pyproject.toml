@@ -5,7 +5,7 @@ description = "A program that implements easy-to-use APIs for a variety of commo
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "mixmoe", email = "admin@obfs.dev" }]
-requires-python = ">=3.8,<4.0"
+requires-python = ">=3.9,<4.0"
 dependencies = [
     "fastapi<1.0.0,>=0.85.1",
     "httpx[http2]<0.24.0,>=0.21.3",
@@ -93,4 +93,4 @@ lint.select = [
     # isort
     "I",
 ]
-target-version = "py38"
+target-version = "py39"
