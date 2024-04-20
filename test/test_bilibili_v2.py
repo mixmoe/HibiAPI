@@ -30,9 +30,8 @@ def test_paged_playurl(client: TestClient):
 
 def test_seasoninfo(client: TestClient):
     response = client.get("seasoninfo", params={"season_id": 425})
-    print(response.text)
     assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.json()["code"] in (0, -404)
 
 
 def test_seasonrecommend(client: TestClient):

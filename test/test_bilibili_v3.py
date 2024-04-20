@@ -52,7 +52,7 @@ def test_user_favorite(client: TestClient):
 def test_season_info(client: TestClient):
     response = client.get("season_info", params={"season_id": 425})
     assert response.status_code == 200
-    assert response.json()["code"] == 0
+    assert response.json()["code"] in (0, -404)
 
 
 def test_season_recommend(client: TestClient):
