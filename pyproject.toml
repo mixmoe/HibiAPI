@@ -7,20 +7,20 @@ license = { text = "Apache-2.0" }
 authors = [{ name = "mixmoe", email = "admin@obfs.dev" }]
 requires-python = ">=3.9,<4.0"
 dependencies = [
-    "fastapi<1.0.0,>=0.85.1",
-    "httpx[http2]<0.24.0,>=0.21.3",
-    "uvicorn[standard]<0.20,>=0.14",
-    "confuse<2.0.0,>=1.4.0",
-    "loguru<1.0.0,>=0.6.0",
-    "python-dotenv<1.0.0,>=0.21.0",
-    "qrcode[pil]<8.0,>=6.1",
-    "pycryptodomex<4.0.0,>=3.10.1",
-    "sentry-sdk<2.0.0,>=1.10.1",
+    "fastapi>=0.110.2",
+    "httpx[http2]>=0.27.0",
+    "uvicorn[standard]>=0.29.0",
+    "confuse>=2.0.1",
+    "loguru>=0.7.2",
+    "python-dotenv>=1.0.1",
+    "qrcode[pil]>=7.4.2",
+    "pycryptodomex>=3.20.0",
+    "sentry-sdk>=1.45.0",
     "pydantic<2.0.0,>=1.9.0",
-    "python-multipart<1.0.0,>=0.0.5",
-    "cashews[diskcache,redis]<5.0,>=3.3",
-    "typing-extensions>=3.10",
-    "typer[all]<1.0.0,>=0.6.1",
+    "python-multipart>=0.0.9",
+    "cashews[diskcache,redis]>=7.0.2",
+    "typing-extensions>=4.11.0",
+    "typer[all]>=0.12.3",
     "fastapi<1.0.0,>=0.85.1",
     "httpx[http2]<0.24.0,>=0.21.3",
     "uvicorn[standard]<0.20,>=0.14",
@@ -43,11 +43,7 @@ repository = "https://github.com/mixmoe/HibiAPI"
 documentation = "https://github.com/mixmoe/HibiAPI/wiki"
 
 [project.optional-dependencies]
-scripts = [
-    "pyqt6<7.0.0,>=6.4.0",
-    "pyqt6-webengine<7.0.0,>=6.4.0",
-    "requests>=2.28.2",
-]
+scripts = ["pyqt6>=6.6.1", "pyqt6-webengine>=6.6.0", "requests>=2.31.0"]
 
 [project.scripts]
 hibiapi = "hibiapi.__main__:cli"
@@ -58,12 +54,12 @@ build-backend = "pdm.backend"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "pytest<8.0.0,>=7.1.2",
-    "pytest-httpserver<2.0.0,>=1.0.4",
-    "pytest-cov<4.0.0,>=3.0.0",
-    "pytest-benchmark<5.0.0,>=4.0.0",
-    "pytest-pretty>=1.1.0",
-    "ruff>=0.3.2",
+    "pytest>=8.1.1",
+    "pytest-httpserver>=1.0.10",
+    "pytest-cov>=5.0.0",
+    "pytest-benchmark>=4.0.0",
+    "pytest-pretty>=1.2.0",
+    "ruff>=0.4.1",
 ]
 
 [tool.pdm.build]
