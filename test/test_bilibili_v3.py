@@ -31,24 +31,6 @@ def test_video_address(client: TestClient):
         pytest.xfail(reason=response.text)
 
 
-def test_video_recommend(client: TestClient):
-    response = client.get("video_recommend")
-    assert response.status_code == 200
-    assert response.json()["list"]
-
-
-def test_video_dynamic(client: TestClient):
-    response = client.get("video_dynamic")
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_video_ranking(client: TestClient):
-    response = client.get("video_ranking")
-    assert response.status_code == 200
-    assert response.json()["rank"]
-
-
 def test_user_info(client: TestClient):
     response = client.get("user_info", params={"uid": 2})
     assert response.status_code == 200
@@ -87,12 +69,6 @@ def test_season_episode(client: TestClient):
 
 def test_season_timeline(client: TestClient):
     response = client.get("season_timeline")
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_season_ranking(client: TestClient):
-    response = client.get("season_ranking")
     assert response.status_code == 200
     assert response.json()["code"] == 0
 

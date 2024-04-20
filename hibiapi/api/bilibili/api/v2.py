@@ -1,14 +1,11 @@
 from enum import Enum
 from functools import wraps
-from typing import Callable, Coroutine, Optional, TypeVar, Union
+from typing import Callable, Coroutine, Optional, TypeVar
 
 from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,
     CommentSortType,
     CommentType,
-    RankBangumiType,
-    RankContentType,
-    RankDurationType,
     TimelineType,
     VideoFormatType,
     VideoQualityType,
@@ -126,31 +123,6 @@ class BilibiliEndpointV2(BaseEndpoint, cache_endpoints=False):
                 page=page,
                 pagesize=pagesize,
             )
-
-    async def rank(
-        self,
-        *,
-        content: Union[RankContentType, RankBangumiType] = RankContentType.FULL_SITE,
-        duration: RankDurationType = RankDurationType.THREE_DAY,
-        new: bool = True,
-    ):
-        if isinstance(content, int):
-            return await self.base.rank_list(
-                content=content,
-                duration=duration,
-                new=new,
-            )
-        else:
-            return await self.base.rank_list_bangumi(
-                site=content,
-                duration=duration,
-            )
-
-    async def typedynamic(self):
-        return await self.base.type_dynamic()
-
-    async def recommend(self):
-        return await self.base.recommend()
 
     async def timeline(
         self, *, type: TimelineType = TimelineType.GLOBAL

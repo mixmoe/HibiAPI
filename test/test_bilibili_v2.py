@@ -30,6 +30,7 @@ def test_paged_playurl(client: TestClient):
 
 def test_seasoninfo(client: TestClient):
     response = client.get("seasoninfo", params={"season_id": 425})
+    print(response.text)
     assert response.status_code == 200
     assert response.json()["code"] == 0
 
@@ -48,6 +49,7 @@ def test_comments(client: TestClient):
 
 def test_season_comments(client: TestClient):
     response = client.get("comments", params={"season_id": 425, "index": 1})
+    print(response.text)
     if response.status_code == 200:
         assert response.json()["code"] == 0
     elif response.status_code == 400:
@@ -82,35 +84,6 @@ def test_search_hot(client: TestClient):
     assert response.json()["code"] == 0
 
 
-def test_rank(client: TestClient):
-    from hibiapi.api.bilibili import RankContentType
-
-    for content in RankContentType.__members__.values():
-        response = client.get("rank", params={"content": content.value})
-        assert response.status_code == 200
-        assert response.json()["rank"]
-
-
-def test_rank_bangumi(client: TestClient):
-    from hibiapi.api.bilibili import RankBangumiType
-
-    response = client.get("rank", params={"content": RankBangumiType.CN.value})
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_typedynamic(client: TestClient):
-    response = client.get("typedynamic")
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_recommend(client: TestClient):
-    response = client.get("recommend")
-    assert response.status_code == 200
-    assert response.json()["list"]
-
-
 def test_timeline(client: TestClient):
     from hibiapi.api.bilibili import TimelineType
 
@@ -135,11 +108,3 @@ def test_archive(client: TestClient):
 def test_favlist(client: TestClient):
     # TODO:add test case
     pass
-
-
-def test_rank_redirect(client: TestClient):
-    response = client.get("/bilibili/rank")
-
-    assert response.status_code == 200
-    assert response.history
-    assert response.history[0].status_code == 301

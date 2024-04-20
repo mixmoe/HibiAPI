@@ -2,9 +2,6 @@ from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,
     CommentSortType,
     CommentType,
-    RankBangumiType,
-    RankContentType,
-    RankDurationType,
     TimelineType,
     VideoFormatType,
     VideoQualityType,
@@ -34,23 +31,6 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
             cid=cid,
             quality=quality,
             type=type,
-        )
-
-    async def video_recommend(self):
-        return await self.base.recommend()
-
-    async def video_dynamic(self):
-        return await self.base.type_dynamic()
-
-    async def video_ranking(
-        self,
-        *,
-        type: RankContentType = RankContentType.FULL_SITE,
-        duration: RankDurationType = RankDurationType.THREE_DAY,
-    ):
-        return await self.base.rank_list(
-            content=type,
-            duration=duration,
         )
 
     async def user_info(self, *, uid: int, page: int = 1, size: int = 10):
@@ -86,17 +66,6 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
 
     async def season_timeline(self, *, type: TimelineType = TimelineType.GLOBAL):
         return await self.base.timeline(type=type)
-
-    async def season_ranking(
-        self,
-        *,
-        type: RankBangumiType = RankBangumiType.GLOBAL,
-        duration: RankDurationType = RankDurationType.THREE_DAY,
-    ):
-        return await self.base.rank_list_bangumi(
-            site=type,
-            duration=duration,
-        )
 
     async def search(self, *, keyword: str, page: int = 1, size: int = 20):
         return await self.base.search(

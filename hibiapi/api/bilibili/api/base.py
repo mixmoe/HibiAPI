@@ -76,64 +76,6 @@ class VideoFormatType(IntEnum):
     DASH = 16
 
 
-@enum_auto_doc
-class RankBangumiType(str, Enum):
-    """番剧排行榜类型"""
-
-    CN = "cn"
-    """国产动画"""
-    GLOBAL = "global"
-    """番剧"""
-
-
-@enum_auto_doc
-class RankContentType(IntEnum):
-    """视频排行榜内容类型"""
-
-    FULL_SITE = 0
-    """全站"""
-    DOUGA = 1
-    """动画"""
-    GUOCHUANG = 168
-    """国创相关"""
-    MUSIC = 3
-    """音乐"""
-    DANCE = 129
-    """舞蹈"""
-    GAME = 4
-    """游戏"""
-    TECHNOLOGY = 36
-    """科技"""
-    LIFE = 160
-    """生活"""
-    KICHIKU = 119
-    """鬼畜"""
-    FASHION = 155
-    """时尚"""
-    INFORMATION = 165
-    """广告"""
-    ENT = 5
-    """娱乐"""
-    MOVIE = 23
-    """电影"""
-    TV = 11
-    """电视剧"""
-
-
-@enum_auto_doc
-class RankDurationType(IntEnum):
-    """排行榜时间段类型"""
-
-    DAILY = 1
-    """日排行"""
-    THREE_DAY = 3
-    """三日排行"""
-    WEEKLY = 7
-    """周排行"""
-    MONTHLY = 30
-    """月排行"""
-
-
 class BaseBilibiliEndpoint(BaseEndpoint):
     def _sign(self, base: str, endpoint: str, params: Dict[str, Any]) -> URL:
         params.update(
@@ -165,8 +107,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         *,
         sign: bool = True,
         params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
-        ...
+    ) -> Dict[str, Any]: ...
 
     @overload
     async def request(
@@ -176,8 +117,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         *,
         sign: bool = True,
         params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
-        ...
+    ) -> Dict[str, Any]: ...
 
     @dont_route
     @catch_network_error
@@ -317,8 +257,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
 
     async def season_info(self, *, season_id: int):
         return await self.request(
-            "api/season_v5",
-            "bgm",
+            "pgc/view/web/season",
+            "api",
             params={
                 "season_id": season_id,
             },
@@ -365,49 +305,6 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             },
         )
 
-    async def rank_list_bangumi(
-        self,
-        *,
-        site: RankBangumiType = RankBangumiType.GLOBAL,
-        duration: RankDurationType = RankDurationType.THREE_DAY,
-    ):
-        return await self.request(
-            "jsonp/season_rank_list/{site}/{duration}.ver",
-            "bgm",
-            sign=False,
-            params={
-                "duration": duration,
-                "site": site,
-            },
-        )
-
-    async def rank_list(
-        self,
-        content: RankContentType = RankContentType.FULL_SITE,
-        duration: RankDurationType = RankDurationType.THREE_DAY,
-        new: bool = True,
-    ):
-        return await self.request(
-            "index/rank/all-{new_post}{duration}-{content}.json",
-            "main",
-            sign=False,
-            params={
-                "new_post": "" if new else "0",
-                "duration": duration,
-                "content": content,
-            },
-        )
-
-    async def type_dynamic(self):
-        return await self.request(
-            "typedynamic/index",
-            "api",
-            sign=False,
-            params={
-                "type": "json",
-            },
-        )
-
     async def timeline(self, *, type: TimelineType = TimelineType.GLOBAL):
         return await self.request(
             "web_api/timeline_{type}",
@@ -417,9 +314,6 @@ class BaseBilibiliEndpoint(BaseEndpoint):
                 "type": type,
             },
         )
-
-    async def recommend(self):
-        return await self.request("index/recommend.json", "main", sign=False)
 
     async def suggest(self, *, keyword: str):  # NOTE: this endpoint is not used
         return await self.request(
