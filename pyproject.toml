@@ -76,10 +76,10 @@ test = """pytest \
     --cov-report term-missing \
     ./test"""
 start = "hibiapi run"
-format = "ruff --fix"
+lint = "ruff check"
 
 [tool.ruff]
-select = [
+lint.select = [
     # pycodestyle
     "E",
     # Pyflakes
