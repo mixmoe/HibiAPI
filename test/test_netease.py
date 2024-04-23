@@ -135,7 +135,7 @@ def test_user_playlist(client: TestClient):
 
 
 def test_search_redirect(client: TestClient):
-    response = client.get("/netease/search", params={"s": "test"})
+    response = client.get("http://testserver/netease/search", params={"s": "test"})
 
     assert response.status_code == 200
     assert response.history

@@ -17,7 +17,7 @@ def client():
         yield client
 
 
-def test_qrcode_generate(client: TestClient):
+def test_qrcode_generate(client: TestClient, in_stress: bool = False):
     response = client.get(
         "qrcode/",
         params={
@@ -27,7 +27,9 @@ def test_qrcode_generate(client: TestClient):
     )
     assert response.status_code == 200
     assert "image/png" in response.headers["content-type"]
-    return True
+
+    if in_stress:
+        return True
 
 
 def test_qrcode_all(client: TestClient):
@@ -49,14 +51,14 @@ def test_qrcode_all(client: TestClient):
 def test_qrcode_stress(client: TestClient, benchmark: BenchmarkFixture):
     assert benchmark.pedantic(
         test_qrcode_generate,
-        args=(client,),
+        args=(client, True),
         rounds=50,
         iterations=3,
     )
 
 
 def test_qrcode_redirect(client: TestClient):
-    response = client.get("/qrcode/", params={"text": "Hello, World!"})
+    response = client.get("http://testserver/qrcode/", params={"text": "Hello, World!"})
 
     assert response.status_code == 200
 

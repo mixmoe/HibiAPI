@@ -269,7 +269,7 @@ def test_request_cache(client: TestClient, benchmark: BenchmarkFixture):
 
 
 def test_rank_redirect(client: TestClient):
-    response = client.get("/pixiv/rank")
+    response = client.get("http://testserver/pixiv/rank")
 
     assert response.status_code == 200
     assert response.history

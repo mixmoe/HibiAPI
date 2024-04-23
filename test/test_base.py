@@ -14,15 +14,16 @@ def client():
         yield client
 
 
-def test_openapi(client: TestClient):
+def test_openapi(client: TestClient, in_stress: bool = False):
     response = client.get("/openapi.json")
     assert response.status_code == 200
     assert response.json()
 
-    return True
+    if in_stress:
+        return True
 
 
-def test_doc_page(client: TestClient):
+def test_doc_page(client: TestClient, in_stress: bool = False):
     response = client.get("/docs")
     assert response.status_code == 200
     assert response.text
@@ -31,13 +32,14 @@ def test_doc_page(client: TestClient):
     assert response.status_code == 200
     assert response.text
 
-    return True
+    if in_stress:
+        return True
 
 
 def test_openapi_stress(client: TestClient, benchmark: BenchmarkFixture):
     assert benchmark.pedantic(
         test_openapi,
-        args=(client,),
+        args=(client, True),
         rounds=200,
         warmup_rounds=10,
         iterations=3,
@@ -45,7 +47,9 @@ def test_openapi_stress(client: TestClient, benchmark: BenchmarkFixture):
 
 
 def test_doc_page_stress(client: TestClient, benchmark: BenchmarkFixture):
-    assert benchmark.pedantic(test_doc_page, args=(client,), rounds=200, iterations=3)
+    assert benchmark.pedantic(
+        test_doc_page, args=(client, True), rounds=200, iterations=3
+    )
 
 
 def test_notfound(client: TestClient):
