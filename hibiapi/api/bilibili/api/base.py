@@ -2,7 +2,7 @@ import hashlib
 import json
 from enum import Enum, IntEnum
 from time import time
-from typing import Any, Dict, Optional, overload
+from typing import Any, Optional, overload
 
 from httpx import URL
 
@@ -77,7 +77,7 @@ class VideoFormatType(IntEnum):
 
 
 class BaseBilibiliEndpoint(BaseEndpoint):
-    def _sign(self, base: str, endpoint: str, params: Dict[str, Any]) -> URL:
+    def _sign(self, base: str, endpoint: str, params: dict[str, Any]) -> URL:
         params.update(
             {
                 **BilibiliConstants.DEFAULT_PARAMS,
@@ -92,7 +92,7 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         return URL(url, params=params)
 
     @staticmethod
-    def _parse_json(content: str) -> Dict[str, Any]:
+    def _parse_json(content: str) -> dict[str, Any]:
         try:
             return json.loads(content)
         except json.JSONDecodeError:
@@ -106,8 +106,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         endpoint: str,
         *,
         sign: bool = True,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]: ...
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]: ...
 
     @overload
     async def request(
@@ -116,8 +116,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         source: str,
         *,
         sign: bool = True,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]: ...
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]: ...
 
     @dont_route
     @catch_network_error
@@ -127,8 +127,8 @@ class BaseBilibiliEndpoint(BaseEndpoint):
         source: Optional[str] = None,
         *,
         sign: bool = True,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         host = BilibiliConstants.SERVER_HOST[source or "app"]
         url = (self._sign if sign else self._join)(
             base=host, endpoint=endpoint, params=params or {}

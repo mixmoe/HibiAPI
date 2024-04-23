@@ -1,7 +1,8 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Type, TypeVar, overload
+from types import UnionType
+from typing import Any, TypeVar, overload
 
 import confuse
 import dotenv
@@ -17,20 +18,21 @@ _T = TypeVar("_T")
 
 class ConfigSubView(confuse.Subview):
     @overload
-    def get(self) -> Any:
-        ...
+    def get(self) -> Any: ...
 
     @overload
-    def get(self, template: Type[_T]) -> _T:
-        ...
+    def get(self, template: type[_T]) -> _T: ...
 
-    def get(self, template: Type[_T] = Any) -> _T:
-        return parse_obj_as(template, super().get())
+    def get(self, template: type[_T] | None = None) -> Any | _T:
+        object_ = super().get()
+        if template is not None:
+            return parse_obj_as(template, object_)
+        return object_
 
     def as_str(self) -> str:
         return self.get(str)
 
-    def as_str_seq(self, split: str = "\n") -> List[str]:
+    def as_str_seq(self, split: str = "\n") -> list[str]:
         return [
             stripped
             for line in self.as_str().strip().split(split)
@@ -46,8 +48,8 @@ class ConfigSubView(confuse.Subview):
     def as_path(self) -> Path:
         return self.get(Path)
 
-    def as_dict(self) -> Dict[str, Any]:
-        return self.get(Dict[str, Any])
+    def as_dict(self) -> dict[str, Any]:
+        return self.get(dict[str, Any])
 
     def __getitem__(self, key: str) -> "ConfigSubView":
         return self.__class__(self, key)
@@ -77,7 +79,7 @@ class AppConfig(confuse.Configuration):
             if k.lower().startswith(config_name)
         }
         # Convert `AAA_BBB_CCC=DDD` to `{'aaa':{'bbb':{'ccc':'ddd'}}}`
-        source_tree: Dict[str, Any] = {}
+        source_tree: dict[str, Any] = {}
         for key, value in env_configs.items():
             _tmp = source_tree
             *nodes, name = key.split("_")

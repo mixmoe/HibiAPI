@@ -1,7 +1,8 @@
 import hashlib
+from collections.abc import Awaitable
 from datetime import timedelta
 from functools import wraps
-from typing import Any, Awaitable, Callable, Dict, Optional, Tuple, TypeVar, cast
+from typing import Any, Callable, Optional, TypeVar, cast
 
 from cashews import Cache
 from pydantic import BaseModel
@@ -73,7 +74,7 @@ disable_cache = cache_config(enabled=False)
 
 
 class CachedValidatedFunction(ValidatedFunction):
-    def serialize(self, args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> BaseModel:
+    def serialize(self, args: tuple[Any, ...], kwargs: dict[str, Any]) -> BaseModel:
         values = self.build_values(args=args, kwargs=kwargs)
         return self.model(**values)
 

@@ -2,7 +2,7 @@ import hashlib
 import sys
 from base64 import urlsafe_b64encode
 from secrets import token_urlsafe
-from typing import Any, Callable, Dict, Optional, TypeVar
+from typing import Any, Callable, Optional, TypeVar
 from urllib.parse import parse_qs, urlencode
 
 import requests
@@ -62,7 +62,7 @@ class WebView(QWebEngineView):
     def __init__(self):
         super().__init__()
 
-        self.cookies: Dict[str, str] = {}
+        self.cookies: dict[str, str] = {}
 
         page = self.page()
         profile = page.profile()
@@ -158,7 +158,7 @@ class LoginPhrase:
             headers={"User-Agent": USER_AGENT},
         )
         response.raise_for_status()
-        data: Dict[str, Any] = response.json()
+        data: dict[str, Any] = response.json()
 
         access_token = data["access_token"]
         refresh_token = data["refresh_token"]

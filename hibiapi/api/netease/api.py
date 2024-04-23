@@ -6,7 +6,7 @@ from datetime import timedelta
 from enum import IntEnum
 from ipaddress import IPv4Address
 from random import randint
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any, Optional
 
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad
@@ -98,7 +98,7 @@ class _EncryptUtil:
         return f"{result:0>256x}"
 
     @classmethod
-    def encrypt(cls, data: Dict[str, Any]) -> Dict[str, str]:
+    def encrypt(cls, data: dict[str, Any]) -> dict[str, str]:
         secret = bytes(secrets.choice(cls.alphabets) for _ in range(16))
         secure_key = cls._rsa(bytes(reversed(secret)))
         return {
@@ -129,8 +129,8 @@ class NeteaseEndpoint(BaseEndpoint):
     @dont_route
     @catch_network_error
     async def request(
-        self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        self, endpoint: str, *, params: Optional[dict[str, Any]] = None
+    ) -> dict[str, Any]:
         params = {
             **(params or {}),
             "csrf_token": self.client.cookies.get("__csrf", ""),
@@ -186,7 +186,11 @@ class NeteaseEndpoint(BaseEndpoint):
             },
         )
 
-    async def detail(self, *, id: List[int] = Query()):
+    async def detail(
+        self,
+        *,
+        id: Annotated[list[int], Query()],
+    ):
         return await self.request(
             "api/v3/song/detail",
             params={
@@ -200,7 +204,7 @@ class NeteaseEndpoint(BaseEndpoint):
     async def song(
         self,
         *,
-        id: List[int] = Query(),
+        id: Annotated[list[int], Query()],
         br: BitRateType = BitRateType.STANDARD,
     ):
         return await self.request(

@@ -1,5 +1,5 @@
 from http.cookies import SimpleCookie
-from typing import Any, Dict
+from typing import Any
 
 from hibiapi.utils.config import APIConfig
 
@@ -7,7 +7,7 @@ _CONFIG = APIConfig("bilibili")
 
 
 class BilibiliConstants:
-    SERVER_HOST: Dict[str, str] = {
+    SERVER_HOST: dict[str, str] = {
         "app": "https://app.bilibili.com",
         "api": "https://api.bilibili.com",
         "interface": "https://interface.bilibili.com",
@@ -18,7 +18,7 @@ class BilibiliConstants:
         "mobile": "https://m.bilibili.com",
     }
     APP_HOST: str = "http://app.bilibili.com"
-    DEFAULT_PARAMS: Dict[str, Any] = {
+    DEFAULT_PARAMS: dict[str, Any] = {
         "build": 507000,
         "device": "android",
         "platform": "android",

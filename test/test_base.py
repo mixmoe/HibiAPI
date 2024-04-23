@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Annotated, Any
 
 import pytest
 from fastapi import Depends
@@ -67,13 +67,13 @@ def test_net_request():
     class TestEndpoint(BaseEndpoint):
         base = "https://httpbin.org"
 
-        async def request(self, path: str, params: Dict[str, Any]):
+        async def request(self, path: str, params: dict[str, Any]):
             url = self._join(self.base, path, params)
             response = await self.client.post(url, data=params)
             response.raise_for_status()
             return response.json()
 
-        async def form(self, *, data: Dict[str, Any]):
+        async def form(self, *, data: dict[str, Any]):
             return await self.request("/post", data)
 
         async def teapot(self):
@@ -90,12 +90,14 @@ def test_net_request():
 
     @router.post("form")
     async def form(
-        *, data: Dict[str, Any], endpoint: TestEndpoint = Depends(net_client)
+        *,
+        endpoint: Annotated[TestEndpoint, Depends(net_client)],
+        data: dict[str, Any],
     ):
         return await endpoint.form(data=data)
 
     @router.post("teapot")
-    async def teapot(endpoint: TestEndpoint = Depends(net_client)):
+    async def teapot(endpoint: Annotated[TestEndpoint, Depends(net_client)]):
         return await endpoint.teapot()
 
     from hibiapi.app.routes import router as api_router

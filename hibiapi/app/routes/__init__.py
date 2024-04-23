@@ -1,4 +1,4 @@
-from typing import List, Protocol, cast
+from typing import Protocol, cast
 
 from hibiapi.app.routes import (
     bika,
@@ -32,7 +32,7 @@ class RouteInterface(Protocol):
 
 
 modules = cast(
-    List[RouteInterface],
+    list[RouteInterface],
     [bilibili, netease, pixiv, qrcode, sauce, tieba, wallpaper, bika],
 )
 
@@ -45,7 +45,8 @@ for module in modules:
 
     if not module.__config__["enabled"].as_bool():
         logger.warning(
-            f"API Route <y><b>{mount}</b></y> has been <r><b>disabled</b></r> in config."
+            f"API Route <y><b>{mount}</b></y> has been "
+            "<r><b>disabled</b></r> in config."
         )
         continue
     router.include_router(module.router, prefix=mount)

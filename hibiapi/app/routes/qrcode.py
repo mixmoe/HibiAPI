@@ -3,7 +3,15 @@ from typing import Optional
 from fastapi import Request, Response
 from pydantic.color import Color
 
-from hibiapi.api.qrcode import Config, HostUrl, QRCodeLevel, QRInfo, ReturnEncode
+from hibiapi.api.qrcode import (
+    COLOR_BLACK,
+    COLOR_WHITE,
+    Config,
+    HostUrl,
+    QRCodeLevel,
+    QRInfo,
+    ReturnEncode,
+)
 from hibiapi.utils.routing import SlashRouter
 from hibiapi.utils.temp import TempFile
 
@@ -33,8 +41,8 @@ async def qrcode_api(
     logo: Optional[HostUrl] = None,
     encode: ReturnEncode = ReturnEncode.raw,
     level: QRCodeLevel = QRCodeLevel.MEDIUM,
-    bgcolor: Color = Color("FFFFFF"),
-    fgcolor: Color = Color("000000"),
+    bgcolor: Color = COLOR_BLACK,
+    fgcolor: Color = COLOR_WHITE,
     fun: str = "qrcode",
 ):
     qr = await QRInfo.new(

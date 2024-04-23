@@ -1,6 +1,5 @@
 from http.cookies import SimpleCookie
 from ipaddress import IPv4Network
-from typing import Dict
 
 from hibiapi.utils.config import APIConfig
 
@@ -26,7 +25,7 @@ class NeteaseConstants:
     HOST: str = "http://music.163.com"
     COOKIES: SimpleCookie = SimpleCookie(_Config["net"]["cookie"].as_str())
     SOURCE_IP_SEGMENT: IPv4Network = _Config["net"]["source"].get(IPv4Network)
-    DEFAULT_HEADERS: Dict[str, str] = {
+    DEFAULT_HEADERS: dict[str, str] = {
         "user-agent": _Config["net"]["user-agent"].as_str(),
         "referer": "http://music.163.com",
     }

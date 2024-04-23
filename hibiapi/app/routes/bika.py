@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends, Header
 
 from hibiapi.api.bika import (
@@ -17,7 +19,9 @@ except Exception as e:
     BikaConstants.CONFIG["enabled"].set(False)
 
 
-async def x_image_quality(x_image_quality: ImageQuality = Header(ImageQuality.medium)):
+async def x_image_quality(
+    x_image_quality: Annotated[ImageQuality, Header()] = ImageQuality.medium,
+):
     if x_image_quality is None:
         return BikaConstants.CONFIG["image_quality"].get(ImageQuality)
     return x_image_quality

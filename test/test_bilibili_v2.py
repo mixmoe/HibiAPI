@@ -41,7 +41,7 @@ def test_seasonrecommend(client: TestClient):
 
 
 def test_comments(client: TestClient):
-    response = client.get("comments", params={"aid": 2})
+    response = client.get("comments", params={"aid": 810872})
     assert response.status_code == 200
     assert response.json()["code"] == 0
 

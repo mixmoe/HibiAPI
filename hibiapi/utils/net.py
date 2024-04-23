@@ -1,14 +1,11 @@
 import functools
+from collections.abc import Coroutine
 from types import TracebackType
 from typing import (
     Any,
     Callable,
     ClassVar,
-    Coroutine,
-    Dict,
-    List,
     Optional,
-    Type,
     TypeVar,
     Union,
 )
@@ -65,19 +62,19 @@ class AsyncHTTPClient(AsyncClient):
 
 class BaseNetClient:
     connections: ClassVar[int] = 0
-    clients: ClassVar[List[AsyncHTTPClient]] = []
+    clients: ClassVar[list[AsyncHTTPClient]] = []
 
     client: Optional[AsyncHTTPClient] = None
 
     def __init__(
         self,
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[dict[str, Any]] = None,
         cookies: Optional[Cookies] = None,
-        proxies: Optional[Dict[str, str]] = None,
-        client_class: Type[AsyncHTTPClient] = AsyncHTTPClient,
+        proxies: Optional[dict[str, str]] = None,
+        client_class: type[AsyncHTTPClient] = AsyncHTTPClient,
     ):
         self.cookies, self.client_class = cookies or Cookies(), client_class
-        self.headers: Dict[str, Any] = headers or {}
+        self.headers: dict[str, Any] = headers or {}
         self.proxies: Any = proxies or {}  # Bypass type checker
 
         self.create_client()
@@ -103,7 +100,7 @@ class BaseNetClient:
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]] = None,
+        exc_type: Optional[type[BaseException]] = None,
         exc_value: Optional[BaseException] = None,
         traceback: Optional[TracebackType] = None,
     ):

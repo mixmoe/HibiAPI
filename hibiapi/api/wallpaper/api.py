@@ -1,6 +1,6 @@
 from datetime import timedelta
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from hibiapi.utils.cache import cache_config
 from hibiapi.utils.config import APIConfig
@@ -35,7 +35,7 @@ class WallpaperCategoryType(str, Enum):
     """文字"""
 
 
-CATEGORY: Dict[WallpaperCategoryType, str] = {
+CATEGORY: dict[WallpaperCategoryType, str] = {
     WallpaperCategoryType.girl: "4e4d610cdf714d2966000000",
     WallpaperCategoryType.animal: "4e4d610cdf714d2966000001",
     WallpaperCategoryType.landscape: "4e4d610cdf714d2966000002",
@@ -64,8 +64,8 @@ class WallpaperEndpoint(BaseEndpoint):
     @dont_route
     @catch_network_error
     async def request(
-        self, endpoint: str, *, params: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        self, endpoint: str, *, params: Optional[dict[str, Any]] = None
+    ) -> dict[str, Any]:
 
         response = await self.client.get(
             self._join(

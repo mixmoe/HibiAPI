@@ -1,11 +1,12 @@
 import asyncio
+import re
 from ipaddress import ip_address
 from secrets import compare_digest
-from typing import List
-from urllib.parse import ParseResult
+from typing import Annotated
 
 import sentry_sdk
 from fastapi import Depends, FastAPI, Request, Response
+from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -52,13 +53,13 @@ class AuthorizationModel(BaseModel):
 
 
 AUTHORIZATION_ENABLED = Config["authorization"]["enabled"].as_bool()
-AUTHORIZATION_ALLOWED = Config["authorization"]["allowed"].get(List[AuthorizationModel])
+AUTHORIZATION_ALLOWED = Config["authorization"]["allowed"].get(list[AuthorizationModel])
 
 security = HTTPBasic()
 
 
 async def basic_authorization_depend(
-    credentials: HTTPBasicCredentials = Depends(security),
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)],
 ):
     # NOTE: We use `compare_digest` to avoid timing attacks.
     # Ref: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
@@ -90,7 +91,7 @@ async def rate_limit_depend(request: Request):
     except ValueError:
         limit_key = f"rate_limit:fallback-{request.client.host}"
 
-    request_count: int = await cache.incr(limit_key)  # type:ignore
+    request_count = await cache.incr(limit_key) or 1
     if request_count <= 1:
         await cache.expire(limit_key, timeout=RATE_LIMIT_INTERVAL)
     elif request_count > RATE_LIMIT_MAX:
@@ -151,42 +152,13 @@ async def cleanup_clients():
     logger.debug(f"Cleaned <r>{len(opened_clients)}</r> unclosed HTTP clients")
 
 
-"""
-Temporary redirection solution below for #12
-"""
-
-
-def _redirect(request: Request, path: str, to: str) -> Response:
-    return Response(
-        status_code=301,
-        headers={
-            "Location": ParseResult(
-                scheme="",
-                netloc="",
-                path=to + path,
-                params="",
-                query=str(request.query_params),
-                fragment="",
-            ).geturl()
-        },
-    )
-
-
-@app.get("/qrcode/{path:path}", include_in_schema=False)
-async def _qr_redirect(path: str, request: Request):
-    return _redirect(request, path, "/api/qrcode/")
-
-
-@app.get("/pixiv/{path:path}", include_in_schema=False)
-async def _pixiv_redirect(path: str, request: Request):
-    return _redirect(request, path, "/api/pixiv/")
-
-
-@app.get("/netease/{path:path}", include_in_schema=False)
-async def _netease_redirect(path: str, request: Request):
-    return _redirect(request, path, "/api/netease/")
-
-
-@app.get("/bilibili/{path:path}", include_in_schema=False)
-async def _bilibili_redirect(path: str, request: Request):
-    return _redirect(request, path, "/api/bilibili/v2/")
+@app.middleware("http")
+async def redirect_workaround_middleware(request: Request, call_next):
+    """Temporary redirection workaround for #12"""
+    if matched := re.match(
+        r"^/(qrcode|pixiv|netease|bilibili)/(\w+)", request.url.path
+    ):
+        _, service, path = matched.groups()
+        redirect_url = request.url.replace(path=f"/api/{service}/{path}")
+        return RedirectResponse(redirect_url, status_code=301)
+    return await call_next(request)

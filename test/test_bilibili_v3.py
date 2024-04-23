@@ -92,6 +92,6 @@ def test_search_suggestion(client: TestClient):
 
 
 def test_comments(client: TestClient):
-    response = client.get("comments", params={"id": 2})
+    response = client.get("comments", params={"id": 810872})
     assert response.status_code == 200
     assert response.json()["code"] == 0

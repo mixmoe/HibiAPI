@@ -2,7 +2,6 @@ import asyncio
 import hashlib
 from datetime import datetime, timedelta, timezone
 from itertools import cycle
-from typing import Dict, List
 
 from httpx import URL
 from pydantic import BaseModel, Extra, Field
@@ -35,14 +34,14 @@ class PixivAuthData(AccountDataModel):
 
 
 class NetRequest(BaseNetClient):
-    def __init__(self, tokens: List[str]):
+    def __init__(self, tokens: list[str]):
         super().__init__(
             headers=PixivConstants.DEFAULT_HEADERS.copy(),
             proxies=PixivConstants.CONFIG["proxy"].as_dict(),
         )
         self.user_tokens = cycle(tokens)
         self.auth_lock = asyncio.Lock()
-        self.user_tokens_dict: Dict[str, PixivAuthData] = {}
+        self.user_tokens_dict: dict[str, PixivAuthData] = {}
         self.headers["accept-language"] = PixivConstants.CONFIG["language"].as_str()
 
     def get_available_user(self):

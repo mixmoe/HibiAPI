@@ -1,16 +1,16 @@
 import ast
 import inspect
 from enum import Enum
-from typing import Dict, Type, TypeVar
+from typing import TypeVar
 
-_ET = TypeVar("_ET", bound=Type[Enum])
+_ET = TypeVar("_ET", bound=type[Enum])
 
 
 def enum_auto_doc(enum: _ET) -> _ET:
     enum_class_ast, *_ = ast.parse(inspect.getsource(enum)).body
     assert isinstance(enum_class_ast, ast.ClassDef)
 
-    enum_value_comments: Dict[str, str] = {}
+    enum_value_comments: dict[str, str] = {}
     for index, body in enumerate(body_list := enum_class_ast.body):
         if (
             isinstance(body, ast.Assign)

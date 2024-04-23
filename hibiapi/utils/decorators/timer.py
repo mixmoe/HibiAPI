@@ -4,7 +4,7 @@ import time
 from dataclasses import dataclass, field
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, Callable, ClassVar, Dict, Optional, TypeVar
+from typing import Any, Callable, ClassVar, TypeVar
 
 from hibiapi.utils.log import logger
 
@@ -19,11 +19,11 @@ class TimerError(Exception):
 class Timer:
     """Time your code using a class, context manager, or decorator"""
 
-    timers: ClassVar[Dict[str, float]] = dict()
-    name: Optional[str] = None
+    timers: ClassVar[dict[str, float]] = dict()
+    name: str | None = None
     text: str = "Elapsed time: {:0.3f} seconds"
-    logger_func: Optional[Callable[[str], None]] = print
-    _start_time: Optional[float] = field(default=None, init=False, repr=False)
+    logger_func: Callable[[str], None] | None = print
+    _start_time: float | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
         """Initialization: add timer to dict of timers"""

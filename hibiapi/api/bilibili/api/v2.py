@@ -1,6 +1,7 @@
+from collections.abc import Coroutine
 from enum import Enum
 from functools import wraps
-from typing import Callable, Coroutine, Optional, TypeVar
+from typing import Callable, Optional, TypeVar
 
 from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,

@@ -1,7 +1,7 @@
 import random
 from enum import IntEnum
 from io import BytesIO
-from typing import Any, Dict, Optional, overload
+from typing import Any, Optional, overload
 
 from httpx import HTTPError
 
@@ -70,8 +70,8 @@ class SauceEndpoint(BaseEndpoint, cache_endpoints=False):
 
     @catch_network_error
     async def request(
-        self, *, file: UploadFileIO, params: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, *, file: UploadFileIO, params: dict[str, Any]
+    ) -> dict[str, Any]:
         response = await self.client.post(
             url=self._join(
                 self.base,
@@ -98,7 +98,7 @@ class SauceEndpoint(BaseEndpoint, cache_endpoints=False):
         database: Optional[int] = None,
         enabled_mask: Optional[int] = None,
         disabled_mask: Optional[int] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         ...
 
     @overload
@@ -111,7 +111,7 @@ class SauceEndpoint(BaseEndpoint, cache_endpoints=False):
         database: Optional[int] = None,
         enabled_mask: Optional[int] = None,
         disabled_mask: Optional[int] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         ...
 
     async def search(

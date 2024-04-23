@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from pydantic import AnyHttpUrl, BaseModel, Extra, Field
 
@@ -9,7 +9,7 @@ class ExceptionReturn(BaseModel):
     time: datetime = Field(default_factory=datetime.now)
     code: int = Field(ge=400, le=599)
     detail: str
-    headers: Dict[str, str] = {}
+    headers: dict[str, str] = {}
 
     class Config:
         extra = Extra.allow
@@ -18,14 +18,14 @@ class ExceptionReturn(BaseModel):
 class BaseServerException(Exception):
     code: int = 500
     detail: str = "Server Fault"
-    headers: Dict[str, Any] = {}
+    headers: dict[str, Any] = {}
 
     def __init__(
         self,
         detail: Optional[str] = None,
         *,
         code: Optional[int] = None,
-        headers: Optional[Dict[str, Any]] = None,
+        headers: Optional[dict[str, Any]] = None,
         **params
     ) -> None:
         self.data = ExceptionReturn(

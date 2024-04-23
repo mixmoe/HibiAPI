@@ -2,7 +2,7 @@ import json
 import re
 from datetime import date, timedelta
 from enum import Enum
-from typing import Any, Dict, Literal, Optional, Union, cast, overload
+from typing import Any, Literal, Optional, Union, cast, overload
 
 from hibiapi.api.pixiv.constants import PixivConstants
 from hibiapi.api.pixiv.net import NetRequest as PixivNetClient
@@ -136,16 +136,16 @@ class PixivEndpoints(BaseEndpoint):
         self,
         endpoint: str,
         *,
-        params: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
         return_text: Literal[False] = False,
-    ) -> Dict[str, Any]: ...
+    ) -> dict[str, Any]: ...
 
     @overload
     async def request(
         self,
         endpoint: str,
         *,
-        params: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
         return_text: Literal[True],
     ) -> str: ...
 
@@ -155,9 +155,9 @@ class PixivEndpoints(BaseEndpoint):
         self,
         endpoint: str,
         *,
-        params: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
         return_text: bool = False,
-    ) -> Union[Dict[str, Any], str]:
+    ) -> Union[dict[str, Any], str]:
         headers = self.client.headers.copy()
 
         net_client = cast(PixivNetClient, self.client.net_client)

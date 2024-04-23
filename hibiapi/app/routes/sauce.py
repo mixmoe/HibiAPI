@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Annotated, Optional
 
 from fastapi import Depends, File, Form
 from loguru import logger
@@ -30,13 +30,13 @@ async def request_client():
 
 @router.get("/")
 async def sauce_url(
+    endpoint: Annotated[SauceEndpoint, Depends(request_client)],
     url: HostUrl,
     size: int = 30,
     deduplicate: DeduplicateType = DeduplicateType.ALL,
     database: Optional[int] = None,
     enabled_mask: Optional[int] = None,
     disabled_mask: Optional[int] = None,
-    endpoint: SauceEndpoint = Depends(request_client),
 ):
     """
     ## Name: `sauce_url`
@@ -76,13 +76,13 @@ async def sauce_url(
 
 @router.post("/")
 async def sauce_form(
+    endpoint: Annotated[SauceEndpoint, Depends(request_client)],
     file: bytes = File(..., max_length=SauceConstants.IMAGE_MAXIMUM_SIZE),
     size: int = Form(30),
-    deduplicate: DeduplicateType = Form(DeduplicateType.ALL),
+    deduplicate: Annotated[DeduplicateType, Form()] = DeduplicateType.ALL,
     database: Optional[int] = Form(None),
     enabled_mask: Optional[int] = Form(None),
     disabled_mask: Optional[int] = Form(None),
-    endpoint: SauceEndpoint = Depends(request_client),
 ):
     """
     ## Name: `sauce_form`

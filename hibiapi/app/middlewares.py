@@ -1,5 +1,6 @@
+from collections.abc import Awaitable
 from datetime import datetime
-from typing import Awaitable, Callable, List
+from typing import Callable
 
 from fastapi import Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,14 +25,14 @@ if Config["server"]["gzip"].as_bool():
     app.add_middleware(GZipMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=Config["server"]["cors"]["origins"].get(List[str]),
+    allow_origins=Config["server"]["cors"]["origins"].get(list[str]),
     allow_credentials=Config["server"]["cors"]["credentials"].as_bool(),
-    allow_methods=Config["server"]["cors"]["methods"].get(List[str]),
-    allow_headers=Config["server"]["cors"]["headers"].get(List[str]),
+    allow_methods=Config["server"]["cors"]["methods"].get(list[str]),
+    allow_headers=Config["server"]["cors"]["headers"].get(list[str]),
 )
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=Config["server"]["allowed"].get(List[str]),
+    allowed_hosts=Config["server"]["allowed"].get(list[str]),
 )
 app.add_middleware(SentryAsgiMiddleware)
 

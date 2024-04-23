@@ -3,7 +3,7 @@ from enum import Enum
 from io import BytesIO
 from os import fdopen
 from pathlib import Path
-from typing import List, Literal, Optional, cast
+from typing import Literal, Optional, cast
 
 from PIL import Image
 from pydantic import AnyHttpUrl, BaseModel, Field, validate_arguments
@@ -23,7 +23,7 @@ Config = APIConfig("qrcode")
 
 
 class HostUrl(BaseHostUrl):
-    allowed_hosts = Config["qrcode"]["icon-site"].get(List[str])
+    allowed_hosts = Config["qrcode"]["icon-site"].get(list[str])
 
 
 @enum_auto_doc
@@ -52,6 +52,10 @@ class ReturnEncode(str, Enum):
     jsc = "jsc"
 
 
+COLOR_WHITE = Color("FFFFFF")
+COLOR_BLACK = Color("000000")
+
+
 class QRInfo(BaseModel):
     url: Optional[AnyHttpUrl] = None
     path: Path
@@ -76,8 +80,8 @@ class QRInfo(BaseModel):
         ),
         logo: Optional[HostUrl] = None,
         level: QRCodeLevel = QRCodeLevel.MEDIUM,
-        bgcolor: Color = Color("FFFFFF"),
-        fgcolor: Color = Color("000000"),
+        bgcolor: Color = COLOR_WHITE,
+        fgcolor: Color = COLOR_BLACK,
     ):
         icon_stream = None
         if logo is not None:

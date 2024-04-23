@@ -1,9 +1,10 @@
 import inspect
+from collections.abc import Mapping
 from contextvars import ContextVar
 from enum import Enum
 from fnmatch import fnmatch
 from functools import wraps
-from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Tuple, Type
+from typing import Annotated, Any, Callable, Literal, Optional
 from urllib.parse import ParseResult, urlparse
 
 from fastapi import Depends, Request
@@ -26,7 +27,7 @@ def dont_route(func: AsyncCallable_T) -> AsyncCallable_T:
 
 class EndpointMeta(type):
     @staticmethod
-    def _list_router_function(members: Dict[str, Any]):
+    def _list_router_function(members: dict[str, Any]):
         return {
             name: object
             for name, object in members.items()
@@ -40,8 +41,8 @@ class EndpointMeta(type):
     def __new__(
         cls,
         name: str,
-        bases: Tuple[type, ...],
-        namespace: Dict[str, Any],
+        bases: tuple[type, ...],
+        namespace: dict[str, Any],
         *,
         cache_endpoints: bool = True,
         **kwargs,
@@ -62,7 +63,7 @@ class BaseEndpoint(metaclass=EndpointMeta, cache_endpoints=False):
         self.client = client
 
     @staticmethod
-    def _join(base: str, endpoint: str, params: Dict[str, Any]) -> URL:
+    def _join(base: str, endpoint: str, params: dict[str, Any]) -> URL:
         host: ParseResult = urlparse(base)
         params = {
             k: (v.value if isinstance(v, Enum) else v)
@@ -90,14 +91,14 @@ class SlashRouter(APIRouter):
 
 class EndpointRouter(SlashRouter):
     @staticmethod
-    def _exclude_params(func: Callable, params: Mapping[str, Any]) -> Dict[str, Any]:
+    def _exclude_params(func: Callable, params: Mapping[str, Any]) -> dict[str, Any]:
         func_params = inspect.signature(func).parameters
         return {k: v for k, v in params.items() if k in func_params}
 
     @staticmethod
     def _router_signature_convert(
         func,
-        endpoint_class: Type["BaseEndpoint"],
+        endpoint_class: type["BaseEndpoint"],
         request_client: Callable,
         method_name: Optional[str] = None,
     ):
@@ -125,7 +126,7 @@ class EndpointRouter(SlashRouter):
 
     def include_endpoint(
         self,
-        endpoint_class: Type[BaseEndpoint],
+        endpoint_class: type[BaseEndpoint],
         net_client: BaseNetClient,
         add_match_all: bool = True,
     ):
@@ -152,9 +153,9 @@ class EndpointRouter(SlashRouter):
 
         @self.get("/", description="JournalAD style API routing", deprecated=True)
         async def match_all(
+            endpoint: Annotated[endpoint_class, Depends(request_client)],
             request: Request,
             type: Literal[tuple(router_functions.keys())],  # type: ignore
-            endpoint: endpoint_class = Depends(request_client),
         ):
             func = router_functions[type]
             return await func(
@@ -163,10 +164,10 @@ class EndpointRouter(SlashRouter):
 
 
 class BaseHostUrl(AnyHttpUrl):
-    allowed_hosts: List[str] = []
+    allowed_hosts: list[str] = []
 
     @classmethod
-    def validate_host(cls, parts) -> Tuple[str, Optional[str], str, bool]:
+    def validate_host(cls, parts) -> tuple[str, Optional[str], str, bool]:
         host, tld, host_type, rebuild = super().validate_host(parts)
         if not cls._check_domain(host):
             raise UrlHostError(allowed=cls.allowed_hosts)
