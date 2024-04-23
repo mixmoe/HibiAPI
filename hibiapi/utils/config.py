@@ -29,7 +29,10 @@ class ConfigSubView(confuse.Subview):
         return object_
 
     def get_optional(self, template: type[_T]) -> _T | None:
-        return self.get(Optional[template])  # type: ignore
+        try:
+            return self.get(template)
+        except Exception:
+            return None
 
     def as_str(self) -> str:
         return self.get(str)
