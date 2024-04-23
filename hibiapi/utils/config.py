@@ -1,8 +1,7 @@
 import json
 import os
 from pathlib import Path
-from types import UnionType
-from typing import Any, TypeVar, overload
+from typing import Any, Optional, TypeVar, overload
 
 import confuse
 import dotenv
@@ -23,16 +22,19 @@ class ConfigSubView(confuse.Subview):
     @overload
     def get(self, template: type[_T]) -> _T: ...
 
-    def get(self, template: type[_T] | None = None) -> Any | _T:
+    def get(self, template: type[_T] | None = None) -> Any | _T:  # type: ignore
         object_ = super().get()
         if template is not None:
             return parse_obj_as(template, object_)
         return object_
 
+    def get_optional(self, template: type[_T]) -> _T | None:
+        return self.get(Optional[template])  # type: ignore
+
     def as_str(self) -> str:
         return self.get(str)
 
-    def as_str_seq(self, split: str = "\n") -> list[str]:
+    def as_str_seq(self, split: str = "\n") -> list[str]:  # type: ignore
         return [
             stripped
             for line in self.as_str().strip().split(split)

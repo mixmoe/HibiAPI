@@ -3,14 +3,13 @@ import re
 import sys
 from datetime import timedelta
 from pathlib import Path
-from typing import Optional
 
 import sentry_sdk.integrations.logging as sentry
 from loguru import logger as _logger
 
 from hibiapi.utils.config import Config
 
-LOG_FILE = Config["log"]["file"].get(Optional[Path])
+LOG_FILE = Config["log"]["file"].get_optional(Path)
 LOG_LEVEL = Config["log"]["level"].as_str().strip().upper()
 LOG_FORMAT = Config["log"]["format"].as_str().strip()
 

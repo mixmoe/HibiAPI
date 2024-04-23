@@ -65,14 +65,18 @@ class WebView(QWebEngineView):
         self.cookies: dict[str, str] = {}
 
         page = self.page()
+        assert page is not None
         profile = page.profile()
+        assert profile is not None
         profile.setHttpUserAgent(USER_AGENT)
         page.contentsSize().setHeight(768)
         page.contentsSize().setWidth(432)
 
         self.interceptor = RequestInterceptor()
         profile.setUrlRequestInterceptor(self.interceptor)
-        profile.cookieStore().cookieAdded.connect(self._on_cookie_added)
+        cookie_store = profile.cookieStore()
+        assert cookie_store is not None
+        cookie_store.cookieAdded.connect(self._on_cookie_added)
 
         self.setFixedHeight(896)
         self.setFixedWidth(414)
@@ -80,7 +84,7 @@ class WebView(QWebEngineView):
         self.start("about:blank")
 
     def start(self, goto: str):
-        self.page().profile().cookieStore().deleteAllCookies()
+        self.page().profile().cookieStore().deleteAllCookies()  # type: ignore
         self.cookies.clear()
         self.load(QUrl(goto))
 
@@ -115,7 +119,7 @@ class ResponseDataWidget(QWidget):
 
     def _on_clipboard_copy(self, checked: bool):
         if paste_string := self.cookie_paste.toPlainText().strip():
-            app.clipboard().setText(paste_string)
+            app.clipboard().setText(paste_string)  # type: ignore
 
 
 _T = TypeVar("_T", bound="LoginPhrase")
