@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Optional
 
 import typer
 import uvicorn
@@ -90,7 +89,7 @@ def run(
         access_log=False,
         log_config=LOG_CONFIG,
         workers=workers,
-        forwarded_allow_ips=Config["server"]["allowed-forward"].get(Optional[str]),
+        forwarded_allow_ips=Config["server"]["allowed-forward"].get_optional(str),
         **(RELOAD_CONFIG if reload else {}),
     )
 

@@ -1,5 +1,6 @@
 import asyncio
 import re
+from contextlib import asynccontextmanager
 from ipaddress import ip_address
 from secrets import compare_digest
 from typing import Annotated
@@ -101,12 +102,39 @@ async def rate_limit_depend(request: Request):
     return
 
 
+async def flush_sentry():
+    client = sentry_sdk.Hub.current.client
+    if client is not None:
+        client.close()
+    sentry_sdk.flush()
+    logger.debug("Sentry client has been closed")
+
+
+async def cleanup_clients():
+    opened_clients = [
+        client for client in BaseNetClient.clients if not client.is_closed
+    ]
+    if opened_clients:
+        await asyncio.gather(
+            *map(lambda client: client.aclose(), opened_clients),
+            return_exceptions=True,
+        )
+    logger.debug(f"Cleaned <r>{len(opened_clients)}</r> unclosed HTTP clients")
+
+
+@asynccontextmanager
+async def fastapi_lifespan(app: FastAPI):
+    yield
+    await asyncio.gather(cleanup_clients(), flush_sentry())
+
+
 app = FastAPI(
     title="HibiAPI",
     version=__version__,
     description=DESCRIPTION,
     docs_url="/docs/test",
     redoc_url="/docs",
+    lifespan=fastapi_lifespan,
 )
 app.include_router(
     ImplRouter,
@@ -130,35 +158,13 @@ async def robots():
     return Response(content, status_code=200)
 
 
-@app.on_event("shutdown")
-def flush_sentry():
-    client = sentry_sdk.Hub.current.client
-    if client is not None:
-        client.close()
-    sentry_sdk.flush()
-    logger.debug("Sentry client has been closed")
-
-
-@app.on_event("shutdown")
-async def cleanup_clients():
-    opened_clients = [
-        client for client in BaseNetClient.clients if not client.is_closed
-    ]
-    if opened_clients:
-        await asyncio.gather(
-            *map(lambda client: client.aclose(), opened_clients),
-            return_exceptions=True,
-        )
-    logger.debug(f"Cleaned <r>{len(opened_clients)}</r> unclosed HTTP clients")
-
-
 @app.middleware("http")
 async def redirect_workaround_middleware(request: Request, call_next):
     """Temporary redirection workaround for #12"""
     if matched := re.match(
-        r"^/(qrcode|pixiv|netease|bilibili)/(\w+)", request.url.path
+        r"^/(qrcode|pixiv|netease|bilibili)/(\w*)$", request.url.path
     ):
-        _, service, path = matched.groups()
+        service, path = matched.groups()
         redirect_url = request.url.replace(path=f"/api/{service}/{path}")
         return RedirectResponse(redirect_url, status_code=301)
     return await call_next(request)
