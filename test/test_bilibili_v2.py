@@ -40,23 +40,6 @@ def test_seasonrecommend(client: TestClient):
     assert response.json()["code"] == 0
 
 
-def test_comments(client: TestClient):
-    response = client.get("comments", params={"aid": 810872})
-    assert response.status_code == 200
-    assert response.json()["code"] == 0
-
-
-def test_season_comments(client: TestClient):
-    response = client.get("comments", params={"season_id": 425, "index": 1})
-    print(response.text)
-    if response.status_code == 200:
-        assert response.json()["code"] == 0
-    elif response.status_code == 400:
-        pytest.skip("Your region does not support getting comments from bangumi")
-    else:
-        raise AssertionError(f"{response.status_code=} is not expected")
-
-
 def test_search(client: TestClient):
     response = client.get("search", params={"keyword": "railgun"})
     assert response.status_code == 200

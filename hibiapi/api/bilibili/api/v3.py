@@ -1,7 +1,5 @@
 from hibiapi.api.bilibili.api.base import (
     BaseBilibiliEndpoint,
-    CommentSortType,
-    CommentType,
     TimelineType,
     VideoFormatType,
     VideoQualityType,
@@ -79,20 +77,3 @@ class BilibiliEndpointV3(BaseEndpoint, cache_endpoints=False):
 
     async def search_suggestion(self, *, keyword: str):
         return await self.base.search_suggest(keyword=keyword)
-
-    async def comments(
-        self,
-        *,
-        id: int,
-        type: CommentType = CommentType.VIDEO,
-        sort: CommentSortType = CommentSortType.TIME,
-        page: int = 1,
-        size: int = 20,
-    ):
-        return await self.base.comments(
-            oid=id,
-            type=type,
-            sort=sort,
-            page=page,
-            pagesize=size,
-        )

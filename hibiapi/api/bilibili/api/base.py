@@ -23,36 +23,6 @@ class TimelineType(str, Enum):
 
 
 @enum_auto_doc
-class CommentSortType(IntEnum):
-    """评论排序类型"""
-
-    LIKES = 2
-    """按点赞"""
-    HOT = 1
-    """按热评"""
-    TIME = 0
-    """按时间"""
-
-
-@enum_auto_doc
-class CommentType(IntEnum):
-    """评论来源类型"""
-
-    VIDEO = 1
-    """视频"""
-    ARTICLE = 12
-    """文章"""
-    DYNAMIC_PICTURE = 11
-    """含图片的动态"""
-    DYNAMIC_TEXT = 17
-    """不含图片的动态"""
-    AUDIO = 14
-    """音乐"""
-    AUDIO_LIST = 19
-    """歌单"""
-
-
-@enum_auto_doc
 class VideoQualityType(IntEnum):
     """视频质量类型"""
 
@@ -280,28 +250,6 @@ class BaseBilibiliEndpoint(BaseEndpoint):
             sign=False,
             params={
                 "season_id": season_id,
-            },
-        )
-
-    async def comments(
-        self,
-        *,
-        type: CommentType,
-        oid: int,
-        sort: CommentSortType = CommentSortType.TIME,
-        page: int = 1,
-        pagesize: int = 20,
-    ):
-        return await self.request(
-            "x/v2/reply",
-            "api",
-            sign=False,
-            params={
-                "type": type,
-                "oid": oid,
-                "sort": sort,
-                "pn": page,
-                "ps": pagesize,
             },
         )
 
