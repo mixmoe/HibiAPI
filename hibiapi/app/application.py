@@ -92,7 +92,7 @@ async def rate_limit_depend(request: Request):
     except ValueError:
         limit_key = f"rate_limit:fallback-{request.client.host}"
 
-    request_count = await cache.incr(limit_key) or 1
+    request_count = await cache.incr(limit_key)
     if request_count <= 1:
         await cache.expire(limit_key, timeout=RATE_LIMIT_INTERVAL)
     elif request_count > RATE_LIMIT_MAX:
