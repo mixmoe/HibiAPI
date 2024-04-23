@@ -22,13 +22,13 @@ class ConfigSubView(confuse.Subview):
     @overload
     def get(self, template: type[_T]) -> _T: ...
 
-    def get(self, template: type[_T] | None = None) -> Any | _T:  # type: ignore
+    def get(self, template: Optional[type[_T]] = None):  # type: ignore
         object_ = super().get()
         if template is not None:
             return parse_obj_as(template, object_)
         return object_
 
-    def get_optional(self, template: type[_T]) -> _T | None:
+    def get_optional(self, template: type[_T]) -> Optional[_T]:
         try:
             return self.get(template)
         except Exception:
