@@ -74,6 +74,9 @@ test = """pytest \
 start = "hibiapi run"
 lint = "ruff check"
 
+[tool.pyright]
+typeCheckingMode = "standard"
+
 [tool.ruff]
 lint.select = [
     # pycodestyle
