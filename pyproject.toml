@@ -22,7 +22,6 @@ dependencies = [
     "typing-extensions>=4.11.0",
     "typer[all]>=0.12.3",
     "fastapi<1.0.0,>=0.85.1",
-    "httpx[http2]<0.24.0,>=0.21.3",
     "uvicorn[standard]<0.20,>=0.14",
     "confuse<2.0.0,>=1.4.0",
     "loguru<1.0.0,>=0.6.0",
