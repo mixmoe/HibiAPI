@@ -15,7 +15,7 @@ jobs:
 
       - uses: pdm-project/setup-pdm@v3
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Install Dependencies
         run: |
